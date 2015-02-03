@@ -1,3 +1,5 @@
 # parentsSchool
 School in touch with parents
-school app
+School App
+
+School 
