@@ -1,0 +1,33 @@
+<div class="modal" ng-controller="LoginCtrl">
+  <ion-header-bar>
+    <h1 class="title">Login</h1>
+    <div class="buttons">
+      <button class="button button-clear" ng-click="closeLogin()">X</button>
+    </div>
+  </ion-header-bar>
+  <ion-content>
+    <form>
+      <div class="list">
+        <label class="item item-input">
+          <span class="input-label">Username</span>
+          <input type="text" ng-model="user.username">
+        </label>
+        <label class="item item-input">
+          <span class="input-label">Password</span>
+          <input type="password" ng-model="user.password">
+        </label>
+        <label class="item">
+          <button class="button icon-right ion-ios7-arrow-right button-block button-positive" ng-click="login()">Log in</button>
+        </label>
+
+        <div class="row" ng-show="doingLogin">
+          <div class="col centered-content">
+            <i class="icon ion-loading-c loading-big"></i>
+          </div>
+        </div>
+
+      </div>
+    </form>
+  </ion-content>
+</div>
+

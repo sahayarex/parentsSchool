@@ -1,0 +1,32 @@
+<ion-view title="Pages" ng-init="getData()">
+  <ion-nav-buttons side="left">
+    <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+  </ion-nav-buttons>
+  <ion-content class="has-header">
+    <ion-refresher pulling-text="Pull to refresh" on-refresh="getData()">
+    </ion-refresher>
+    <div class="item" ng-show="gettingIssues">
+    <span class=""><i class="icon ion-loading-c loading-big"></i></span>
+    </div>
+    <div class="item" ng-show="emptyResults">
+    <span class="">No records available</span>
+    </div>  
+    <div class="list card" ng-repeat="(k,v) in pages | orderObjectBy:'nid':true" ng-hide="emptyResults">
+    
+    <div class="item">
+      <h2>{{v.title}}</h2>
+      <p>{{v.body}}</p>
+    </div>
+
+    <div class="item item-image" ng-repeat="(ik,iv) in v.images">
+      <img src="{{iv.image}}" class="full-image">
+    </div>
+
+    <a class="item assertive" href="" ng-click="remove({{v.nid}})">
+      Remove
+    </a>
+
+    </div> 
+
+  </ion-content>
+</ion-view>

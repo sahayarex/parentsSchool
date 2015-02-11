@@ -1,0 +1,144 @@
+<ion-view title="{{siteName}}" >
+  <ion-nav-buttons side="left">
+    <button menu-toggle="left"class="button button-icon icon ion-navicon"></button>
+  </ion-nav-buttons>
+<form ng-enter="keyEntered()" ng-submit="saveSite()" ng-controller="SiteCtrl">
+<ion-tabs class="tabs-positive tabs-icon-only">
+  <ion-tab title="Procurement">
+    <ion-content>
+     <div class="list list-inset site-monitor">
+      <label class="item row bar-positive bar bar-header">
+      <span class="col col-50">Item</span>
+      <span class="col col-25 delivered">
+       Delivered
+       </span>
+      <span class="col col-25">
+       Installed
+       </span>
+       </label>
+      <div ng-show="gettingForm">
+      <div class="item row">
+      <span class="col"><i class="icon ion-loading-c loading-big"></i></span>
+      </div>
+      </div>
+     <div ng-repeat="(k,v) in fd.group_procurement" class="items-list">
+
+      <div class="item row parent-main-item {{sm[v.delivered]}} {{sm[v.installed]}}">
+      <span class="col col-50">{{v.label}}</span>
+      <span class="col col-25 delivered">
+       <label class="toggle toggle-positive">
+         <input type="checkbox" ng-model="sm[v.delivered]" ng-bind="sm[v.installed]" ng-checked="sm[v.delivered]||sm[v.installed]" ng-disabled="sm[v.installed]">
+         <div class="track">
+           <div class="handle"></div>
+         </div>
+       </label>
+      </span>
+      <span class="col col-25 installed">
+       <label class="toggle toggle-positive">
+         <input type="checkbox" ng-model="sm[v.installed]">
+         <div class="track">
+           <div class="handle"></div>
+         </div>
+       </label>        
+      </span>
+      </div>
+      <label ng-show="sm[v.delivered] || sm[v.installed]" class="item row  main-item {{sm[v.delivered]}} {{sm[v.installed]}}">
+      <span class="col col-50"></span>
+      <span class="col col-25 delivered">
+       <input ng-show="sm[v.delivered] || sm[v.installed]" type="number" ng-model="sm[v.d_count]" class="count ng-valid ng-dirty">
+       </span>
+      <span class="col col-25 delivered">
+       <input ng-show="sm[v.installed]" type="number" ng-model="sm[v.i_count]" class="count ng-valid ng-dirty">
+       </span>
+       </label>
+      </div>
+      <label class="item row">
+      <span class="col">
+      <button class="button icon-right ion-ios7-arrow-right button-block button-positive" type="submit">Submit <i ng-show="savingSiteDetails" class="icon ion-loading-c loading-big"></i></button>
+      </span>
+      </label>      
+    </div>
+    </ion-content>
+  </ion-tab>
+
+  <ion-tab title="Admin">
+    
+    <ion-content>
+     <div class="list list-inset site-monitor">
+      <label class="item row bar-positive bar bar-header">
+      <span class="col col-50">Item</span>
+      <span class="col col-25 delivered">
+       Delivered
+       </span>
+      <span class="col col-25">
+       Installed
+       </span>
+       </label>
+     <div ng-repeat="(k,v) in fd.group_admin" class="items-list">
+
+      <div class="item row">
+      <span class="col col-50">{{v.label}}</span>
+      <span class="col col-25 delivered">
+      <label class="toggle toggle-positive">
+         <input type="checkbox" ng-model="sm[v.delivered]" ng-bind="sm[v.installed]" ng-checked="sm[v.delivered]||sm[v.installed]" ng-disabled="sm[v.installed]">
+         <div class="track">
+           <div class="handle"></div>
+         </div>
+       </label>
+      </span>
+      <span class="col col-25 installed">
+       <label class="toggle toggle-positive">
+         <input type="checkbox" ng-model="sm[v.installed]">
+         <div class="track">
+           <div class="handle"></div>
+         </div>
+       </label>        
+      </span>
+      </div>
+      </div>
+      <label class="item row">
+      <span class="col">
+      <button class="button icon-right ion-ios7-arrow-right button-block button-positive" type="submit">Submit <i ng-show="savingSiteDetails" class="icon ion-loading-c loading-big"></i></button>
+      </span>
+      </label>      
+    </div>
+    </ion-content>
+
+  </ion-tab>
+
+  <ion-tab title="Photos">
+    <ion-content>
+      <div class="list list-inset site-monitor">
+      <label class="item row bar-positive bar bar-header">
+        <span class="col">Upload Photos</span>
+      </label>
+      <label class="item row">
+      <span class="col">
+      <a ng-disabled="takePhotoDisabled" ng-click="takePicture({{sm.pictureIndex}})" class="item item-icon-right" href="">
+        <i class="icon ion-camera positive"></i>Click
+      </a>
+      </span>
+      <span class="col">
+      <a ng-click="browsePicture({{sm.pictureIndex}})" ng-model="browse" class="item item-icon-right" href="">
+        <i class="icon ion-images positive"></i>Browse
+      </a>
+      </span>
+      </label>  
+      <label class="item row item-image" ng-repeat="(k,v) in sm.allPhotos | reverse">
+      <span class="col">
+      <img src="{{v}}" />
+      </span>
+      </label>      
+  <label class="item row">
+  <span class="col">
+  <button class="button icon-right ion-ios7-arrow-right button-block button-positive" type="submit">Submit <i ng-show="savingSiteDetails" class="icon ion-loading-c loading-big"></i></button>
+  </span>
+  </label>
+      </div>
+
+    </ion-content>
+  </ion-tab>
+
+</ion-tabs>
+</form>
+</ion-view>
