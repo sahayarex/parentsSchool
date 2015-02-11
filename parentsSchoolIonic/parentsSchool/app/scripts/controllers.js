@@ -1,11 +1,11 @@
-angular.module('ParentsSchool.controllers', ['ParentsSchool.services'])
+angular.module('parentsSchool.controllers', ['parentsSchool.services'])
 
-.controller('AppCtrl', function($scope, $state, $ionicModal, AuthenticationService) {
+.controller('AppCtrl', function($scope, $state, AuthenticationService) {
   $scope.uid = localStorage.getItem('uid') || '';
   $scope.savingSiteDetails = false; 
   $scope.authenticatedMenu = {"Links":[{"title":"Create Page", "href":"app.createPage"},{"title":"Pages", "href":"app.pages"},{"title":"log-out", "href":"app.logout"}]};                            
   $scope.anonymousMenu = {"Links":[{"title":"log-in", "href":"app.home"}]};
-/*  console.log('uid', $scope.uid); 
+  console.log('uid', $scope.uid); 
   if($scope.uid) {
     $scope.authorized = true;
     $scope.menuLinks = $scope.authenticatedMenu;
@@ -14,20 +14,7 @@ angular.module('ParentsSchool.controllers', ['ParentsSchool.services'])
   } else {
     $scope.authorized = false;
     $scope.menuLinks = $scope.anonymousMenu;
-  }*/
-  $ionicModal.fromTemplateUrl('templates/login.html', function(modal) {
-      $scope.loginModal = modal;
-    },
-    {
-      scope: $scope,
-      animation: 'slide-in-up',
-      focusFirstInput: true
-    }
-  );
-  //Be sure to cleanup the modal by removing it from the DOM
-  $scope.$on('$destroy', function() {
-    $scope.loginModal.remove();
-  });
+  }
 
   //Sync online
   setInterval(function() {
@@ -64,36 +51,18 @@ angular.module('ParentsSchool.controllers', ['ParentsSchool.services'])
       }
     }
   }, 5000);
-  //Sync online
-/*  setInterval(function() {
-    var processing = localStorage.getItem('processing') || 'No';
-    if(processing == 'No') {
-      if(AuthenticationService.online()) {
-        var Storage = JSON.parse(localStorage.getItem('localStorage')) || {};
-        if(Object.keys(Storage).length > 0) {
-          angular.forEach(Storage, function(monitor, key) {
-            if(!monitor.nid) {
-              localStorage.setItem('processing', 'Yes');
-              AuthenticationService.saveMonitorInServer(monitor, key);
-              $state.go($state.current, {}, {reload: true});
-            }
-          })
-        }
-      }
-    }
-  }, 3000);*/
 })
   
 .controller('LoginCtrl', function($scope, $http, $state, AuthenticationService) {
   $scope.message = "";
   $scope.doingLogin = false;
   $scope.user = {
-    username: null,
-    password: null
+    email: 'admin@admin.com',
+    password: 'admin'
   };
  
   $scope.login = function() {
-    if(($scope.user.username == null) || ($scope.user.password == null)) {
+    if(($scope.user.email == null) || ($scope.user.password == null)) {
       alert('Please fill the fields');
     } else {
       $scope.doingLogin = true;
@@ -110,7 +79,7 @@ angular.module('ParentsSchool.controllers', ['ParentsSchool.services'])
   });
  
   $scope.$on('event:auth-loginConfirmed', function() {
-    $scope.username = null;
+    $scope.email = null;
     $scope.password = null;
     $scope.authorized = true;
     $scope.menuLinks = $scope.authenticatedMenu;
@@ -119,7 +88,7 @@ angular.module('ParentsSchool.controllers', ['ParentsSchool.services'])
   
   $scope.$on('event:auth-login-failed', function(e, status) {
     $scope.doingLogin = false;
-    $scope.user.username = '';
+    $scope.user.email = '';
     $scope.user.password = '';
   });
  
@@ -135,8 +104,10 @@ angular.module('ParentsSchool.controllers', ['ParentsSchool.services'])
   $ionicViewService.clearHistory();
 })
 
-.controller('LogoutCtrl', function($scope, AuthenticationService) {
-  AuthenticationService.logout();
+.controller('LogoutCtrl', function($scope, $state) {
+  localStorage.removeItem('uid');
+  $state.go('app.home', {}, {reload: true, inherit: false});
+
 })
 
 

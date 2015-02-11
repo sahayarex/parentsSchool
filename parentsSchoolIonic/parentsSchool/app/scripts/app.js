@@ -6,7 +6,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('ParentsSchool', ['ionic', 'config', 'ParentsSchool.services', 'ParentsSchool.controllers'])
+angular.module('parentsSchool', ['ionic', 'config', 'parentsSchool.services', 'parentsSchool.controllers'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {

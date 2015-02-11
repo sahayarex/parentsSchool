@@ -1,34 +1,32 @@
-angular.module('ParentsSchool.services', ['http-auth-interceptor'])
+angular.module('parentsSchool.services', ['http-auth-interceptor'])
 .factory('AuthenticationService', function($rootScope, $http, $q, authService, $httpBackend, $location) {
   var baseUrl = 'http://localhost\:9000';
   //var baseUrl = 'http://axis.moolah.co.in';
-  var loginEndpoint       = baseUrl +'/api/users/me';
+  var loginEndpoint       = baseUrl +'/api/users/verify';
   var logoutEndpoint       = baseUrl +'/api/users/';
   /*var token = localStorage.getItem('token') || '';
   if(token) {
     $http.defaults.headers.post['X-CSRF-TOKEN']= token;  
   }
-*/
-  $http.defaults.headers.common.Authorization = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJfaWQiOiI1NGQ1ZjkwNmIzMTAxZGQwNDA1NTYyY2YiLCJpYXQiOjE0MjMzMDkwNzA2MTUsImV4cCI6MTQyMzMyNzA3MDYxNX0.Yrul64rZC2dN1p_JiD6DBRLAnmWk1Lz7XlxkKhWJmXc";
+  */
   var service = {
     login: function(user) {
-      $http.get(loginEndpoint, user, { ignoreAuthModule: true })
+      $http
+      .post(loginEndpoint, user)
       .success(function (data, status, headers, config) {
         console.log('Login data form server:', data);
-/*        $http.defaults.headers.common.Authorization = data.token;
-        $http.defaults.headers.post['X-CSRF-TOKEN'] = data.token;
-        $http.defaults.headers.post['XSRF-TOKEN'] = data.token;
-        var prevUserUid = localStorage.getItem('uid') || '';
+        $http.defaults.headers.common.Authorization = "Bearer "+data.token;
+/*        var prevUserUid = localStorage.getItem('uid') || '';
         if(prevUserUid && (prevUserUid != data.user.uid)) {
           localStorage.removeItem('userSites'+prevUserUid);
           localStorage.removeItem('localData');
-        }
-        localStorage.setItem('uid', data.user.uid);
-        localStorage.setItem('user', JSON.stringify(data.user));
+        }*/
+        localStorage.setItem('uid', data._id);
+        localStorage.setItem('user', JSON.stringify(data));
         localStorage.setItem('token', data.token);
 
         authService.loginConfirmed(data, function(config) { 
-          config.headers.Authorization = data.token;
+          config.headers.Authorization = "Bearer "+data.token;
           return config;
         });
       })
@@ -40,7 +38,6 @@ angular.module('ParentsSchool.services', ['http-auth-interceptor'])
         } else if (status == 404) {
           error = "Backend is not configured properly"; 
         }
-        alert(error);*/
       });
     },
     logout: function(user) {
