@@ -1,0 +1,20 @@
+<ion-view title="Update {{studentname}} marks">
+<!--   <ion-nav-buttons side="left">
+    <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
+  </ion-nav-buttons> -->
+  <ion-content>
+    <form ng-submit="updateMarks()">
+      <div class="list list-inset">
+      <label class="item item-input" ng-repeat="(k,v) in subjects">
+      <span class="input-label">{{v}}</span>
+      <input style="text-transform: capitalize" type="text" ng-model="marks[v]">
+      </label>
+      <label class="item item-input">
+      <span class="input-label">Attendance</span>
+      <input style="text-transform: capitalize" type="text" ng-model="marks.attendance">
+      </label>      
+      <button class="button button-block button-positive activated">Submit</button>
+      </div>
+    </form>
+  </ion-content>
+</ion-view>

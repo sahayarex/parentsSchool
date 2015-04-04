@@ -2,11 +2,11 @@
   "name": "ParentsSchool",
   "version": "0.0.0",
   "dependencies": {
-    "ionic": "v1.0.0-beta.13"
+    "ionic": "v1.0.0-beta.13",
+    "angular-chart.js": "~0.5.3"
   },
   "devDependencies": {
     "angular-mocks": "~1.2.17",
     "angular-scenario": "~1.2.17"
   }
 }
-

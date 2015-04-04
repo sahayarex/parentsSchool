@@ -13,7 +13,7 @@ exports.index = function(req, res) {
 
 // Get a single general
 exports.show = function(req, res) {
-  General.findById(req.params.id, function (err, general) {
+  General.find({school:req.params.school}, function (err, general) {
     if(err) { return handleError(res, err); }
     if(!general) { return res.send(404); }
     return res.json(general);
@@ -22,6 +22,7 @@ exports.show = function(req, res) {
 
 // Creates a new general in the DB.
 exports.create = function(req, res) {
+  console.log('body', req.body);
   General.create(req.body, function(err, general) {
     if(err) { return handleError(res, err); }
     return res.json(201, general);

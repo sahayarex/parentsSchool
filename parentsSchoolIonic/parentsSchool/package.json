@@ -50,6 +50,8 @@
   "cordovaPlugins": [
     "https://github.com/driftyco/ionic-plugins-keyboard.git",
     "org.apache.cordova.statusbar",
-    "org.apache.cordova.console"
+    "org.apache.cordova.console",
+    "https://github.com/apache/cordova-plugin-splashscreen",
+    "https://github.com/brodysoft/Cordova-SQLitePlugin.git"
   ]
 }

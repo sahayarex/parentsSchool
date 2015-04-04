@@ -27,7 +27,9 @@ exports.index = function(req, res) {
 exports.create = function (req, res, next) {
   var newUser = new User(req.body);
   newUser.provider = 'local';
-  newUser.role = 'user';
+  /*newUser.role = 'user';*/
+console.log('user', newUser);
+console.log('req', req.body);
   newUser.save(function(err, user) {
     if (err) return validationError(res, err);
     var token = jwt.sign({_id: user._id }, config.secrets.session, { expiresInMinutes: 60*5 });
@@ -101,7 +103,7 @@ exports.verify = function(req, res, next) {
 console.log('user', req.body); 
 User.findOne({
     email: req.body.email
-  }, function(err, user) { // don't ever give out the password or salt
+  }, '-salt -hashedPassword', function(err, user) { // don't ever give out the password or salt
     if (err) return next(err);
     if(user.authenticate(req.body.password)) {
       if (!user) return res.json(401);
@@ -111,7 +113,7 @@ User.findOne({
       data.email = user.email;
       data.name = user.name;
       data.role = user.role;
-      console.log(data);
+
       res.json(data);
     } else {
       res.json({status: 'password not matching'});

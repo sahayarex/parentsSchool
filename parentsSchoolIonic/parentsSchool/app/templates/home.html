@@ -1,30 +1,24 @@
 <ion-view title="Home" ng-controller="LoginCtrl">
    <ion-content class="has-header">
-   	<div class="angular-center-container">
-		<div class="centered">
-		  	<form>
-		      <div class="list list-inset">
-		        <label class="item item-input">
-		          <span class="input-label">Username</span>
-		          <input type="text" ng-model="user.email">
-		        </label>
-		        <label class="item item-input">
-		          <span class="input-label">Password</span>
-		          <input type="password" ng-model="user.password">
-		        </label>
-		        <label class="item">
-		          <button class="button icon-right ion-ios7-arrow-right button-block button-positive" ng-click="login()">Log in</button>
-		        </label>
+	  	<form>
+	      <div class="list list-inset">
+	        <label class="item item-input">
+	          <i class="icon ion-person"></i>
+	          <input class="custom-icon" type="text" ng-model="user.email" placeholder="Username">
+	        </label>
+	        <label class="item item-input">
+	          <i class="icon ion-locked custom-icon"></i>
+	          <input class="custom-icon" type="password" ng-model="user.password" placeholder="Password">
+	        </label>
 
-		        <div class="row" ng-show="doingLogin">
-		          <div class="col centered-content">
-		            <i class="icon ion-loading-c loading-big"></i>
-		          </div>
-		        </div>
+	      <button class="button button-block button-positive" ng-click="login()">Log in</button>
 
-		      </div>
-		    </form>
-		</div>
-	</div>
+	        <div class="row" ng-show="doingLogin">
+	          <div class="col centered-content">
+	            <i class="icon ion-loading-c loading-big"></i>
+	          </div>
+	        </div>
+
+	    </form>
   </ion-content>
 </ion-view>

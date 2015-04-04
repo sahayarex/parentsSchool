@@ -14,12 +14,15 @@ var UserSchema = new Schema({
     default: 'user',
     enum: ['admin', 'user', 'parent', 'student', 'teacher', 'hm']
   },
-  school: String,
-  class: String,
+  studentid: String,
+  standard: String,
   devision: String,
   phone: String,
   address: String,
   students: Array,
+  parent: String,
+  teacher: String,
+  school: String,
   hashedPassword: String,
   provider: String,
   salt: String,
@@ -27,7 +30,6 @@ var UserSchema = new Schema({
   twitter: {},
   google: {},
   github: {},
-  created: Date
 });
 
 /**

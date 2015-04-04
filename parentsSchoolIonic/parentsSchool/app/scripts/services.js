@@ -1,5 +1,5 @@
 angular.module('parentsSchool.services', ['http-auth-interceptor'])
-.factory('AuthenticationService', function($rootScope, $http, $q, authService, $httpBackend, $location) {
+.factory('AuthenticationService', function($rootScope, user, $http, $q, authService, $httpBackend, $location) {
   var baseUrl = 'http://localhost\:9000';
   //var baseUrl = 'http://axis.moolah.co.in';
   var loginEndpoint       = baseUrl +'/api/users/verify';
@@ -14,15 +14,17 @@ angular.module('parentsSchool.services', ['http-auth-interceptor'])
       $http
       .post(loginEndpoint, user)
       .success(function (data, status, headers, config) {
-        console.log('Login data form server:', data);
         $http.defaults.headers.common.Authorization = "Bearer "+data.token;
 /*        var prevUserUid = localStorage.getItem('uid') || '';
         if(prevUserUid && (prevUserUid != data.user.uid)) {
           localStorage.removeItem('userSites'+prevUserUid);
           localStorage.removeItem('localData');
         }*/
+        console.log("UserData from server:", data);
+        $rootScope.user = data;
         localStorage.setItem('uid', data._id);
         localStorage.setItem('user', JSON.stringify(data));
+        console.log('Login data form server:', data);
         localStorage.setItem('token', data.token);
 
         authService.loginConfirmed(data, function(config) { 
@@ -50,18 +52,38 @@ angular.module('parentsSchool.services', ['http-auth-interceptor'])
     loginCancelled: function() {
       authService.loginCancelled();
     },
-    getNodes: function(nodeData) {
+    saveMarks: function(marks) {
+      console.log("Marks", marks);
       var defer = $q.defer();
-      $http.post(baseUrl+'/drupalionic/drupalionic_resources/get_nodes', nodeData)
+      $http.post(baseUrl+'/api/marks', marks)
       .success(function(data, status, headers, config){
-        localStorage.setItem('processing', 'No');
         defer.resolve(data);
       }).error(function(data, status, headers, config){
-        localStorage.setItem('processing', 'No');
         defer.reject(data);
       }); 
       return defer.promise;
-    },        
+    },
+    updateMarks: function(marks) {
+      console.log("update marks:", marks);
+      var defer = $q.defer();
+      $http.post(baseUrl+'/api/marks/'+marks._id, marks)
+      .success(function(data, status, headers, config){
+        defer.resolve(data);
+      }).error(function(data, status, headers, config){
+        defer.reject(data);
+      }); 
+      return defer.promise;
+    },    
+    getMarks: function(student) {
+      var defer = $q.defer();
+      $http.get(baseUrl+'/api/marks/'+student.year+'/'+student.typeofexam+'/'+student.studentid)
+      .success(function(data, status, headers, config){
+        defer.resolve(data);
+      }).error(function(data, status, headers, config){
+        defer.reject(data);
+      }); 
+      return defer.promise;
+    },            
     online: function() {
       if(navigator.platform == "Linux x86_64") {
         return true;

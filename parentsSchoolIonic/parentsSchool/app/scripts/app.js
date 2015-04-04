@@ -6,9 +6,9 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-angular.module('parentsSchool', ['ionic', 'config', 'parentsSchool.services', 'parentsSchool.controllers'])
+var app = angular.module('parentsSchool', ['ionic', 'config', 'chart.js', 'parentsSchool.services', 'parentsSchool.controllers'])
 
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform, $rootScope) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -20,6 +20,7 @@ angular.module('parentsSchool', ['ionic', 'config', 'parentsSchool.services', 'p
       StatusBar.styleDefault();
     }
   });
+  $rootScope.filters = false;
 })
 
 .directive('ngEnter', function () {
@@ -34,7 +35,7 @@ angular.module('parentsSchool', ['ionic', 'config', 'parentsSchool.services', 'p
         });
     };
 })
-
+/*
 .filter('orderObjectBy', function() {
   return function(items, field, reverse) {
     var filtered = [];
@@ -54,7 +55,7 @@ angular.module('parentsSchool', ['ionic', 'config', 'parentsSchool.services', 'p
     return items.slice().reverse();
   };
 })
-
+*/
 .directive('clickOnce', function($timeout) {
     return {
         restrict: 'A',
@@ -72,7 +73,47 @@ angular.module('parentsSchool', ['ionic', 'config', 'parentsSchool.services', 'p
         }
     };
 })
+.directive('ionSearch', function() {
+    return {
+        restrict: 'E',
+        replace: true,
+        scope: {
+            getData: '&source',
+            model: '=?',
+            search: '=?filter'
+        },
+        link: function(scope, element, attrs) {
+            attrs.minLength = attrs.minLength || 0;
+            scope.placeholder = attrs.placeholder || '';
+            scope.search = {value: ''};
+            if (attrs.class)
+                element.addClass(attrs.class);
 
+            if (attrs.source) {
+                scope.$watch('search.value', function (newValue, oldValue) {
+                  console.log('newValue', newValue);
+                  console.log('oldValue', oldValue);
+                    if (newValue.length > attrs.minLength) {
+                        scope.getData({str: newValue}).then(function (results) {
+                            scope.model = results;
+                        });
+                    } else {
+                        scope.model = [];
+                    }
+                });
+            }
+
+            scope.clearSearch = function() {
+                scope.search.value = '';
+            };
+        },
+        template: '<div class="item-input-wrapper">' +
+                    '<i class="icon ion-android-search"></i>' +
+                    '<input type="search" placeholder="{{placeholder}}" ng-model="search.value">' +
+                    '<i ng-if="search.value.length > 0" ng-click="clearSearch()" class="icon ion-close"></i>' +
+                  '</div>'
+    };
+})
 .config(function($stateProvider, $urlRouterProvider, $httpProvider) {
   delete $httpProvider.defaults.headers.common['X-Requested-With'];
   $stateProvider
@@ -82,21 +123,66 @@ angular.module('parentsSchool', ['ionic', 'config', 'parentsSchool.services', 'p
       templateUrl: "templates/menu.html",
       controller: 'AppCtrl'
     })
-   .state('app.pages', {
-      url: "/pages",
+   .state('app.dashboard', {
+      url: "/dashboard",
       views: {
         'menuContent' :{
-          templateUrl: "templates/pages.html",
-          controller: 'PagesCtrl'
+          templateUrl: "templates/dashboard.html",
+          controller: 'DashboardCtrl'
         }
       }
     })
-    .state('app.page', {
-      url: "/page/:pageId",
+   .state('app.dashboardFilters', {
+      url: "/dashboard/:year/:typeofexam",
       views: {
         'menuContent' :{
-          templateUrl: "templates/page.html",
-          controller: 'PageCtrl'
+          templateUrl: "templates/dashboard.html",
+          controller: 'DashboardCtrl'
+        }
+      }
+    })
+    .state('app.allstudents', {
+      url: "/allstudents",
+      views: {
+        'menuContent' :{
+          templateUrl: "templates/allstudents.html",
+          controller: 'AllStudentsCtrl'
+        }
+      }
+    })       
+   .state('app.marks', {
+      url: "/marks",
+      views: {
+        'menuContent' :{
+          templateUrl: "templates/marks.html",
+          controller: 'MarksCtrl'
+        }
+      }
+    })   
+    .state('app.students', {
+      url: "/marks/:year/:typeofexam",
+      views: {
+        'menuContent' :{
+          templateUrl: "templates/students.html",
+          controller: 'StudentsCtrl'
+        }
+      }
+    })    
+    .state('app.entermarks', {
+      url: "/marks/:year/:typeofexam/:studentid",
+      views: {
+        'menuContent' :{
+          templateUrl: "templates/entermarks.html",
+          controller: 'EnterMarksCtrl'
+        }
+      }
+    })
+    .state('app.updatemarks', {
+      url: "/marks/:year/:typeofexam/:studentid/:action",
+      views: {
+        'menuContent' :{
+          templateUrl: "templates/updatemarks.html",
+          controller: 'UpdateMarksCtrl'
         }
       }
     })    
@@ -139,3 +225,4 @@ angular.module('parentsSchool', ['ionic', 'config', 'parentsSchool.services', 'p
 
 });
 
+app.value("user", {});
