@@ -1,0 +1,11 @@
+Student;StudentID;Standard;Division;Address;Teacher;TeacherPhone;Parent;ParentPhone;TypeOfExams;Subjects
+Student a;1;8;a;11/19, port street;teacher a;8787843737;parent a;8989898989;quarterly, half-yearly, annual;tamil, engilsh, hindi, math, science, history
+Student b;2;8;a;11/19, port street;teacher a;8787843737;parent b;8989898989;quarterly, half-yearly, annual;tamil, engilsh, hindi, math, science, history
+Student c;3;8;a;11/19, port street;teacher a;8787843737;parent c;8989898989;quarterly, half-yearly, annual;tamil, engilsh, hindi, math, science, history
+Student d;4;8;a;11/19, port street;teacher a;8787843737;parent d;8989898989;quarterly, half-yearly, annual;tamil, engilsh, hindi, math, science, history
+Student e;5;8;a;11/19, port street;teacher a;8787843737;parent e;8989898989;quarterly, half-yearly, annual;tamil, engilsh, hindi, math, science, history
+Student f;6;8;a;11/19, port street;teacher a;8787843737;parent f;8989898989;quarterly, half-yearly, annual;tamil, engilsh, hindi, math, science, history
+Student g;7;8;a;11/19, port street;teacher a;8787843737;parent g;8989898989;quarterly, half-yearly, annual;tamil, engilsh, hindi, math, science, history
+Student h;8;8;a;11/19, port street;teacher a;8787843737;parent h;8989898989;quarterly, half-yearly, annual;tamil, engilsh, hindi, math, science, history
+Student i;9;8;a;11/19, port street;teacher a;8787843737;parent i;8989898989;quarterly, half-yearly, annual;tamil, engilsh, hindi, math, science, history
+Student j;10;8;a;11/19, port street;teacher a;8787843737;parent j;8989898989;quarterly, half-yearly, annual;tamil, engilsh, hindi, math, science, history
