@@ -7,9 +7,21 @@
             <div class="bar bar-header item-input-inset">
                 <ion-search placeholder="Search a user" filter="query.search"></ion-search>
             </div>
-            <div ng-repeat="user in users | filter:query.search.value" class="item">
+            <a class="item item-avatar" ng-repeat="user in users | filter:query.search.value" href="#/app/studentdashboard/{{user.year}}/{{user.typeofexam}}/{{user.studentid}}">
+
+      <div class="text-icon badge badge-assertive">{{user.grade}}</div>
+      <h2>{{user.student}}</h2>
+      <p>Total: {{user.total}} | Percentage: {{user.percentage}}%</p>
+    </a>
+<!--                 <a class="item item-icon-left" ng-repeat="user in users | filter:query.search.value" href="#">
+    <i class="icon ion-person"></i>
+    {{user.student}}
+    <span class="badge badge-assertive">{{user.grade}}</span>
+    <span>Total: {{user.total}} | Percentage: {{user.percentage}}%</span>
+  </a> -->
+<!--             <div ng-repeat="user in users | filter:query.search.value" class="item">
                 {{user.name}}
-             </div>
+             </div> -->
         </div>
   </ion-content>
 </ion-view>

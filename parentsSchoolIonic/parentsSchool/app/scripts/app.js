@@ -1,4 +1,5 @@
 'use strict';
+var db = null;
 // Ionic Starter App, v0.9.20
 
 // angular.module is a global place for creating, registering and retrieving Angular modules
@@ -6,9 +7,9 @@
 // the 2nd parameter is an array of 'requires'
 // 'starter.services' is found in services.js
 // 'starter.controllers' is found in controllers.js
-var app = angular.module('parentsSchool', ['ionic', 'config', 'chart.js', 'parentsSchool.services', 'parentsSchool.controllers'])
+var app = angular.module('parentsSchool', ['ionic', 'ngCordova', 'config', 'chart.js', 'parentsSchool.services', 'parentsSchool.controllers'])
 
-.run(function($ionicPlatform, $rootScope) {
+.run(function($ionicPlatform, $cordovaSQLite) {
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -19,8 +20,22 @@ var app = angular.module('parentsSchool', ['ionic', 'config', 'chart.js', 'paren
       // org.apache.cordova.statusbar required
       StatusBar.styleDefault();
     }
+    if(window.cordova) {
+      db = $cordovaSQLite.openDB({ name: "my.db" });
+    } else {
+      db = window.openDatabase("my.db", "1.0", "Cordova Demo", 200000);
+    }
+    $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS people (id integer primary key, firstname text, lastname text)");
+/*
+      var query = "INSERT INTO people (firstname, lastname) VALUES (?,?)";
+      $cordovaSQLite.execute(db, query, ["sahaya1", "rex1"]).then(function(res) {
+        console.log("insertId: " + res.insertId);
+        alert("res.insertId: "+res.insertId);
+      }, function (err) {
+        console.error(err);
+        alert("error");
+      });*/
   });
-  $rootScope.filters = false;
 })
 
 .directive('ngEnter', function () {
@@ -149,7 +164,25 @@ var app = angular.module('parentsSchool', ['ionic', 'config', 'chart.js', 'paren
           controller: 'AllStudentsCtrl'
         }
       }
-    })       
+    })
+   .state('app.allstudentsFilters', {
+      url: "/allstudents/:year/:typeofexam",
+      views: {
+        'menuContent' :{
+          templateUrl: "templates/allstudents.html",
+          controller: 'AllStudentsCtrl'
+        }
+      }
+    })           
+   .state('app.studentDashboard', {
+      url: "/studentdashboard/:year/:typeofexam/:studentid",
+      views: {
+        'menuContent' :{
+          templateUrl: "templates/studentdashboard.html",
+          controller: 'StudentDashboardCtrl'
+        }
+      }
+    })   
    .state('app.marks', {
       url: "/marks",
       views: {

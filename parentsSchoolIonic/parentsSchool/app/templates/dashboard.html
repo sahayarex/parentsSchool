@@ -6,22 +6,16 @@
   <div class="row" ng-if="dashboardStatus == 'empty'">
     <div class="col">Dashboard is empty</div>
   </div>
-  <div class="row">
-    <canvas id="doughnut" class="chart chart-doughnut" data="statusData"
-    labels="statusLabels" series="stutusLabels"></canvas>   
-  </div>
-  <div class="row">
-    <canvas id="line" class="chart chart-line" data="gradeData"
-      labels="gradeLabels">
+  <div class="item item-list">
+    <canvas id="doughnut" class="col chart chart-doughnut" data="statusData"
+    labels="statusLabels" legend="true" series="stutusLabels"></canvas>
+    <canvas id="line" class="col chart chart-line" data="gradeData"
+      labels="gradeLabels" legend="true" series="gradeLabels">
     </canvas>     
-  </div>
-  <div class="row">
-    <canvas id="bar" class="chart chart-bar" data="subjectData"
-  labels="subjectLabels" series="subjectSeries"></canvas>
-  </div>
-  <div class="row">
-    <canvas id="pie" class="chart chart-pie" data="attendanceData"
-  labels="attendanceLabels"></canvas> 
+    <canvas id="bar" class="col chart chart-bar" data="subjectData"
+  labels="subjectLabels" legend="true" series="subjectSeries"></canvas>
+    <canvas id="pie" class="col chart chart-pie" data="attendanceData"
+  labels="attendanceLabels" legend="true" series="attendanceLabels"></canvas> 
   </div>
   </ion-content>
 </ion-view>

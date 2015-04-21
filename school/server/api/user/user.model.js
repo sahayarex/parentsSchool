@@ -21,7 +21,7 @@ var UserSchema = new Schema({
   division: String,
   phone: String,
   address: String,
-  students: {type: Array, unique: true},
+  students: { type: Array, unique: true},
   parent: String,
   teacher: String,
   hashedPassword: String,

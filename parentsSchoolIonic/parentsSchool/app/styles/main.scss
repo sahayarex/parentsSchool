@@ -23,3 +23,13 @@ input.custom-icon {
 .input-label {
     text-transform: capitalize;
 }
+.item-avatar .text-icon {
+position: absolute;
+top: 16px;
+left: 16px;
+max-width: 44px;
+max-height: 40px;
+width: 100%;
+font-size: 32px;
+padding: 12px 12px;
+}

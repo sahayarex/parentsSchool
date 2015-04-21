@@ -45,11 +45,11 @@
         <form>
         <div class="list list-inset">
             <div class="item item-divider">Year</div>
-            <ion-radio name="year" ng-model="dashboardFilters.year" ng-repeat="(k,v) in years" ng-value="{{k}}">{{v}}</ion-radio>
+            <ion-radio name="year" ng-model="filters.year" ng-repeat="(k,v) in years" ng-value="{{k}}">{{v}}</ion-radio>
         </div>
         <div class="list list-inset">
             <div class="item item-divider">Exam</div>
-            <ion-radio name="exam" ng-model="dashboardFilters.typeofexam" ng-repeat="(k,v) in user.typeofexams" ng-value="{{k}}">{{v}}</ion-radio>
+            <ion-radio name="exam" ng-model="filters.typeofexam" ng-repeat="(k,v) in user.typeofexams" ng-value="{{k}}">{{v}}</ion-radio>
         </div>        
       <div class="row">
         <button class="col col-33 col-offset-33 button icon-left ion-chevron-left button-block button-positive" ng-click="filterResult()">Go</button>

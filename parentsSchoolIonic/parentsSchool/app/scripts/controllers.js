@@ -1,6 +1,6 @@
 angular.module('parentsSchool.controllers', ['parentsSchool.services'])
 
-.controller('AppCtrl', function($scope, $rootScope, $state, AuthenticationService, $ionicSideMenuDelegate) {
+.controller('AppCtrl', function($scope, $rootScope, $state, $cordovaSQLite, $ionicSideMenuDelegate, AuthenticationService) {
   $scope.user = JSON.parse(localStorage.getItem('user')) || {};
   $scope.uid = localStorage.getItem('uid') || '';
   $scope.savingSiteDetails = false;
@@ -54,18 +54,24 @@ angular.module('parentsSchool.controllers', ['parentsSchool.services'])
       }
     }
   }, 3000);
-console.log("page",$state.current.url.indexOf('dashboard'));
+
+  $rootScope.filterResult = function() {
+    $ionicSideMenuDelegate.toggleRight();
+    console.log("current ", $state.current.url.indexOf('allstudents'));
+    if($state.current.url.indexOf('dashboard') > -1) {
+      $state.go("app.dashboardFilters", {year: $rootScope.years[$rootScope.filters.year], typeofexam: $scope.user.typeofexams[$rootScope.filters.typeofexam]});
+    } else if ($state.current.url.indexOf('allstudents') > -1) {
+    console.log('filter available', $state);
+    console.log("result", $rootScope.filters);
+      
+      $state.go("app.allstudentsFilters", {year: $rootScope.years[$rootScope.filters.year], typeofexam: $scope.user.typeofexams[$rootScope.filters.typeofexam]});
+    }
+  }
+/*console.log("page",$state.current.url.indexOf('dashboard'));
 if($state.current.url.indexOf('dashboard') > -1) {
   console.log('filter available', $state);
-  $scope.dashboard = true;
-  $rootScope.dashboardFilters = {};
-  $scope.years = ["2015","2014"];
-  $scope.filterResult = function() {
-    console.log("result", $rootScope.dashboardFilters);
-    $ionicSideMenuDelegate.toggleRight();
-    $state.go("app.dashboardFilters", {year: $scope.years[$rootScope.dashboardFilters.year], typeofexam: $scope.user.typeofexams[$rootScope.dashboardFilters.typeofexam]});
-  }
-}
+
+}*/
  /* console.log("current state", $state.current);
   document.body.classList.add($state.current.url.replace(/\//g, ""));  
   $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){ 
@@ -76,19 +82,26 @@ if($state.current.url.indexOf('dashboard') > -1) {
 
   });*/
 })
-.controller('DashboardCtrl', function($scope, $rootScope, $stateParams, AuthenticationService) {
+.controller('DashboardCtrl', function($scope, $rootScope, $state, $stateParams, $ionicSideMenuDelegate, AuthenticationService) {
+  $rootScope.dashboard = true;
+  $rootScope.filters = true;
+  $rootScope.filters = {};
+  $rootScope.years = ["2015","2014"];
   console.log("state Params", $stateParams);
   var user = JSON.parse(localStorage.getItem("user")) || {};
   var latestUpdated = JSON.parse(localStorage.getItem("latestUpdated")) || {};
   console.log("latest updated", latestUpdated);
   if(Object.keys($stateParams).length > 0) {
     $scope.params = $stateParams;
+    $rootScope.filters = {year: $rootScope.years.indexOf($stateParams.year), typeofexam: user.typeofexams.indexOf($stateParams.typeofexam)};
   } else {
     var year = new Date().getFullYear();
     if(Object.keys(latestUpdated).length > 0) {
       $scope.params = {year: latestUpdated.year, typeofexam: latestUpdated.typeofexam};
+      $rootScope.filters = {year: $rootScope.years.indexOf(latestUpdated.year), typeofexam: user.typeofexams.indexOf(latestUpdated.typeofexam)};
     } else {
       $scope.params = {year: year, typeofexam: user.typeofexams[0]};
+      $rootScope.filters = {year: $rootScope.years.indexOf(year), typeofexam: 0};
     }
   }
   $scope.params.studentid = "all";
@@ -106,25 +119,19 @@ if($state.current.url.indexOf('dashboard') > -1) {
   AuthenticationService.getMarks($scope.params).then(function(studentMarks) {
     console.log("got marks man: ", studentMarks);
     if(studentMarks.length > 0) {
-      $rootScope.filters = true;
       angular.forEach(studentMarks, function(v,k) {
         if(v.status == "Pass")
             pass++;
         if(v.status == "Fail")
             fail++;
-        angular.forEach(v.subjects, function(vv, kk) {
-          console.log("limit", user.passmark);
-          console.log("subject", vv);
-          console.log("subject val", v[vv]);
-          if(parseInt(v[vv]) > user.passmark) {
+        angular.forEach(v.marks, function(vv, kk) {
+          if(parseInt(vv[v.subjects[kk]]) > user.passmark) {
             subjectDataPass[kk] = (subjectDataPass[kk]) ? subjectDataPass[kk] + 1 : 1;
             subjectDataFail[kk] = (subjectDataFail[kk]) ? subjectDataFail[kk] : 0;
           } else {
             subjectDataFail[kk] = (subjectDataFail[kk]) ? subjectDataFail[kk] + 1 : 1;
             subjectDataPass[kk] = (subjectDataPass[kk]) ? subjectDataPass[kk] : 0;
           }
-          console.log("Item pass: ", subjectDataPass);
-          console.log("Item fail: ", subjectDataFail);
         })
         angular.forEach(user.grades, function(gv, gk) {
           gradeData[gk] = (gradeData[gk]) ? gradeData[gk] : 0;
@@ -155,22 +162,109 @@ if($state.current.url.indexOf('dashboard') > -1) {
       $scope.attendanceData = [attendance, 100 - attendance];
     } else {
       $scope.dashboardStatus = "empty";
-      $rootScope.filters = false;
     }
   });
-
-
-
-  $scope.onClick = function (points, evt) {
-    console.log("event", evt);
-    console.log("point", points);
-  };
 })
-.controller('AllStudentsCtrl', function($scope) {
-  $scope.query = {};
+.controller('AllStudentsCtrl', function($scope, $rootScope, AuthenticationService) {
   var user = JSON.parse(localStorage.getItem("user")) || {};
-  $scope.users = user.students;
-  console.log("user", user);
+  $rootScope.dashboard = true;
+  $rootScope.filters = true;
+
+  console.log("students Filters",$rootScope.filters);
+  $scope.query = {};
+  var params = {year: $rootScope.years[$rootScope.filters.year], typeofexam: user.typeofexams[$rootScope.filters.typeofexam]};
+  params.studentid = "all";
+  console.log("root", params);
+  AuthenticationService.getMarks(params).then(function(studentMarks) {
+    if(studentMarks.length > 0) {
+      angular.forEach(studentMarks, function(mv, mk) {
+        mv.grade = mv.grade.replace("Grade ", "");
+        mv.percentage = mv.percentage.toPrecision(4);
+      })
+      $scope.users = studentMarks;
+    }
+  })
+
+})
+.controller('StudentDashboardCtrl', function($scope, $rootScope, $state, $stateParams, $ionicSideMenuDelegate, AuthenticationService) {
+  $rootScope.dashboard = true;
+  $rootScope.filters = true;
+  console.log("state Params", $stateParams);
+  var user = JSON.parse(localStorage.getItem("user")) || {};
+  var latestUpdated = JSON.parse(localStorage.getItem("latestUpdated")) || {};
+  console.log("latest updated", latestUpdated);
+  if(Object.keys($stateParams).length > 0) {
+    $scope.params = $stateParams;
+    $rootScope.filters = {year: $rootScope.years.indexOf($stateParams.year), typeofexam: user.typeofexams.indexOf($stateParams.typeofexam)};
+  } else {
+    var year = new Date().getFullYear();
+    if(Object.keys(latestUpdated).length > 0) {
+      $scope.params = {year: latestUpdated.year, typeofexam: latestUpdated.typeofexam};
+      $rootScope.filters = {year: $rootScope.years.indexOf(latestUpdated.year), typeofexam: user.typeofexams.indexOf(latestUpdated.typeofexam)};
+    } else {
+      $scope.params = {year: year, typeofexam: user.typeofexams[0]};
+      $rootScope.filters = {year: $rootScope.years.indexOf(year), typeofexam: 0};
+    }
+  }
+  $scope.params.typeofexam = "all";
+  $scope.statusLabels = ["Pass", "Fail"];
+  var pass = 0;
+  var fail = 0;
+  var subjectMarks = [];
+  var subjectLabels = [];
+  var subjectDataPass = [];
+  var subjectDataFail = [];
+  var gradeData = [];
+  var gradeLabels = [];
+  var attendanceVal = 0;
+  $scope.gradeData = [];
+  AuthenticationService.getMarks($scope.params).then(function(studentMarks) {
+    console.log("got marks man: ", studentMarks);
+    if(studentMarks.length > 0) {
+      var gradeDataVal = [];
+      angular.forEach(studentMarks, function(v,k) {
+        if(v.status == "Pass")
+            pass++;
+        if(v.status == "Fail")
+            fail++;
+        angular.forEach(v.marks, function(vv, kk) {
+          if(parseInt(vv[v.subjects[kk]]) > user.passmark) {
+            subjectDataPass[kk] = (subjectDataPass[kk]) ? subjectDataPass[kk] + 1 : 1;
+            subjectDataFail[kk] = (subjectDataFail[kk]) ? subjectDataFail[kk] : 0;
+          } else {
+            subjectDataFail[kk] = (subjectDataFail[kk]) ? subjectDataFail[kk] + 1 : 1;
+            subjectDataPass[kk] = (subjectDataPass[kk]) ? subjectDataPass[kk] : 0;
+          }
+        })
+        gradeDataVal[k] = []; 
+        angular.forEach(v.marks, function(gv, gk) {
+          gradeDataVal[k][gk] = parseInt(gv[v.subjects[gk]]);
+        })
+        if(attendanceVal > 0) {
+          attendanceVal = parseInt(v.attendance);
+        } else {
+          attendanceVal = attendanceVal + parseInt(v.attendance);
+        }
+      })
+/*      console.log("subjectLabels", subjectLabels);
+      console.log("subjectPass", subjectDataPass);
+      console.log("subjectFail", subjectDataFail);*/
+      $scope.subjectSeries = ["Pass", "Fail"];
+      $scope.subjectLabels = user.subjects;
+      $scope.subjectData = [
+        subjectDataPass,subjectDataFail
+      ];
+      $scope.statusData = [pass,fail];
+      $scope.gradeData = gradeDataVal;
+      $scope.gradeLabels = user.subjects;
+      $scope.gradeSeries = user.typeofexams;
+      var attendance = attendanceVal * (100/(studentMarks.length *100));
+      $scope.attendanceLabels = ["Present", "Absent"];
+      $scope.attendanceData = [attendance, 100 - attendance];
+    } else {
+      $scope.dashboardStatus = "empty";
+    }
+  });
 })
 .controller('MarksCtrl', function($scope, AuthenticationService) {
   var user = JSON.parse(localStorage.getItem("user")) || {};
@@ -218,6 +312,11 @@ if($state.current.url.indexOf('dashboard') > -1) {
   });
   console.log("user", $scope.studentname);
   $scope.createMarks = function() {
+    $scope.marks.marks = [];
+    angular.forEach(user.subjects, function(sv, sk) {
+      $scope.marks.marks[sk] = {};
+      $scope.marks.marks[sk][sv] = ($scope.allmarks[sv]) ? parseInt($scope.allmarks[sv]) : 0;
+    });
     var localData = JSON.parse(localStorage.getItem('localData')) || {};
     var t = new Date();
     var time = t.getTime();
@@ -245,7 +344,7 @@ if($state.current.url.indexOf('dashboard') > -1) {
       allUpdated[year] = {};
       allUpdated[year][$scope.marks.typeofexam] = {};
     }
-    allStudents[$scope.marks.studentid+"time"] = time;
+    //allStudents[$scope.marks.studentid+"time"] = time;
     allUpdated[year][$scope.marks.typeofexam] = allStudents;
     localStorage.setItem("updatedStudents", JSON.stringify(allUpdated));
     localStorage.setItem("latestUpdated", JSON.stringify({year:year, typeofexam: $scope.marks.typeofexam}));

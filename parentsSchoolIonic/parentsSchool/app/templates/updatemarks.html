@@ -5,9 +5,9 @@
   <ion-content>
     <form ng-submit="updateMarks()">
       <div class="list list-inset">
-      <label class="item item-input" ng-repeat="(k,v) in subjects">
-      <span class="input-label">{{v}}</span>
-      <input style="text-transform: capitalize" type="text" ng-model="marks[v]">
+      <label class="item item-input" ng-repeat="(k,v) in marks.marks">
+      <span class="input-label">{{k}}</span>
+      <input style="text-transform: capitalize" type="text" ng-model="marks.marks[k]">
       </label>
       <label class="item item-input">
       <span class="input-label">Attendance</span>

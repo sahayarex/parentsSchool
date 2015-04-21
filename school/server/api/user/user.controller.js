@@ -1,5 +1,6 @@
 'use strict';
 
+var _ = require('lodash');
 var User = require('./user.model');
 var passport = require('passport');
 var config = require('../../config/environment');
@@ -20,11 +21,14 @@ var createParent = function(res, request, student) {
     if (err) return next(err);
     console.log("ParentData", parentData);
     if(parentData) {
+      parentData.name = request.parent;
       parentData.students.push(student._id);
-      parentData.save(function(err) {
-        if (err) return validationError(res, err);
-        console.log("New Student added to parent");
-        return createTeacher(res, request, student);
+      parentData.phone = request.parentPhone;
+      parentData.password = request.password;
+      parentData.provider = request.provider;
+      parentData.save(function (err) {
+        if (err) { return validationError(res, err); }
+        return createTeacher(res, request, student);  
       });
     } else {
       var parentData = {};
@@ -37,7 +41,6 @@ var createParent = function(res, request, student) {
       parentData.provider = request.provider;
       var newParent = new User(parentData);
       newParent.save(function(err, parent) {
-        console.log("parent err", err);
         if (err) return validationError(res, err);
         console.log("Parent Created");
         return createTeacher(res, request, student);  
@@ -54,11 +57,20 @@ var createTeacher = function(res, request, student) {
     if (err) return next(err);
     console.log("Teacher: ",teacherData);
     if(teacherData) {
+      teacherData.name = request.teacher;
+      teacherData.phone = request.teacherPhone;
+      teacherData.password = request.password;
+      teacherData.provider = request.provider;
       teacherData.students.push({id:student._id,name:student.name});
-      teacherData.save(function(err, teacher) {
-        if (err) return validationError(res, err);
-        console.log("New Student added to teacher");
-        return res.json(200, teacher);
+      teacherData.typeofexams = request.typeofexams.replace(/ /g,"").split(",");
+      teacherData.subjects = request.subjects.replace(/ /g,"").split(",");
+      teacherData.school = request.school;
+      teacherData.standard = request.standard;
+      teacherData.division = request.division;      
+      teacherData.save(function (err) {
+        if (err) { return validationError(res, err); }
+        console.log("Teacher updated");
+        return res.json(200, teacherData);
       });
     } else {
       var teacherData = {};
@@ -113,10 +125,11 @@ exports.create = function (req, res, next) {
     }, '-salt -hashedPassword', function(err, studentData) {
       console.log("studentData", studentData);
       if(studentData) {
-        studentData.school = userData.school;
-        studentData.save(function(err) {
-          if (err) return validationError(res, err);
-          return createParent(res, req.body, studentData);
+        var studentUpdated = _.merge(studentData, userData);
+        studentUpdated.save(function (err) {
+          if (err) { return validationError(res, err); }
+          console.log("Student Updated");
+          return createParent(res, req.body, studentData);        
         });
       } else {
         var userStudent = new User(userData);
@@ -133,6 +146,11 @@ exports.create = function (req, res, next) {
     newUser.role = 'user';
     newUser.save(function(err, user) {
       if (err) return validationError(res, err);
+      var studentUpdated = _.merge(studentData, userData);
+      studentUpdated.save(function (err) {
+        if (err) { return validationError(res, err); }
+        return res.json(200, studentData);
+      });
       var token = jwt.sign({_id: user._id }, config.secrets.session, { expiresInMinutes: 60*5 });
       res.json({ token: token });
     });
@@ -174,7 +192,8 @@ User.findOne({
       data.students = user.students;
       data.typeofexams = user.typeofexams;
       data.subjects = user.subjects;
-      
+      data.division = user.division;
+      data.standard = user.standard;
       School.findOne({
         school: user.school
       }, function(err, school) {
@@ -185,6 +204,7 @@ User.findOne({
         data.grades = school.grades;
         data.schoolid = school._id;
         data.school = user.school;
+        data.period = school.period;
         console.log("user and school: ", data);
         res.json(data);
       })      

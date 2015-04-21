@@ -7,6 +7,7 @@ var SchoolSchema = new Schema({
   school: { type: String, unique: true, required: true},
   grades: Array,
   passmark: Number,
+  period: String,
   created: Date,
   updated: Date 
 });

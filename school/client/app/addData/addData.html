@@ -33,6 +33,12 @@
 	      <input required="true" type="integer" class="form-control" ng-model="school.passmark" 
 	         placeholder="Enter Pass Mark">
 	   </div>	   
+	   <div class="form-group required">
+	      <label for="passmark">Period</label>
+	      <input required="true" type="textarea" class="form-control" ng-model="school.period" 
+	         placeholder="Enter Period of education year">
+	         <p class="help-block">Example "June-April"</p>
+	   </div>	   	   
 	   <div class="form-group">
 	      <label for="inputfile">Import all students</label>
 	      	<ng-csv-import content="csv.content" header="true" separator=";" result="csv.result"></ng-csv-import>

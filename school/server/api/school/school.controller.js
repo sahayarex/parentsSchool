@@ -22,10 +22,23 @@ exports.show = function(req, res) {
 
 // Creates a new school in the DB.
 exports.create = function(req, res) {
-  School.create(req.body, function(err, school) {
-    if(err) { return handleError(res, err); }
-    return res.json(201, school);
-  });
+  School.findOne({
+      school:req.body.school,
+    }, function(err, schoolData) {
+      console.log("schoolData", schoolData);
+      if(schoolData) {
+        var updated = _.merge(schoolData, req.body);
+        updated.save(function (err) {
+          if (err) { return handleError(res, err); }
+          return res.json(200, schoolData);
+        });
+      } else {
+        School.create(req.body, function(err, school) {
+          if(err) { return handleError(res, err); }
+          return res.json(201, school);
+        });   
+      }
+    });
 };
 
 // Updates an existing school in the DB.

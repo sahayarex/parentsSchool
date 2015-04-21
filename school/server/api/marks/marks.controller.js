@@ -1,3 +1,4 @@
+
 'use strict';
 
 var _ = require('lodash');
@@ -23,12 +24,13 @@ exports.show = function(req, res) {
 
 // Get a single mark
 exports.getMark = function(req, res) {
+  var params = req.params;
   console.log("requested", req.params);
-  var params = {};
-  params.typeofexam = req.params.typeofexam;
-  params.year = req.params.year;
-  if(req.params.studentid != "all") {
-    params.studentid = req.params.studentid;
+  if(req.params.typeofexam == "all") {
+    delete params.typeofexam;
+  }
+  if(req.params.studentid == "all") {
+    delete params.studentid;
   }
   console.log("request", params);
   Marks.find(params, function (err, marks) {
@@ -53,24 +55,6 @@ exports.create = function(req, res) {
   School.findOne({school: req.body.school}, function (err, school) {
     if (err) return next(err);
     if (!school) return res.send(401);
-    var total = 0;
-    var status = "Pass";
-    req.body.subjects.forEach(function(v) {
-      console.log("v:", req.body[v]);
-      console.log("v1:", parseInt(req.body[v]));
-      if(req.body[v] < school.passmark) {
-        status = "Fail";
-      }
-      total = parseInt(total) + parseInt(req.body[v]);
-    });
-    req.body.total = total;
-    req.body.percentage = total * (100/(req.body.subjects.length*100));
-    school.grades.forEach(function(v) {
-      if((req.body.percentage >= v.lesser) && ((req.body.percentage <= v.greater))) {
-        req.body.grade = (status == "Fail") ? "Grade F" : v.grade;
-      }
-    })
-    req.body.status = status;
     var d = new Date();
     delete req.body.serverUpdate;
     console.log("before store:", req.body);
@@ -90,14 +74,14 @@ exports.update = function(req, res) {
     if (!school) return res.send(401);
     var total = 0;
     var status = "Pass";
-    req.body.subjects.forEach(function(v) {
-      console.log("v:", req.body[v]);
-      console.log("v1:", parseInt(req.body[v]));
-      if(req.body[v] < 35) {
+    req.body.marks.forEach(function(v) {
+      console.log("v:", req.body.marks[v]);
+      console.log("v1:", parseInt(req.body.marks[v]));
+      if(req.body.marks[v] < school.passmark) {
         status = "Fail";
       }
-      total = parseInt(total) + parseInt(req.body[v]);     
-    });
+      total = parseInt(total) + parseInt(req.body.marks[v]);
+    });    
     req.body.total = total;
     req.body.percentage = total * (100/(req.body.subjects.length*100));
     school.grades.forEach(function(v) {
