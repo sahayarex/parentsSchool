@@ -25,6 +25,9 @@ angular.module('starter.controllers', ['starter.services'])
   } else if ($state.current.url.indexOf('allstudents') > -1) {
     $rootScope.filters = true;
     $rootScope.page = "allstudents";
+  } else {
+    $rootScope.filters = false;
+    $rootScope.page == "nofilters";
   }
   if($rootScope.filters) {
     var t = new Date();
@@ -237,12 +240,6 @@ angular.module('starter.controllers', ['starter.services'])
   }
 })
 .controller('AllStudentsCtrl', function($scope, $rootScope, $cordovaSQLite, AuthenticationService) {
-  $scope.initialize = function() {
-    console.log("Student scope initialize");
-  }
-  $rootScope.filters = true;
-  $rootScope.page = "allstudents";
-  console.log("all students");
   $rootScope.filterStudentsAll = function(page) {
     console.log("Filters data Students:", $rootScope.filtersData);
     $scope.getStudentsData();
@@ -374,8 +371,6 @@ angular.module('starter.controllers', ['starter.services'])
   });
 })
 .controller('MarksCtrl', function($scope, $rootScope, AuthenticationService) {
-  $rootScope.filters = false;
-  $rootScope.page = 'marks';
   $scope.exams = user.typeofexams;
   
   var latestUpdated = JSON.parse(localStorage.getItem("latestUpdated")) || {};
