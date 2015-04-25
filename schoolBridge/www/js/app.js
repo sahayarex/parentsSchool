@@ -28,7 +28,7 @@ angular.module('starter', ['ionic', 'ngCordova', 'chart.js', 'starter.controller
     }
   });
 })
-.directive('initialize', function() {
+.directive('initialize', function($rootScope) {
   return {
     restrict: 'AE',
     replace: true,
@@ -36,8 +36,14 @@ angular.module('starter', ['ionic', 'ngCordova', 'chart.js', 'starter.controller
     link: function(scope, elem, attrs) {
       elem.bind('click', function() {
         console.log("INITIALIZE: ", scope.link);
+        console.log("choose exam");
         if(scope.link.title == "Dashboard") {
           scope.filterResults();
+        } else if(scope.link.title == "Students") {
+          $rootScope.filters = true;
+        } else {
+          $rootScope.filters = false;
+          $rootScope.page = "allstudents";
         }
       });
     }

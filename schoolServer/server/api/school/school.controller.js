@@ -3,6 +3,7 @@
 var _ = require('lodash');
 var School = require('./school.model');
 var User = require('../user/user.model');
+var crypto = require('crypto');
 // Get list of schools
 exports.index = function(req, res) {
   School.find(function (err, schools) {
@@ -37,9 +38,13 @@ exports.create = function(req, res) {
           if(err) { return handleError(res, err); }
           var hm = {};
           hm.role = "hm";
+          hm.name = "Head Master";
           hm.email = req.body.schoolphone.replace(" ", "-")+"@"+req.body.school.replace(" ", "-").toLowerCase()+".com";
-          hm.password = "hm"+req.body.schoolphone.replace(" ", "-");
+          hm.pepper = crypto.randomBytes(16).toString('base64');
+          hm.password = hm.pepper;
           hm.provider = "local";
+          hm.school = req.body.school;
+          hm.schoolid = school._id;
           var newHm = new User(hm);
           newHm.save(function(err, hmdata) {
             if(err) { return handleError(res, err); }
