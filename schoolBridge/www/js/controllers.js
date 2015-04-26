@@ -3,7 +3,7 @@ angular.module('starter.controllers', ['starter.services'])
 .controller('AppCtrl', function($scope, $stateParams, $cordovaSQLite, $rootScope, $state, AuthenticationService) {
   $scope.uid = localStorage.getItem('uid') || '';
   user = JSON.parse(localStorage.getItem('user')) || user;
-  $scope.authenticatedMenu = {"Links":[{"title":"Dashboard", "href":"app.dashboard", "class":"ion-stats-bars"}, {"title":"Students", "href":"app.allstudents", "class": "ion-person"},{"title":"Marks", "href":"app.marks", "class":"ion-clipboard"},{"title":"log-out", "href":"logout", "class":"ion-log-out"}]};                            
+  $scope.authenticatedMenu = {"Links":[{"title":"Dashboard", "href":"app.dashboard", "class":"ion-stats-bars"}, {"title":"Students", "href":"app.allstudents", "class": "ion-person"},{"title":"log-out", "href":"logout", "class":"ion-log-out"}]};                            
   $scope.anonymousMenu = {"Links":[{"title":"log-in", "href":"app.home", "class": "ion-log-in"}]};
   if($scope.uid) {
     $scope.authorized = true;
