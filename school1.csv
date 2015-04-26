@@ -1,41 +1,41 @@
-Student;StudentID;Standard;Division;Address;Teacher;TeacherPhone;Parent;ParentPhone;TypeOfExams;Subjects
-Student a;1;8;a;11/19, port street;teacher a;8787844737;parent a;8989898989;quarterly, half-yearly, annual;tamil, engilsh, hindi, math, science, history
-Student b;2;8;a;11/19, port street;teacher a;8787844737;parent b;8989898988;quarterly, half-yearly, annual;malayalam, engilsh, hindi, math, science, history
-Student c;3;8;a;11/19, port street;teacher a;8787844737;parent c;9989898989;quarterly, half-yearly, annual;tamil, engilsh, hindi, math, science, history
-Student d;4;8;a;11/19, port street;teacher a;8787844737;parent d;8889898989;quarterly, half-yearly, annual;tamil, engilsh, hindi, math, science, history
-Student e;5;8;a;11/19, port street;teacher a;8787844737;parent e;8979898989;quarterly, half-yearly, annual;tamil, engilsh, hindi, math, science, history
-Student f;6;8;a;11/19, port street;teacher a;8787844737;parent f;8986898989;quarterly, half-yearly, annual;tamil, engilsh, hindi, math, science, history
-Student g;7;8;a;11/19, port street;teacher a;8787844737;parent g;8987898989;quarterly, half-yearly, annual;tamil, engilsh, hindi, math, science, history
-Student h;8;8;a;11/19, port street;teacher a;8787844737;parent h;8981898989;quarterly, half-yearly, annual;tamil, engilsh, hindi, math, science, history
-Student i;9;8;a;11/19, port street;teacher a;8787844737;parent i;8982898989;quarterly, half-yearly, annual;tamil, engilsh, hindi, math, science, history
-Student j;10;8;a;11/19, port street;teacher a;8787844737;parent j;8989898389;quarterly, half-yearly, annual;tamil, engilsh, hindi, math, science, history
-Student k;11;8;a;11/19, port street;teacher a;8787844737;parent a;8989898489;quarterly, half-yearly, annual;tamil, engilsh, hindi, math, science, history
-Student l;12;8;a;11/19, port street;teacher a;8787844737;parent b;8989898989;quarterly, half-yearly, annual;tamil, engilsh, hindi, math, science, history
-Student m;13;8;a;11/19, port street;teacher a;8787844737;parent m;8985598989;quarterly, half-yearly, annual;tamil, engilsh, hindi, math, science, history
-Student n;14;8;a;11/19, port street;teacher a;8787844737;parent n;8989866989;quarterly, half-yearly, annual;tamil, engilsh, hindi, math, science, history
-Student o;15;8;a;11/19, port street;teacher a;8787844737;parent o;8989877989;quarterly, half-yearly, annual;tamil, engilsh, hindi, math, science, history
-Student p;16;8;a;11/19, port street;teacher a;8787844737;parent p;8989448989;quarterly, half-yearly, annual;tamil, engilsh, hindi, math, science, history
-Student q;17;8;a;11/19, port street;teacher a;8787844737;parent q;8989118989;quarterly, half-yearly, annual;tamil, engilsh, hindi, math, science, history
-Student r;18;8;a;11/19, port street;teacher a;8787844737;parent r;8989822989;quarterly, half-yearly, annual;tamil, engilsh, hindi, math, science, history
-Student s;19;8;a;11/19, port street;teacher a;8787844737;parent s;8989998989;quarterly, half-yearly, annual;tamil, engilsh, hindi, math, science, history
-Student t;20;8;a;11/19, port street;teacher a;8787844737;parent t;8989338989;quarterly, half-yearly, annual;malayalam, engilsh, hindi, math, science, history
-Student 1;1;9;a;11/19, port street;teacher b;8787843737;parent a;8989898989;quarterly, half-yearly, annual;tamil, engilsh, hindi, math, science, history
-Student 2;2;9;a;11/19, port street;teacher b;8787843737;parent b;8989898988;quarterly, half-yearly, annual;malayalam, engilsh, hindi, math, science, history
-Student 3;3;9;a;11/19, port street;teacher b;8787843737;Parent 3;8911198989;quarterly, half-yearly, annual;tamil, engilsh, hindi, math, science, history
-Student 4;4;9;a;11/19, port street;teacher b;8787843737;Parent 4;8911118989;quarterly, half-yearly, annual;tamil, engilsh, hindi, math, science, history
-Student 5;5;9;a;11/19, port street;teacher b;8787843737;Parent 5;8989822989;quarterly, half-yearly, annual;tamil, engilsh, hindi, math, science, history
-Student 6;6;9;a;11/19, port street;teacher b;8787843737;Parent 6;8989893389;quarterly, half-yearly, annual;tamil, engilsh, hindi, math, science, history
-Student 7;7;9;a;11/19, port street;teacher b;8787843737;Parent 7;8989894449;quarterly, half-yearly, annual;tamil, engilsh, hindi, math, science, history
-Student 8;8;9;a;11/19, port street;teacher b;8787843737;Parent 8;8989111989;quarterly, half-yearly, annual;tamil, engilsh, hindi, math, science, history
-Student 9;9;9;a;11/19, port street;teacher b;8787843737;Parent 9;9189898989;quarterly, half-yearly, annual;tamil, engilsh, hindi, math, science, history
-Student 10;10;9;a;11/19, port street;teacher b;8787843737;Parent 10;8989832189;quarterly, half-yearly, annual;tamil, engilsh, hindi, math, science, history
-Student 11;11;9;a;11/19, port street;teacher b;8787843737;Parent 11;8989812389;quarterly, half-yearly, annual;tamil, engilsh, hindi, math, science, history
-Student 12;12;9;a;11/19, port street;teacher b;8787843737;Parent 12;8989855589;quarterly, half-yearly, annual;tamil, engilsh, hindi, math, science, history
-Student 13;13;9;a;11/19, port street;teacher b;8787843737;Parent 13;8989895589;quarterly, half-yearly, annual;tamil, engilsh, hindi, math, science, history
-Student 14;14;9;a;11/19, port street;teacher b;8787843737;Parent 14;8989865489;quarterly, half-yearly, annual;tamil, engilsh, hindi, math, science, history
-Student 18;15;9;a;11/19, port street;teacher b;8787843737;Parent 18;8989832489;quarterly, half-yearly, annual;tamil, engilsh, hindi, math, science, history
-Student 15;16;9;a;11/19, port street;teacher b;8787843737;Parent 15;8989888989;quarterly, half-yearly, annual;tamil, engilsh, hindi, math, science, history
-Student 16;17;9;a;11/19, port street;teacher b;8787843737;Parent 16;8989876989;quarterly, half-yearly, annual;tamil, engilsh, hindi, math, science, history
-Student 17;18;9;a;11/19, port street;teacher b;8787843737;Parent 17;8989896789;quarterly, half-yearly, annual;tamil, engilsh, hindi, math, science, history
-Student 19;19;9;a;11/19, port street;teacher b;8787843737;Parent 19;8989894589;quarterly, half-yearly, annual;tamil, engilsh, hindi, math, science, history
-Student 20;20;9;a;11/19, port street;teacher b;8787843737;Parent 20;8989833389;quarterly, half-yearly, annual;malayalam, engilsh, hindi, math, science, history
+Student;StudentID;Standard;Division;Address;Teacher;TeacherPhone;Parent;ParentPhone;TypeOfExams;Subjects;
+Student a;1;8;a;11/19, port street;teacher a;8787844737;parent a;8989898989;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
+Student b;2;8;a;11/19, port street;teacher a;8787844737;parent b;8989898988;quarterly,half-yearly,annual;malayalam,english,hindi,math,science,history
+Student c;3;8;a;11/19, port street;teacher a;8787844737;parent c;9989898989;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
+Student d;4;8;a;11/19, port street;teacher a;8787844737;parent d;8889898989;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
+Student e;5;8;a;11/19, port street;teacher a;8787844737;parent e;8979898989;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
+Student f;6;8;a;11/19, port street;teacher a;8787844737;parent f;8986898989;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
+Student g;7;8;a;11/19, port street;teacher a;8787844737;parent g;8987898989;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
+Student h;8;8;a;11/19, port street;teacher a;8787844737;parent h;8981898989;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
+Student i;9;8;a;11/19, port street;teacher a;8787844737;parent i;8982898989;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
+Student j;10;8;a;11/19, port street;teacher a;8787844737;parent j;8989898389;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
+Student k;11;8;a;11/19, port street;teacher a;8787844737;parent a;8989898489;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
+Student l;12;8;a;11/19, port street;teacher a;8787844737;parent b;8989898989;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
+Student m;13;8;a;11/19, port street;teacher a;8787844737;parent m;8985598989;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
+Student n;14;8;a;11/19, port street;teacher a;8787844737;parent n;8989866989;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
+Student o;15;8;a;11/19, port street;teacher a;8787844737;parent o;8989877989;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
+Student p;16;8;a;11/19, port street;teacher a;8787844737;parent p;8989448989;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
+Student q;17;8;a;11/19, port street;teacher a;8787844737;parent q;8989118989;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
+Student r;18;8;a;11/19, port street;teacher a;8787844737;parent r;8989822989;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
+Student s;19;8;a;11/19, port street;teacher a;8787844737;parent s;8989998989;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
+Student t;20;8;a;11/19, port street;teacher a;8787844737;parent t;8989338989;quarterly,half-yearly,annual;malayalam,english,hindi,math,science,history
+Student 1;1;9;a;11/19, port street;teacher b;8787843737;parent a;8989898989;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
+Student 2;2;9;a;11/19, port street;teacher b;8787843737;parent b;8989898988;quarterly,half-yearly,annual;malayalam,english,hindi,math,science,history
+Student 3;3;9;a;11/19, port street;teacher b;8787843737;Parent 3;8911198989;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
+Student 4;4;9;a;11/19, port street;teacher b;8787843737;Parent 4;8911118989;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
+Student 5;5;9;a;11/19, port street;teacher b;8787843737;Parent 5;8989822989;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
+Student 6;6;9;a;11/19, port street;teacher b;8787843737;Parent 6;8989893389;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
+Student 7;7;9;a;11/19, port street;teacher b;8787843737;Parent 7;8989894449;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
+Student 8;8;9;a;11/19, port street;teacher b;8787843737;Parent 8;8989111989;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
+Student 9;9;9;a;11/19, port street;teacher b;8787843737;Parent 9;9189898989;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
+Student 10;10;9;a;11/19, port street;teacher b;8787843737;Parent 10;8989832189;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
+Student 11;11;9;a;11/19, port street;teacher b;8787843737;Parent 11;8989812389;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
+Student 12;12;9;a;11/19, port street;teacher b;8787843737;Parent 12;8989855589;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
+Student 13;13;9;a;11/19, port street;teacher b;8787843737;Parent 13;8989895589;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
+Student 14;14;9;a;11/19, port street;teacher b;8787843737;Parent 14;8989865489;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
+Student 18;15;9;a;11/19, port street;teacher b;8787843737;Parent 18;8989832489;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
+Student 15;16;9;a;11/19, port street;teacher b;8787843737;Parent 15;8989888989;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
+Student 16;17;9;a;11/19, port street;teacher b;8787843737;Parent 16;8989876989;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
+Student 17;18;9;a;11/19, port street;teacher b;8787843737;Parent 17;8989896789;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
+Student 19;19;9;a;11/19, port street;teacher b;8787843737;Parent 19;8989894589;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
+Student 20;20;9;a;11/19, port street;teacher b;8787843737;Parent 20;8989833389;quarterly,half-yearly,annual;malayalam,english,hindi,math,science,history

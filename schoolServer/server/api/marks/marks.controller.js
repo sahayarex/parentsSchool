@@ -48,21 +48,78 @@ exports.getAllMarks = function(req, res) {
     return res.json(marks);
   });
 };
-
+/*{ school: 'school a',
+  schoolid: '553b23937d39d2851f8949c3',
+  student: 'Student b',
+  studentid: '2',
+  standard: '8',
+  division: 'a',
+  typeofexam: 'Quaterly',
+  tamil: '10',
+  english: '20',
+  hindi: 'ab',
+  math: '20',
+  science: '10',
+  history: '20',
+  attendance: '10/30',
+  import: true }*/
 // Creates a new marks in the DB.
 exports.create = function(req, res) {
-  console.log("requested", req.body);
-  School.findOne({school: req.body.school}, function (err, school) {
-    if (err) return next(err);
-    if (!school) return res.send(401);
-    var d = new Date();
-    delete req.body.serverUpdate;
-    console.log("before store:", req.body);
-    Marks.create(req.body, function(err, marks) {
-      if(err) { return handleError(res, err); }
-      return res.json(201, marks);
+  console.log("request:", req.body);
+  if(req.body.import) {
+    User.findOne({schoolid: req.body.schoolid, name: req.body.student, role: "student"}, function (err, student) {
+      if (err) return next(err);
+      if (!student) return res.send(401);
+      console.log("Student", student)
+      var total = 0;
+      var status = "Pass";
+      req.body.marks = [];
+      student.subjects.forEach(function(sub, si) {
+        req.body.marks[si] = {};
+        console.log("subject:", sub);
+        console.log("subjectVal", req.body.marks[sub]);
+        console.log("iteration", si);
+        if(req.body[sub] == "ab") {
+          req.body.marks[si]["status"] = "absent";
+          req.body.marks[si][sub] = 0;
+          status = "Fail";
+        } else {
+          req.body.marks[si]["status"] = "present";
+          req.body.marks[si][sub] = parseInt(req.body[sub]);
+        }
+        total = parseInt(total) + req.body.marks[si][sub];
+        if(req.body[sub] < req.body.passmark) {
+          status = "Fail";
+        }
+      })
+      req.body.subjects = student.subjects;
+      req.body.status = status;
+      req.body.total = total;
+      req.body.percentage = (total * (100/(student.subjects.length*100))).toPrecision(4);
+      req.body.grades.forEach(function(gv, gk) {
+        if((req.body.percentage >= gv.lesser) && ((req.body.percentage <= gv.greater))) {
+          req.body.grade = (status == "Fail") ? "Grade F" : gv.grade;
+        }
+      })
+      console.log("before store:", req.body);
+      Marks.create(req.body, function(err, marks) {
+        if(err) { return handleError(res, err); }
+        return res.json(201, marks);
+      });
     });
-  });
+  } else {
+    School.findOne({school: req.body.school}, function (err, school) {
+      if (err) return next(err);
+      if (!school) return res.send(401);
+      var d = new Date();
+      delete req.body.serverUpdate;
+      console.log("before store:", req.body);
+      Marks.create(req.body, function(err, marks) {
+        if(err) { return handleError(res, err); }
+        return res.json(201, marks);
+      });
+    });
+  }
 };
 
 // Updates an existing marks in the DB.

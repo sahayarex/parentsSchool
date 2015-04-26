@@ -1,11 +1,3 @@
-Student,StudentID,Standard,Division,TypeOfExam,Tamil,English,Hindi,Math,Science,History,Attendance
-Student a,1,8,a,Quaterly,50,80,60,70,50,80,21/30
-Student b,2,8,a,Quaterly,10,20,ab,20,10,20,10/30
-Student c,3,8,a,Quaterly,60,80,80,80,50,50,30/30
-Student d,4,8,a,Quaterly,90,90,90,100,90,100,30/30
-Student e,5,8,a,Quaterly,50,80,60,70,50,80,21/30
-Student f,6,8,a,Quaterly,10,20,30,20,10,20,10/30
-Student g,7,8,a,Quaterly,60,80,80,80,50,50,30/30
-Student h,8,8,a,Quaterly,90,90,90,100,ab,100,30/30
-Student i,9,8,a,Quaterly,10,10,20,20,ab,20,5/30
-Student j,10,8,a,Quaterly,100,100,100,100,90,90,30/30
+Student;StudentID;Standard;Division;TypeOfExam;Malayalam;Tamil;English;Hindi;Math;Science;History;Attendance
+Student a;1;8;a;Quaterly;70;50;80;60;70;50;80;21/30
+Student b;2;8;a;Quaterly;30;;20;ab;20;10;20;10/30
