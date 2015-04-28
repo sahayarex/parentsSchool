@@ -11,9 +11,30 @@
 
 var _ = require('lodash');
 var Thing = require('./thing.model');
+var Marks = require('../marks/marks.model');
+var User = require('../user/user.model');
 
 // Get list of things
 exports.index = function(req, res) {
+          User.find({schoolid: "553dee4a2e9831c17b030fea", role: "student"}, function(er, allusers) {
+            console.log("length", allusers.length);
+        var subjects = [];
+        var typeofexams = [];
+        for (var i = 0; i <= allusers.length - 1; i++) {
+          for (var j = 0; j < allusers[i].subjects.length; j++) {
+            if(subjects.indexOf(allusers[i].subjects[j]) == -1) {
+              subjects.push(allusers[i].subjects[j]);
+            } 
+          }
+          for (var k = 0; k < allusers[i].subjects.length; k++) {
+            if(typeofexams.indexOf(allusers[i].typeofexams[k]) == -1) {
+              typeofexams.push(allusers[i].typeofexams[k]);
+            } 
+          }
+        }
+        console.log("subjects", subjects);
+        console.log("typeofexams", typeofexams);
+        })
   Thing.find(function (err, things) {
     if(err) { return handleError(res, err); }
     return res.json(200, things);

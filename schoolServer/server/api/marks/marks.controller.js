@@ -92,6 +92,8 @@ exports.create = function(req, res) {
           status = "Fail";
         }
       })
+      req.body.studentid = student._id;
+      req.body.typeofexam = req.body.typeofexam.toLowerCase();
       req.body.subjects = student.subjects;
       req.body.status = status;
       req.body.total = total;
@@ -102,10 +104,25 @@ exports.create = function(req, res) {
         }
       })
       console.log("before store:", req.body);
-      Marks.create(req.body, function(err, marks) {
-        if(err) { return handleError(res, err); }
-        return res.json(201, marks);
-      });
+      Marks.findOne({studentid: student._id, typeofexam: req.body.typeofexam, educationyear: req.body.educationyear}, function(err, markcreated) {
+        if (err) return next(err);
+        var t = new Date();
+        console.log("availability: ", markcreated);
+        if(markcreated) {
+          var updated = _.merge(markcreated, req.body);
+          req.body.updated = t.getTime();
+          updated.save(function (err) {
+          if (err) { return handleError(res, err); }
+            return res.json(200, markcreated);
+          });
+        } else {
+          req.body.created = req.body.updated = t.getTime();
+          Marks.create(req.body, function(err, marks) {
+            if(err) { return handleError(res, err); }
+            return res.json(201, marks);
+          });
+        }
+      })
     });
   } else {
     School.findOne({school: req.body.school}, function (err, school) {

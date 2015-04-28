@@ -100,6 +100,15 @@ angular.module('starter', ['ionic', 'ngCordova', 'chart.js', 'starter.controller
     templateUrl: "templates/menu.html",
     controller: 'AppCtrl'
   })
+  .state('app.hmdashboard', {
+    url: "/hmdashboard",
+    views: {
+      'menuContent' :{
+        templateUrl: "templates/hmdashboard.html",
+        controller: 'HmDashboardCtrl'
+      }
+    }
+  })
  .state('app.dashboard', {
     url: "/dashboard",
     views: {

@@ -6,6 +6,7 @@ var passport = require('passport');
 var config = require('../../config/environment');
 var jwt = require('jsonwebtoken');
 var School = require('../school/school.model');
+var Marks = require('../marks/marks.model');
 
 var validationError = function(res, err) {
   return res.json(422, err);
@@ -122,6 +123,7 @@ exports.create = function (req, res, next) {
   userData.name = req.body.student;
   if(req.body.import) {
     userData.subjects = req.body.subjects.replace(/ /g,"").split(",");
+    userData.typeofexams = req.body.typeofexams.replace(/ /g,"").split(",");
     delete req.body.import;
     console.log("Requested: ", req.body);
     User.findOne({
@@ -175,7 +177,34 @@ exports.show = function (req, res, next) {
   });
 };
 
-
+var senduserdata = function(res, user, data) {
+  School.findOne({
+        school: user.school
+      }, function(err, school) {
+        if (err) return next(err);
+        if(!school) return res.json(401);
+        console.log("school", school);
+        data.passmark = school.passmark;
+        data.grades = school.grades;
+        data.schoolid = school._id;
+        data.school = user.school;
+        data.period = school.period;
+        console.log("user and school: ", data);
+        Marks.find({schoolid: school._id}).sort({_id: -1}).limit(1).populate('*').exec(function(err, lastmark) {
+          console.log("Lastmark", lastmark);
+          data.educationyear = lastmark[0].educationyear;
+          data.years = [];
+          if(lastmark[0].educationyear.indexOf("-") > -1) {
+            var year = lastmark[0].educationyear.split("-");
+            data.years.push(year[0] - 1 +"-"+year[0]);
+          } else {
+            data.years.push(data.educationyear - 1);
+          }
+          data.years.push(data.educationyear);
+          return data;
+        });
+      });
+}
 /**
 * Verify an user
 */
@@ -203,22 +232,24 @@ User.findOne({
         for (var i = 0; i <= user.students.length - 1; i++) {
           subjects = _.merge(subjects, user.students[i].subjects);
         }
-      }
-
-      School.findOne({
-        school: user.school
-      }, function(err, school) {
-        if (err) return next(err);
-        if(!school) return res.json(401);
-        console.log("school", school);
-        data.passmark = school.passmark;
-        data.grades = school.grades;
-        data.schoolid = school._id;
-        data.school = user.school;
-        data.period = school.period;
-        console.log("user and school: ", data);
+        data.subjects = subjects;
+        data = senduserdata(res, user, data);
         res.json(data);
-      })      
+      } else if (user.role == "hm") {
+        User.find({schoolid: user.schoolid, role: "student"}, function(er, allusers) {
+        var subjects = [];
+        var typeofexams = [];
+        for (var i = 0; i <= allusers.length - 1; i++) {
+          subjects = subjects.concat(allusers.subjects);
+          typeofexams = typeofexams.concat(allusers.typeofexams);
+        }
+        data.subjects = _.uniq(subjects);
+        data.typeofexams = _.uniq(typeofexams);  
+        data = senduserdata(res, user, data);
+        console.log("DATA SENT:", data);
+        res.json(data);
+        })
+      }
     } else {
       res.json({status: 'password not matching'});
     }
