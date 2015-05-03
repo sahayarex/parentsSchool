@@ -8,6 +8,7 @@ angular.module('schoolServerApp')
     $scope.school.school = "school a";
     $scope.school.schoolphone = "8951572125";
     $scope.school.grades = "Grade A:60-100,Grade B:50-59,Grade C:40-49,Grade F:0-39";
+    $scope.school.ranking = "grade";
     $scope.school.passmark = 40;
     $scope.school.period = "June-April";
 	$scope.processing = false;
@@ -28,7 +29,6 @@ angular.module('schoolServerApp')
                         angular.forEach(row, function(r, k) {
                             lastknownData[head[k]] = r;
                         })
-                        console.log('LastknownData', lastknownData);
                         lastknownData["import"] = true;
                         lastknownData["school"] = $scope.school.school;
                         lastknownData["email"] = lastknownData["student"].replace(" ", "-").toLowerCase()+"@"+lastknownData["school"].replace(" ", "-").toLowerCase()+".com";
@@ -37,28 +37,35 @@ angular.module('schoolServerApp')
                 });
             })
             var schoolData = $scope.school;
-/*            schoolData.typeofexams = schoolData.typeofexams.split(",");
-            schoolData.subjects = schoolData.subjects.split(",");*/
             var allGrades = schoolData.grades.split(",");
             var grades = [];
-            angular.forEach(allGrades, function(g, gi) {
-                console.log("g", g);
-                console.log("gi", gi);
-                var values = g.split(":");
-                var range = values[1].split("-");
-                grades[gi] = {};
-                grades[gi]["grade"] = values[0];
-                grades[gi]["lesser"] = parseInt(range[0]);
-                grades[gi]["greater"] = parseInt(range[1]);
-            });
+            console.log("rank", schoolData.ranking);
+            if(schoolData.ranking == 'grade') {
+                angular.forEach(allGrades, function(g, gi) {
+                    var values = g.split(":");
+                    var range = values[1].split("-");
+                    grades[gi] = {};
+                    grades[gi]["grade"] = values[0];
+                    grades[gi]["lesser"] = parseInt(range[0]);
+                    grades[gi]["greater"] = parseInt(range[1]);
+                });
+            } else {
+                angular.forEach(allGrades, function(g, gi) {
+                    var range = g.split("-");
+                    grades[gi] = {};
+                    grades[gi]["grade"] = g;
+                    grades[gi]["lesser"] = parseInt(range[0]);
+                    grades[gi]["greater"] = parseInt(range[1]);
+                });
+            }
             schoolData.grades = grades;
             console.log("schoolData", schoolData);
-            $http.post('/api/schools', schoolData).success(function(school) {
+/*            $http.post('/api/schools', schoolData).success(function(school) {
                 console.log("school", school);
                 createUser(lastknown, school, 0);
             }).error(function(err) {
                 console.log('error', err);
-            });        
+            });    */    
 
         }
     }

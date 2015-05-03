@@ -8,6 +8,7 @@ var SchoolSchema = new Schema({
   grades: Array,
   passmark: Number,
   period: String,
+  ranktype: String,
   created: Date,
   updated: Date 
 });

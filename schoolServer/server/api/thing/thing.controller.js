@@ -16,8 +16,8 @@ var User = require('../user/user.model');
 
 // Get list of things
 exports.index = function(req, res) {
-          User.find({schoolid: "553dee4a2e9831c17b030fea", role: "student"}, function(er, allusers) {
-            console.log("length", allusers.length);
+/*          User.find({schoolid: "553f26aae41009b83febb751", role: "student"}, function(er, allusers) {
+        console.log("length", allusers.length);
         var subjects = [];
         var typeofexams = [];
         for (var i = 0; i <= allusers.length - 1; i++) {
@@ -26,7 +26,7 @@ exports.index = function(req, res) {
               subjects.push(allusers[i].subjects[j]);
             } 
           }
-          for (var k = 0; k < allusers[i].subjects.length; k++) {
+          for (var k = 0; k < allusers[i].typeofexams.length; k++) {
             if(typeofexams.indexOf(allusers[i].typeofexams[k]) == -1) {
               typeofexams.push(allusers[i].typeofexams[k]);
             } 
@@ -34,7 +34,7 @@ exports.index = function(req, res) {
         }
         console.log("subjects", subjects);
         console.log("typeofexams", typeofexams);
-        })
+        })*/
   Thing.find(function (err, things) {
     if(err) { return handleError(res, err); }
     return res.json(200, things);

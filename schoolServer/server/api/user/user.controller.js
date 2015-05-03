@@ -67,7 +67,7 @@ var createTeacher = function(res, request, student) {
       teacherData.password = teacherData.pepper;
       teacherData.provider = request.provider;
       teacherData.students.push({id:student._id,name:student.name,subjects:student.subjects});
-      teacherData.typeofexams = request.typeofexams.replace(/ /g,"").split(",");
+      teacherData.typeofexams = request.typeofexams;
       teacherData.school = request.school;
       teacherData.standard = request.standard;
       teacherData.division = request.division;      
@@ -86,7 +86,7 @@ var createTeacher = function(res, request, student) {
       teacherData.pepper = Math.random().toString(36).substring(9);
       teacherData.password = teacherData.pepper;
       teacherData.provider = request.provider;
-      teacherData.typeofexams = request.typeofexams.replace(/ /g,"").split(",");
+      teacherData.typeofexams = request.typeofexams;
       teacherData.school = request.school;
       teacherData.standard = request.standard;
       teacherData.division = request.division;
@@ -177,22 +177,37 @@ exports.show = function (req, res, next) {
   });
 };
 
+/**
+ * Get multiple users
+ */
+exports.users = function (req, res, next) {
+  if(req.body.standard == "all") {
+    delete req.body.standard;
+  }
+  if(req.body.division == "all") {
+    delete req.body.division;
+  }
+  req.body.role = "student";
+  User.find(req.body).sort({stardard: -1}).exec(function(err, user) {
+    if (err) return next(err);
+    if (!user) return res.send(401);
+    res.json(user);
+  })
+};
 var senduserdata = function(res, user, data) {
   School.findOne({
         school: user.school
       }, function(err, school) {
         if (err) return next(err);
         if(!school) return res.json(401);
-        console.log("school", school);
         data.passmark = school.passmark;
         data.grades = school.grades;
         data.schoolid = school._id;
         data.school = user.school;
         data.period = school.period;
-        console.log("user and school: ", data);
         Marks.find({schoolid: school._id}).sort({_id: -1}).limit(1).populate('*').exec(function(err, lastmark) {
-          console.log("Lastmark", lastmark);
           data.educationyear = lastmark[0].educationyear;
+          data.latesttypeofexam = lastmark[0].typeofexam;
           data.years = [];
           if(lastmark[0].educationyear.indexOf("-") > -1) {
             var year = lastmark[0].educationyear.split("-");
@@ -201,7 +216,8 @@ var senduserdata = function(res, user, data) {
             data.years.push(data.educationyear - 1);
           }
           data.years.push(data.educationyear);
-          return data;
+          console.log("Data", data)
+          res.json(data);
         });
       });
 }
@@ -233,21 +249,26 @@ User.findOne({
           subjects = _.merge(subjects, user.students[i].subjects);
         }
         data.subjects = subjects;
-        data = senduserdata(res, user, data);
-        res.json(data);
+        senduserdata(res, user, data);
       } else if (user.role == "hm") {
         User.find({schoolid: user.schoolid, role: "student"}, function(er, allusers) {
-        var subjects = [];
-        var typeofexams = [];
-        for (var i = 0; i <= allusers.length - 1; i++) {
-          subjects = subjects.concat(allusers.subjects);
-          typeofexams = typeofexams.concat(allusers.typeofexams);
-        }
-        data.subjects = _.uniq(subjects);
-        data.typeofexams = _.uniq(typeofexams);  
-        data = senduserdata(res, user, data);
-        console.log("DATA SENT:", data);
-        res.json(data);
+          var subjects = [];
+          var typeofexams = [];
+          for (var i = 0; i <= allusers.length - 1; i++) {
+            for (var j = 0; j < allusers[i].subjects.length; j++) {
+              if(subjects.indexOf(allusers[i].subjects[j]) == -1) {
+                subjects.push(allusers[i].subjects[j]);
+              }
+            }
+            for (var k = 0; k < allusers[i].typeofexams.length; k++) {
+              if(typeofexams.indexOf(allusers[i].typeofexams[k]) == -1) {
+                typeofexams.push(allusers[i].typeofexams[k]);
+              } 
+            }
+          }
+          data.subjects = subjects;
+          data.typeofexams = typeofexams;  
+          senduserdata(res, user, data);
         })
       }
     } else {
