@@ -604,7 +604,73 @@ angular.module('starter.controllers', ['starter.services'])
   }  
 })
 .controller('AllStudentsCtrl', function($scope, $rootScope, $cordovaSQLite, AuthenticationService) {
-  var filtersData = JSON.parse(localStorage.getItem('filtersData'));
+  $rootScope.filters = false;
+  var processUsers = function(users) {
+    $scope.allStudents = true;
+    var classes = [];
+    var all = [];
+    var standard = [];
+    angular.forEach(users, function(uv, uk) {
+      var allusers = [];
+      var classd = uv.standard + uv.division;
+      if(classes.indexOf(classd) == -1) {
+        uv.classd = uv.standard + uv.division;
+        allusers.push(uv);
+        classes.push(classd);
+        var sdkey = uv.standard+uv.division;
+        var skey = uv.standard;
+        if(uv.standard.length > 1) {
+          sdkey = "_"+sdkey;
+          skey = "_"+skey;
+        }
+        console.log("standard", uv.standard);
+        console.log("division", uv.division);
+        if(standard.indexOf(uv.standard) == -1 ) {
+          all.push({standard:uv.standard, d: "all", division: "", classd: skey});
+          standard.push(uv.standard);
+        }
+        all.push({standard:uv.standard, d:uv.division, division: uv.division.toUpperCase(), classd: sdkey});
+      }
+    });
+    $scope.users = all;
+  }
+  $scope.getStudentsData = function() {
+    var params = {};
+    params.schoolid = user.schoolid;
+    var dbkey = user.schoolid+"_students";
+    if(AuthenticationService.online()) {
+      AuthenticationService.getUsers(params).then(function(users) {
+        if(users.length > 0) {
+          console.log("Got all users:", users);
+          processUsers(users);
+          var query = "INSERT into users (key, value) VALUES (?, ?)";
+          var selectq = 'SELECT key from users where key = "'+dbkey+'"';
+          $cordovaSQLite.execute(db, selectq).then(function(sres) {
+            if(sres.rows.length == 0) {
+              var values = [dbkey, JSON.stringify(users)];
+              $cordovaSQLite.execute(db, query, values).then(function(res) {
+                console.log("insertId: " + res.insertId);
+              })
+            }
+          })
+        } else {
+          $scope.allStudents = false;
+        }    
+      });
+    } else {
+      var query = 'SELECT * from users where key = "'+dbkey+'"';
+      $cordovaSQLite.execute(db, query).then(function(res) {
+        totalrecords = res.rows.length;
+        if(totalrecords > 0) {
+          var allusers = JSON.parse(res.rows.item(0).value);
+          processUsers(allusers);
+        }
+      }, function(err) {
+        console.log("offline all users error", err);
+      });
+    }
+  }
+/*  var filtersData = JSON.parse(localStorage.getItem('filtersData'));
   $scope.initialize = function() {
     console.log("Student scope initialize");
   }
@@ -614,8 +680,7 @@ angular.module('starter.controllers', ['starter.services'])
   $rootScope.filterStudentsAll = function(page) {
     filtersData = $rootScope.filtersData;
     $scope.getStudentsData();
-    localStorage.setItem('filtersData', JSON.stringify(filtersData));
-  }
+    localStorage.setItem('filtersData', JSON.stringify(filtersDStudents  }
 
   $scope.getStudentsData = function() {
     console.log("user in students:", user);
@@ -659,7 +724,7 @@ angular.module('starter.controllers', ['starter.services'])
 
       });
     }
-  }  
+  }*/  
 })
 .controller('StudentDashboardCtrl', function($scope, $rootScope, $state, $stateParams, $ionicSideMenuDelegate, AuthenticationService) {
   var filtersData = JSON.parse(localStorage.getItem('filtersData'));

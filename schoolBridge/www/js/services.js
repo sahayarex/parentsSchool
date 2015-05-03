@@ -115,7 +115,7 @@ angular.module('starter.services', [])
       return defer.promise;
     },            
     online: function() {
-      return true;
+      return false;
       if(navigator.platform == "Linux x86_64") {
         return true;
       }
