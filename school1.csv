@@ -1,41 +1,81 @@
-Student;StudentID;Standard;Division;Address;Teacher;TeacherPhone;Parent;ParentPhone;TypeOfExams;Subjects
-Student a;1;8;a;11/19, port street;teacher a;8787844737;parent a;8989898989;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
-Student b;2;8;a;11/19, port street;teacher a;8787844737;parent b;8989898988;quarterly,half-yearly,annual;malayalam,english,hindi,math,science,history
-Student c;3;8;a;11/19, port street;teacher a;8787844737;parent c;9989898989;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
-Student d;4;8;a;11/19, port street;teacher a;8787844737;parent d;8889898989;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
-Student e;5;8;b;11/19, port street;teacher 8b;8787844737;parent e;8979898989;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
-Student f;6;8;b;11/19, port street;teacher 8b;8787844737;parent f;8986898989;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
-Student g;7;8;b;11/19, port street;teacher 8b;8787844737;parent g;8987898989;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
-Student h;8;8;b;11/19, port street;teacher 8b;8787844737;parent h;8981898989;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
-Student i;9;10;a;11/19, port street;teacher 10a;8787844737;parent i;8982898989;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
-Student j;10;10;a;11/19, port street;teacher 10a;8787844737;parent j;8989898389;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
-Student k;11;10;a;11/19, port street;teacher 10a;8787844737;parent a;8989898489;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
-Student l;12;10;a;11/19, port street;teacher 10a;8787844737;parent b;8989898989;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
-Student m;13;10;b;11/19, port street;teacher 10b;8787844737;parent m;8985598989;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
-Student n;14;10;b;11/19, port street;teacher 10b;8787844737;parent n;8989866989;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
-Student o;15;10;b;11/19, port street;teacher 10b;8787844737;parent o;8989877989;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
-Student p;16;10;b;11/19, port street;teacher 10b;8787844737;parent p;8989448989;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
-Student q;17;7;a;11/19, port street;teacher 7a;8787844737;parent q;8989118989;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
-Student r;18;7;a;11/19, port street;teacher 7a;8787844737;parent r;8989822989;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
-Student s;19;7;a;11/19, port street;teacher 7a;8787844737;parent s;8989998989;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
-Student t;20;7;a;11/19, port street;teacher 7a;8787844737;parent t;8989338989;quarterly,half-yearly,annual;malayalam,english,hindi,math,science,history
-Student 1;1;9;a;11/19, port street;teacher 9a;8787843737;parent a;8989898989;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
-Student 2;2;9;a;11/19, port street;teacher 9a;8787843737;parent b;8989898988;quarterly,half-yearly,annual;malayalam,english,hindi,math,science,history
-Student 3;3;9;a;11/19, port street;teacher 9a;8787843737;Parent 3;8911198989;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
-Student 4;4;9;a;11/19, port street;teacher 9a;8787843737;Parent 4;8911118989;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
-Student 5;5;9;b;11/19, port street;teacher 9b;8787843737;Parent 5;8989822989;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
-Student 6;6;9;b;11/19, port street;teacher 9b;8787843737;Parent 6;8989893389;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
-Student 7;7;9;b;11/19, port street;teacher 9b;8787843737;Parent 7;8989894449;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
-Student 8;8;9;b;11/19, port street;teacher 9b;8787843737;Parent 8;8989111989;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
-Student 9;9;6;a;11/19, port street;teacher 6a;8787843737;Parent 9;9189898989;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
-Student 10;10;6;a;11/19, port street;teacher 6a;8787843737;Parent 10;8989832189;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
-Student 11;11;6;a;11/19, port street;teacher 6a;8787843737;Parent 11;8989812389;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
-Student 12;12;6;a;11/19, port street;teacher 6a;8787843737;Parent 12;8989855589;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
-Student 13;13;6;b;11/19, port street;teacher 6b;8787843737;Parent 13;8989895589;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
-Student 14;14;6;b;11/19, port street;teacher 6b;8787843737;Parent 14;8989865489;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
-Student 18;15;6;b;11/19, port street;teacher 6b;8787843737;Parent 18;8989832489;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
-Student 15;16;6;b;11/19, port street;teacher 6b;8787843737;Parent 15;8989888989;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
-Student 16;17;7;b;11/19, port street;teacher 7b;8787843737;Parent 16;8989876989;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
-Student 17;18;7;b;11/19, port street;teacher 7b;8787843737;Parent 17;8989896789;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
-Student 19;19;7;b;11/19, port street;teacher 7b;8787843737;Parent 19;8989894589;quarterly,half-yearly,annual;tamil,english,hindi,math,science,history
-Student 20;20;7;b;11/19, port street;teacher 7b;8787843737;Parent 20;8989833389;quarterly,half-yearly,annual;malayalam,english,hindi,math,science,history
+Student;StudentID;Standard;Division;Sex;Address;Teacher;TeacherPhone;Parent;ParentPhone;TypeOfExams;Subjects
+Adarsh A;200101;1;a;male;no: 32, ranganathan street, marthandam;Sudha;7845464100;Aravind D;9944046100;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;malayalam,english,hindi,math,science,history
+Anthony D;200102;1;a;male;22/12, port street, colachel;Sudha;7845464100;Dason C;9871456111;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;tamil,english,hindi,math,science,history
+Anitha C;200103;1;a;female;12/11, shanthi bhavan, nagercoil;Sudha;7845464100;Cindrella S;9846812670;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;tamil,english,hindi,math,science,history
+Ashwini S;200104;1;a;female;1/17, ashwini illam, nithravilai;Sudha;7845464100;Sethu K;9894321256;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;malayalam,english,hindi,math,science,history
+Binil B;200105;1;a;male;12/10, biju nivas, kanjampuram;Sudha;7845464100;Biju A;9876451209;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;tamil,english,hindi,math,science,history
+Binitha X;200106;1;a;female;45, binitha bhavan, kollemcode;Sudha;7845464100;Xavier X;7896723450;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;malayalam,english,hindi,math,science,history
+Baiju J;200107;1;a;male;11/22, baiju villa, kanjampuram;Sudha;7845464100;Joffin J;8976903412;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;tamil,english,hindi,math,science,history
+Cindrella J;200108;1;a;female;44, judin villa, thoothoor;Sudha;7845464100;Judin M;7867098108;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;malayalam,english,hindi,math,science,history
+Daniel D;200109;1;a;male;33, davy bhavan, marthandam;Sudha;7845464100;Davy D;9897650987;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;tamil,english,hindi,math,science,history
+Sruthi R;200110;1;a;female;12/10, sruthi bhavan, nadaikkavu;Sudha;7845464100;Raghavan;9080453211;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;malayalam,english,hindi,math,science,history
+Anto A;200111;1;b;male;anto garden, thoothoor;Anitha;7845464101;Abraham;9944046101;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;tamil,english,hindi,math,science,history
+Anjali A;200112;1;b;female;11/12, anjali bhavan, nithravilai;Anitha;7845464101;Anil kumar;9871456112;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;malayalam,english,hindi,math,science,history
+Anusha B;200113;1;b;female;12/11, anusha bhavan, nagercoil;Anitha;7845464101;Biju A;9846812677;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;tamil,english,hindi,math,science,history
+Arvind A;200114;1;b;male;1/17, arvind illam, nithravilai;Anitha;7845464101;Diwakar;9894321259;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;malayalam,english,hindi,math,science,history
+Biju D;200115;1;b;male;12/10, biju nivas, kanjampuram;Anitha;7845464101;Babu;9876451200;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;tamil,english,hindi,math,science,history
+Bindhu B;200116;1;b;female;45, bindhu bhavan, kollemcode;Anitha;7845464101;Balaji;7896723458;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;malayalam,english,hindi,math,science,history
+Reshma R;200117;1;b;female;11/22, reshma villa, kanjampuram;Anitha;7845464101;Raghu;8976903419;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;tamil,english,hindi,math,science,history
+Rajan R;200118;1;b;male;44, rajan villa, thoothoor;Anitha;7845464101;Ruben;7867098100;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;tamil,english,hindi,math,science,history
+Shabu S;200119;1;b;male;33, shabu bhavan, marthandam;Anitha;7845464101;Sukumaran;9897650986;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;tamil,english,hindi,math,science,history
+Sajan J;200120;1;b;male;12/10, sajan bhavan, nadaikkavu;Anitha;7845464101;Joseph J;9080453210;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;tamil,english,hindi,math,science,history
+Anil A;200201;2;a;male;No: 32, anil bhavan, ranganathan street, marthandam;Rajesh;7845464100;Aravind D;9944046100;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;malayalam,english,hindi,math,science,history
+Amal A;200202;2;a;male;22/12, amal nivas, port street, colachel;Rajesh;7845464100;Anthony;9871456111;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;malayalam,english,hindi,math,science,history
+Angel B;200203;2;a;female;12/11, angel bhavan, nagercoil;Rajesh;7845464100;Bibin C;9846812110;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;tamil,english,hindi,math,science,history
+Ankhitha S;200204;2;a;female;1/17, ankitha illam, nithravilai;Rajesh;7845464100;Sethu K;9894321456;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;malayalam,english,hindi,math,science,history
+Bibin B;200205;2;a;male;12/10, biju nivas, kanjampuram;Rajesh;7845464100;Benson D;9876477209;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;malayalam,english,hindi,math,science,history
+Babitha D;200206;2;a;female;45, babitha bhavan, kollemcode;Rajesh;7845464100;Daniel;7896743450;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;malayalam,english,hindi,math,science,history
+Ferdinant F;200207;2;a;male;11/22, baiju villa, kanjampuram;Rajesh;7845464100;Freddy S;8976900412;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;tamil,english,hindi,math,science,history
+Jeena J;200208;2;a;female;44, judin villa, thoothoor;Rajesh;7845464100;Judin M;7867034108;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;malayalam,english,hindi,math,science,history
+Divya S;200209;2;a;male;33, divya bhavan, marthandam;Rajesh;7845464100;Shankar;9897760987;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;tamil,english,hindi,math,science,history
+Samantha S;200210;2;a;female;12/10, sruthi bhavan, nadaikkavu;Rajesh;7845464100;Sunil C;9080423211;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;malayalam,english,hindi,math,science,history
+Arjun A;200211;2;b;male;arjun garden, thoothoor;Divya;7845464101;Anand L;9942346101;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;tamil,english,hindi,math,science,history
+Anupama D;200212;2;b;female;11/12, anupama bhavan, nithravilai;Divya;7845464101;Dhanesh S;9869856112;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;malayalam,english,hindi,math,science,history
+Aarthi S;200213;2;b;female;12/11, arathi bhavan, nagercoil;Divya;7845464101;Sudhagar D;9843812677;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;tamil,english,hindi,math,science,history
+Athul S;200214;2;b;male;1/17, athul illam, nithravilai;Divya;7845464101;Saravanan;9812321259;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;tamil,english,hindi,math,science,history
+Sunil B;200215;2;b;male;12/10, sunil nivas, kanjampuram;Divya;7845464101;Babu;9823451200;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;tamil,english,hindi,math,science,history
+Bhavani H;200216;2;b;female;45, bindhu bhavan, kollemcode;Divya;7845464101;Hemant;7844723458;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;tamil,english,hindi,math,science,history
+Remya R;200217;2;b;female;11/22, remya villa, kanjampuram;Divya;7845464101;Raghu;8970103419;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;tamil,english,hindi,math,science,history
+Renjith S;200218;2;b;male;44, renjith villa, thoothoor;Divya;7845464101;Sarvesh P;7864598100;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;tamil,english,hindi,math,science,history
+Sameer W;200219;2;b;male;33, wasim bhavan, marthandam;Divya;7845464101;Wasim;9845650986;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;tamil,english,hindi,math,science,history
+Sanil S;200220;2;b;male;12/10, sanil bhavan, nadaikkavu;Divya;7845464101;Sathish S;9078453210;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;tamil,english,hindi,math,science,history
+Amulya B;200301;3;a;female;No: 32, anil bhavan, ranganathan street, marthandam;Sameera;7845464102;Bernar raj;9876901256;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;malayalam,english,hindi,math,science,history
+Amal A;200302;3;a;male;22/12, amal nivas, port street, colachel;Sameera;7845464102;Ajin;9809673211;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;malayalam,english,hindi,math,science,history
+Ananya S;200303;3;a;female;12/11, angel bhavan, nagercoil;Sameera;7845464102;Suman C;8905679811;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;tamil,english,hindi,math,science,history
+Ajantha B;200304;3;a;female;1/17, ankitha illam, nithravilai;Sameera;7845464102;Babu;8903470121;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;tamil,english,hindi,math,science,history
+Bernad F;200305;3;a;male;12/10, biju nivas, kanjampuram;Sameera;7845464102;Freddy A;7845790121;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;tamil,english,hindi,math,science,history
+Smitha S;200306;3;a;female;45, babitha bhavan, kollemcode;Sameera;7845464102;Sanjeev;9879124567;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;malayalam,english,hindi,math,science,history
+Shaji J;200307;3;a;male;11/22, baiju villa, kanjampuram;Sameera;7845464102;Johnson S;8907673411;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;malayalam,english,hindi,math,science,history
+Prophin raj;200308;3;a;male;44, judin villa, thoothoor;Sameera;7845464102;Dason A;9898453411;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;malayalam,english,hindi,math,science,history
+Prenaka P;200309;3;a;female;33, divya bhavan, marthandam;Sameera;7845464102;Paul raj;7890123155;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;tamil,english,hindi,math,science,history
+Britto A;200310;3;a;male;12/10, sruthi bhavan, nadaikkavu;RajSesh;7845464102;Sunil C;9080341245;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;malayalam,english,hindi,math,science,history
+Mary M;200311;3;b;female;arjun garden, thoothoor;Shyji;7845464103;Mohan A;9871887722;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;tamil,english,hindi,math,science,history
+Subin S;200312;3;b;male;11/12, anupama bhavan, nithravilai;Shyji;7845464103;Samuel N;9081234455;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;tamil,english,hindi,math,science,history
+Seethal N;200313;3;b;female;12/11, arathi bhavan, nagercoil;Shyji;7845464103;Nandhakumar S;7890556123;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;tamil,english,hindi,math,science,history
+Neethu N;200314;3;b;female;1/17, athul illam, nithravilai;Shyji;7845464103;Narayanan N;8091009823;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;malayalam,english,hindi,math,science,history
+Salman A;200315;3;b;male;12/10, sunil nivas, kanjampuram;Shyji;7845464103;Azhar S;9041670933;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;tamil,english,hindi,math,science,history
+Thiru A;200316;3;b;male;45, bindhu bhavan, kollemcode;Shyji;7845464103;Anbazhagan A;8989214001;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;tamil,english,hindi,math,science,history
+Thaman D;200317;3;b;male;11/22, remya villa, kanjampuram;Shyji;7845464103;Dinesh S;8923001211;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;malayalam,english,hindi,math,science,history
+Thushara S;200318;3;b;female;44, renjith villa, thoothoor;Shyji;7845464103;Sandeep M;9089120045;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;tamil,english,hindi,math,science,history
+Sindhu M;200319;3;b;female;33, wasim bhavan, marthandam;Shyji;7845464103;Manoj A;9094500121;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;tamil,english,hindi,math,science,history
+Yasir N;200320;3;b;male;12/10, sanil bhavan, nadaikkavu;Shyji;7845464103;Nadeem C;9900810345;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;tamil,english,hindi,math,science,history
+Ajmal A;200401;4;a;male;No:22 ajmal villa, namboly;Justin;8978341219;Anwar A;9897650981;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;tamil,english,hindi,math,science,history
+Deepa S;200402;4;a;female;22/11, deepa nivas, kaliyikavilai;Justin;8978341219;Sajeevan S;9875670923;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;tamil,english,hindi,math,science,history
+Mithun S;200403;4;a;male;11/14, mithun bhavan, nithravilai;Justin;8978341219;Shankaran J;8907654908;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;malayalam,english,hindi,math,science,history
+Shankar V;200404;4;a;male;shankar nivas, colachel;Justin;8978341219;Vishwan K;8976703421;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;tamil,english,hindi,math,science,history
+Teena M;200405;4;a;female;heaven home, attingal;Justin;8978341219;Mejo D;8890675098;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;tamil,english,hindi,math,science,history
+Aadhi A;200406;4;b;male;aadhi bhavan, ayira post;Ramesh;8786755511;Arjun S;7845128971;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;tamil,english,hindi,math,science,history
+Anjali S;200407;4;b;female;athulya bhavan, kollemcode;Ramesh;8786755511;Suman C;8907065112;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;malayalam,english,hindi,math,science,history
+Sabitha L;200408;4;b;female;sabitha bhavan, thoothoor;Ramesh;8786755511;Lenold A;9898675001;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;malayalam,english,hindi,math,science,history
+Serena M;200409;4;b;female;happy home, chinnathurai;Ramesh;8786755511;Mathias A;8876890156;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;tamil,english,hindi,math,science,history
+Tenil A;200410;4;b;male;tenil villa, muttom;Ramesh;8786755511;Abraham N;9897666512;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;malayalam,english,hindi,math,science,history
+Deepa T;200501;5;a;female;22/11, deepa nivas, kaliyikavilai;Sunitha M;7890003311;Tushar R;8912110044;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;tamil,english,hindi,math,science,history
+Dhanya S;200502;5;a;female;1/17, ankitha illam, nithravilai;Sunitha M;7890003311;Suresh S;7890445121;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;tamil,english,hindi,math,science,history
+Selvan V;200503;5;a;male;44, judin villa, thoothoor;Sunitha M;7890003311;Karuppiah K;9089234441;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;malayalam,english,hindi,math,science,history
+Kumar K;200504;5;a;male;56, garden home. Marthandam;Sunitha M;7890003311;Alagarsamy S;9083342231;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;malayalam,english,hindi,math,science,history
+Mahendran A;200505;5;a;male;sabitha bhavan, thoothoor;Sunitha M;7890003311;Biju S;9876561122;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;tamil,english,hindi,math,science,history
+Bhavana B;200506;5;b;female;mythli mandir, nagercoil;Meera J;7890089011;Sumesh S;8999834223;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;malayalam,english,hindi,math,science,history
+Bavithra S;200507;5;b;female;25/12, dream home, nithravilai;Meera J;7890089011;Sivaram K;8879675455;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;tamil,english,hindi,math,science,history
+Hema H;200508;5;b;female;33, davy bhavan, marthandam;Meera J;7890089011;Harshal L;8879900341;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;tamil,english,hindi,math,science,history
+Viji S;200509;5;b;female;42, sherin bhavan, nadaikkavu;Meera J;7890089011;Sourav K;9898790909;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;tamil,english,hindi,math,science,history
+Thaman B;200510;5;b;male;99, sydni seldon, muttom;Meera J;7890089011;Bijoj B;8900908990;periodical1,periodical2,quarterly,periodical3,halfyearly,periodical4,annual;tamil,english,hindi,math,science,history
