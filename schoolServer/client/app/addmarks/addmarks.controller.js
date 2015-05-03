@@ -41,9 +41,9 @@ angular.module('schoolServerApp')
     var sentcount = 0;
     school.ranktype = (school.ranktype) ? school.ranktype : "dynamic";
     if(csvdata && !$scope.processing) {
-      console.log("total", csvdata.length);
       $scope.processing = true;
       var newdata = csvdata;
+      console.log("total", csvdata.length);
       angular.forEach(newdata, function(data, index) {
         angular.forEach(data, function(d, i) {
         var mark = {};
@@ -58,6 +58,7 @@ angular.module('schoolServerApp')
             angular.forEach(row, function(r, k) {
             mark[head[k]] = r;
             })
+            console.log("mark student", mark.student);
             mark.import = true;
             $http.post('/api/marks', mark).success(function(created) {
               if (created.status == "Pass") {

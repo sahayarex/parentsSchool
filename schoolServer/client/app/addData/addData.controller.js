@@ -31,7 +31,7 @@ angular.module('schoolServerApp')
                         })
                         lastknownData["import"] = true;
                         lastknownData["school"] = $scope.school.school;
-                        lastknownData["email"] = lastknownData["student"].replace(" ", "-").toLowerCase()+"@"+lastknownData["school"].replace(" ", "-").toLowerCase()+".com";
+                        lastknownData["email"] = lastknownData["student"].replace(" ", "-").toLowerCase()+lastknownData["studentid"]+"@"+lastknownData["school"].replace(" ", "-").toLowerCase()+".com";
                         lastknown.push(lastknownData);
                     }
                 });
@@ -60,12 +60,12 @@ angular.module('schoolServerApp')
             }
             schoolData.grades = grades;
             console.log("schoolData", schoolData);
-/*            $http.post('/api/schools', schoolData).success(function(school) {
+            $http.post('/api/schools', schoolData).success(function(school) {
                 console.log("school", school);
                 createUser(lastknown, school, 0);
             }).error(function(err) {
                 console.log('error', err);
-            });    */    
+            });        
 
         }
     }
