@@ -9,13 +9,46 @@
   <div class="item item-list" ng-if="dashboardStatus != 'empty'">
     <canvas id="doughnut" class="col chart chart-doughnut" data="statusData"
     labels="statusLabels" legend="true" series="stutusLabels"></canvas>
-    <canvas id="line" class="col chart chart-line" data="gradeData"
+    <canvas id="bar" class="col chart chart-bar" data="gradeData"
       labels="gradeLabels">
     </canvas>     
-    <canvas id="bar" class="col chart chart-bar" data="subjectData"
+    <canvas id="line" class="col chart chart-line" data="subjectData"
   labels="subjectLabels" legend="true" series="subjectSeries"></canvas>
-    <canvas id="pie" class="col chart chart-pie" data="attendanceData"
-  labels="attendanceLabels" legend="true" series="attendanceLabels"></canvas> 
+      <canvas id="line" class="col chart chart-line" data="subjectMarks"
+  labels="subjectLabels"></canvas>
+<!--     <canvas id="pie" class="col chart chart-pie" data="attendanceData"
+  labels="attendanceLabels" legend="true" series="attendanceLabels"></canvas>  -->
+  </div>
+
+  <div class="list" ng-if="dashboardStatus != 'empty'">
+  <a class="item item-icon-left" href="#">
+    <span>Subject</span>
+    <span class="">Student</span>
+    <span class="">Mark</span>
+  </a>
+  <a class="item item-icon-left" href="#" ng-repeat="(k, v) in subjectToppers | orderBy: 'total':'reverse'" >
+    <span>{{v.subject}}</span>
+    <span class="">{{v.student}}</span>
+    <span class="">{{v.total}}</span>
+  </a>
+  </div>
+  <div class="list" ng-if="dashboardStatus != 'empty'">
+  <a class="item item-icon-left" href="#">
+    <i class="icon ion-trophy"></i>
+    <span style="color:#aaa;font-weight:bold;font-size:14px">Topper - Class</span>
+    <span class="badge">Total</span>
+  </a>
+  <a class="item item-icon-left" href="#" ng-repeat="(k, v) in toppers | orderBy: 'total':'reverse'" >
+    <i class="icon ion-person"></i>
+    {{v.student}} - {{v.standard}}:{{v.division}}
+    <span class="badge badge-assertive">{{v.total}}</span>
+  </a>
+  </div>
+  <div class="list" ng-if="dashboardStatus != 'empty'">
+  <a class="item item-icon-left" href="#/app/allstudents/{{standard}}/{{division}}">
+    <i class="icon ion-person"></i>
+    View all students of {{standard}}:{{division}}
+  </a>
   </div>
   </ion-content>
 </ion-view>

@@ -27,6 +27,8 @@ angular.module('starter.services', [])
           console.log("UserData from server:", data);
           user = data;
           $rootScope.filters = false;
+          localStorage.setItem('token', data.token);
+          delete data.token;
           localStorage.setItem('uid', data._id);
           localStorage.setItem('user', JSON.stringify(data));
           defer.resolve(data);
@@ -90,7 +92,21 @@ angular.module('starter.services', [])
       if(student.typeofexam % 1 === 0) {
         type = user.typeofexams[student.typeofexam];
       }
-      $http.get(baseUrl+'/api/marks/'+student.schoolid+'/'+student.year+'/'+type+'/'+student.studentid)
+      $http.get(baseUrl+'/api/marks/'+student.schoolid+'/'+student.year+'/'+type+'/'+student.studentid+'/'+student.standard+'/'+student.division)
+      .success(function(data, status, headers, config){
+        defer.resolve(data);
+      }).error(function(data, status, headers, config){
+        defer.reject(data);
+      }); 
+      return defer.promise;
+    },
+    getUsers: function(userdata) {
+      var defer = $q.defer();
+      if(!userdata.standard)
+        userdata.standard = "all";
+      if(!userdata.division)
+        userdata.division = "all";
+      $http.get(baseUrl+'/api/users/'+userdata.schoolid+'/'+userdata.standard+'/'+userdata.division)
       .success(function(data, status, headers, config){
         defer.resolve(data);
       }).error(function(data, status, headers, config){
@@ -124,3 +140,6 @@ angular.module('starter.services', [])
   };
   return service;
 })
+angular.module('underscore', []).factory('_', function() {
+    return window._; // assumes underscore has already been loaded on the page
+});

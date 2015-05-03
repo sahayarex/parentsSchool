@@ -27,11 +27,35 @@
 	         placeholder="Enter subjects">
 	      <p class="help-block">Example "Tamil,Hindi,English,Math,Science,History"</p>	         
 	   </div>	   	    -->
-	   <div class="form-group">
+	   	<div class="form-group required">
+	      <label for="passmark">Type of Ranking</label>
+			<div class="radio">
+		  		<label><input type="radio" ng-model="school.ranking" value="grade">Grade</label>
+			</div>
+			<div class="radio">
+		  		<label><input type="radio" ng-model="school.ranking" value="rank">Rank</label>
+			</div>
+	   </div>	
+	   <div class="form-group" ng-if="school.ranking == 'grade'">
 	      <label for="grades">Grades</label>
 	      <input required="true" type="textarea" class="form-control" ng-model="school.grades" 
 	         placeholder="Enter grade and mark">
 	      <p class="help-block">Example "Grade A:60-100,Grade B:50-59,Grade C:40-49,Grade F:0-39"</p>
+	   </div>
+	   	<div class="form-group" ng-if="school.ranking == 'rank'" ng-init="school.grades = '0-39,40-49,50-59,60-100'">
+	      <label for="grades">Mark range</label>
+	      <input required="true" type="textarea" class="form-control" ng-model="school.grades" 
+	         placeholder="Enter grade and mark">
+	      <p class="help-block">Example "0-39,40-49,50-59,60-100"</p>
+	   </div>
+	   <div class="form-group required" ng-if="school.ranking == 'rank'">
+	      <label for="passmark">Rank Type</label>
+			<div class="radio">
+		  		<label><input type="radio" ng-model="school.ranktype" value="serial">Serial</label>
+			</div>
+			<div class="radio">
+		  		<label><input type="radio" ng-model="school.ranktype" value="dynamic">Dynamic</label>
+			</div>
 	   </div>
 	   <div class="form-group required">
 	      <label for="passmark">Pass Mark</label>
@@ -43,7 +67,7 @@
 	      <input required="true" type="textarea" class="form-control" ng-model="school.period" 
 	         placeholder="Enter Period of education year">
 	         <p class="help-block">Example "June-April"</p>
-	   </div>	   	   
+	   </div>		      	   
 	   <div class="form-group">
 	      <label for="inputfile">Import all students</label>
 	      	<ng-csv-import content="csv.content" header="true" separator=";" result="csv.result"></ng-csv-import>

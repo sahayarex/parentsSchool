@@ -41,10 +41,13 @@
             <div class="item item-divider"><strong>Exam</strong></div>
             <ion-radio name="exam" ng-model="filtersData.typeofexam" ng-repeat="(k,v) in filtersData.typeofexams" ng-value="{{k}}">{{v}}</ion-radio>
         </div>
-      <div class="row" ng-if="page == 'dashboard'">
+      <div class="row" ng-if="page == 'app.dashboard'">
         <button menu-close class="col col-33 col-offset-33 button icon-left ion-chevron-left button-block button-positive" ng-click="filterResults(page)">Go</button>
       </div>
-      <div class="row" ng-if="page == 'allstudents'">
+      <div class="row" ng-if="page == 'app.hmdashboard'">
+        <button menu-close class="col col-33 col-offset-33 button icon-left ion-chevron-left button-block button-positive" ng-click="hmfilterResults(page)">Go</button>
+      </div>      
+      <div class="row" ng-if="page == 'app.allstudents'">
         <button menu-close class="col col-33 col-offset-33 button icon-left ion-chevron-left button-block button-positive" ng-click="filterStudentsAll(page)">Go</button>
       </div>        
       </form>

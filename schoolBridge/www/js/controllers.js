@@ -3,17 +3,18 @@ angular.module('starter.controllers', ['starter.services'])
 .controller('AppCtrl', function($scope, $stateParams, $cordovaSQLite, $rootScope, $state, AuthenticationService) {
   $scope.uid = localStorage.getItem('uid') || '';
   user = JSON.parse(localStorage.getItem('user')) || user;
-  $scope.authenticatedMenu = {"Links":[{"title":"Dashboard", "href":"app.dashboard", "class":"ion-stats-bars"}, {"title":"Students", "href":"app.allstudents", "class": "ion-person"},{"title":"log-out", "href":"logout", "class":"ion-log-out"}]};                            
   $scope.anonymousMenu = {"Links":[{"title":"log-in", "href":"app.home", "class": "ion-log-in"}]};
   if($scope.uid) {
     $scope.authorized = true;
-    $scope.menuLinks = $scope.authenticatedMenu;
     localStorage.setItem('processing', 'No');
     if(user.role == "hm") {
+      $scope.menuLinks = {"Links":[{"title":"Dashboard", "href":"app.hmdashboard", "class":"ion-stats-bars"}, {"title":"Classes", "href":"app.allclasses", "class": "ion-easel"}, {"title":"Students", "href":"app.allstudents", "class": "ion-person"},{"title":"log-out", "href":"logout", "class":"ion-log-out"}]};                            
       $state.go('app.hmdashboard', {}, {reload: true});
     } else if (user.role == "parent") {
+      $scope.menuLinks = {"Links":[{"title":"Dashboard", "href":"app.dashboard", "class":"ion-stats-bars"}, {"title":"Students", "href":"app.allstudents", "class": "ion-person"},{"title":"log-out", "href":"logout", "class":"ion-log-out"}]};                            
       $state.go('app.dashboard', {}, {reload: true});
     } else {
+      $scope.menuLinks = {"Links":[{"title":"Dashboard", "href":"app.dashboard", "class":"ion-stats-bars"}, {"title":"Students", "href":"app.allstudents", "class": "ion-person"},{"title":"log-out", "href":"logout", "class":"ion-log-out"}]};                            
       $state.go('app.dashboard', {}, {reload: true});
     }
   } else {
@@ -25,11 +26,13 @@ angular.module('starter.controllers', ['starter.services'])
   } else {
     var filtersData = {};
     filtersData.years = user.years;
-    filtersData.educationyear = user.educationyear;
+    filtersData.educationyear = user.years.indexOf(user.educationyear);
+    user.typeofexams.unshift("All");
     filtersData.typeofexams = user.typeofexams;
+    filtersData.typeofexam = user.typeofexams.indexOf(user.latesttypeofexam);
   }
-  console.log("CURRENT PAGE: ", $state.current.url);
-  $rootScope.page = $state.current.url;
+  console.log("CURRENT PAGE: ", $state.current);
+  $rootScope.page = $state.current.name;
 /*
   $rootScope.filters = false;
   if($state.current.url.indexOf('dashboard') > -1) {
@@ -72,6 +75,7 @@ angular.module('starter.controllers', ['starter.services'])
       }
     }
     localStorage.setItem('filtersData', JSON.stringify(filtersData));
+    console.log("FiltersData:", filtersData);
     $rootScope.filtersData = filtersData;
 
   //Sync online
@@ -125,28 +129,33 @@ angular.module('starter.controllers', ['starter.services'])
     }
   }, 3000);  
 })
-.controller('HmDashboardCtrl', function($scope, $rootScope, $state, $cordovaSQLite, AuthenticationService, $stateParams) {
+.controller('HmDashboardCtrl', function($scope, $rootScope, $state, _, $cordovaSQLite, AuthenticationService, $stateParams) {
   var filtersData = JSON.parse(localStorage.getItem('filtersData'));
-  $rootScope.filterResults = function(page) {
+  $rootScope.hmfilterResults = function(page) {
     filtersData = $rootScope.filtersData;
     $scope.getMarksData();
     localStorage.setItem('filtersData', JSON.stringify(filtersData));
   }
-  var pass = fail = attendanceVal = totalrecords = 0;
+  var updateditems = [];
   var subjectMarks = [];
+  var pass = fail = attendanceVal = totalrecords = 0;
   var subjectLabels = []; 
   var gradeLabels = [];
   var subjectDataPass = [];
-  var subjectDataFail = [];    
+  var subjectDataFail = [];  
+  var toppers = [];  
   $scope.getMarksData = function() {
     $rootScope.filters = true;
     console.log("user in dashboard:", user);
     var params = filtersData;
     params.schoolid = user.schoolid;
+    params.year = user.years[params.educationyear];
     if(!params.studentid) {
       params.studentid = "all";
     }
     console.log("params", params);
+    var dbkey = params.schoolid +'_'+params.year+'_'+user.typeofexams[params.typeofexam]+'_hm';
+    console.log("dbkey", dbkey);
     if(AuthenticationService.online()) {
       AuthenticationService.getMarks(params).then(function(studentMarks) {
         console.log("Got marks:", studentMarks);
@@ -160,18 +169,30 @@ angular.module('starter.controllers', ['starter.services'])
           gradeLabels = [];
           subjectDataPass = [];
           subjectDataFail = [];    
+          toppers = [];
           var gradeData = j = [];
           angular.forEach(studentMarks, function(v,k) {
             processMarksVal(v, k, "online");
           })
           applyMarks();
+          var query = "INSERT into marks (key, value) VALUES (?, ?)";
+          var selectq = 'SELECT key from marks where key = "'+dbkey+'"';
+          $cordovaSQLite.execute(db, selectq).then(function(sres) {
+            console.log("record count", sres.rows.length);
+            if(sres.rows.length == 0) {
+              var values = [dbkey, JSON.stringify(studentMarks)];
+              $cordovaSQLite.execute(db, query, values).then(function(res) {
+                console.log("insertId: " + res.insertId);
+              })
+            }
+          })
         } else {
           $scope.dashboardStatus = "empty";
         }    
       });
     } else {
       var type = user.typeofexams[params.typeofexam];
-      var query = 'SELECT * from marks where schoolid = "'+params.schoolid+'" and year = "'+params.year+'" and typeofexam = "'+type+'"';
+      var query = 'SELECT * from marks where key = "'+dbkey+'"';
       $cordovaSQLite.execute(db, query).then(function(res) {
         console.log("local rows: ", res.rows);
         totalrecords = res.rows.length;
@@ -184,10 +205,13 @@ angular.module('starter.controllers', ['starter.services'])
           gradeLabels = [];
           subjectDataPass = [];
           subjectDataFail = [];    
+          toppers = [];
           var gradeData = j = [];
-          for (var i = 0; i <= totalrecords - 1; i++) {
-            processMarksVal(res.rows.item(i), i, "offline");
-          };
+          var allmarks = JSON.parse(res.rows.item(0).value);
+          console.log("allmarks", allmarks);
+          angular.forEach(allmarks, function(v,k) {
+            processMarksVal(v, k, "online");
+          })
           applyMarks();
         } else {
           $scope.dashboardStatus = "empty";
@@ -197,32 +221,45 @@ angular.module('starter.controllers', ['starter.services'])
       });
     }
   }
+  var kkkk = 0;
   var processMarksVal = function(v, k, status) {
-    var subjects = v.subjects;
+    var subjects = user.subjects;
     var marks = v.marks;
     if(status == "offline") {
-      subjects = JSON.parse(v.subjects);
+     // subjects = JSON.parse(v.subjects);
       marks = JSON.parse(v.marks);
-      console.log("subjects", subjects);
-      console.log("marks", marks);
     }
-    console.log("record", v);
-    console.log("record key", k);
       if(v.status == "Pass")
           pass++;
       if(v.status == "Fail")
           fail++;
-      for (var m = 0; m < marks.length ; m++) {
-        subjectDataPass[m] = (subjectDataPass[m]) ? subjectDataPass[m] : 0;
-        subjectDataFail[m] = (subjectDataFail[m]) ? subjectDataFail[m] : 0;   
-        console.log("subject", marks[m][subjects[m]]);
-        console.log("passmark", user.passmark);
-        if(marks[m][subjects[m]] > user.passmark) {
-          subjectDataPass[m]++;
-        } else {
-          subjectDataFail[m]++;
+      if(toppers[v.standard]) {
+        if(toppers[v.standard].total < v.total) {
+          toppers[v.standard] = {student: v.student, standard: v.standard, division: v.division, total: v.total};
         }
-      };
+      } else {
+        toppers[v.standard] = {student: v.student, standard: v.standard, division: v.division, total: v.total};
+      }
+      marks.forEach(function(mv, mk) {
+        angular.forEach(mv, function(mvv, mkk) {
+          if(subjects.indexOf(mkk) > -1) {
+            subjectDataPass[mkk] = (subjectDataPass[mkk]) ? subjectDataPass[mkk] : 0;
+            subjectDataFail[mkk] = (subjectDataFail[mkk]) ? subjectDataFail[mkk] : 0;   
+            if(mvv >= user.passmark) {
+              subjectDataPass[mkk]++;
+            } else {
+              subjectDataFail[mkk]++;
+            }
+/*            if(mkk == "english") {
+              kkkk++;
+              console.log("mark", mvv);
+              console.log("pass", subjectDataPass[mkk]);
+              console.log("fail", subjectDataFail[mkk]);
+            } */          
+          }
+        })
+      })
+
       gradeLabels = [];
       for (var i = 0; i < user.grades.length; i++) {
         j[i] = (j[i]) ? j[i] : 0;
@@ -239,44 +276,77 @@ angular.module('starter.controllers', ['starter.services'])
       }
   }
   var applyMarks = function() {
+    var toppersList = [];
+    _.each(toppers, function(v, k) {
+      if(v) {
+        toppersList.push(v);
+      }
+    });
+    console.log("toppersList", toppersList);
+    $scope.toppers = toppersList;
     $scope.statusLabels = ["Pass", "Fail"];
     $scope.subjectSeries = ["Pass", "Fail"];
+    $scope.subjectData = []; 
     $scope.subjectLabels = user.subjects;
+    var passvals = []
+    var failvals = []
+    angular.forEach(user.subjects, function(us, uk) {
+      passvals.push(subjectDataPass[us]);
+      failvals.push(subjectDataFail[us]);
+    })
     $scope.subjectData = [
-      subjectDataPass,subjectDataFail
+      passvals,failvals
     ];
-    console.log("subjectDataPass", subjectDataPass);
-    console.log("subjectDataFail", subjectDataFail);
     $scope.statusData = [pass,fail];
     $scope.gradeData = [gradeData];
     $scope.gradeLabels = gradeLabels;
-    var attendance = attendanceVal * (100/(totalrecords *100));
+/*    var attendance = attendanceVal * (100/(totalrecords *100));
     $scope.attendanceLabels = ["Present", "Absent"];
-    $scope.attendanceData = [attendance, 100 - attendance];          
+    $scope.attendanceData = [attendance, 100 - attendance]; */         
   }
 })
 .controller('DashboardCtrl', function($scope, $rootScope, $state, $cordovaSQLite, AuthenticationService, $stateParams) {
-  console.log("dash scope initialize");
   var filtersData = JSON.parse(localStorage.getItem('filtersData'));
   $rootScope.filterResults = function(page) {
     filtersData = $rootScope.filtersData;
-    $scope.getMarksData();
     localStorage.setItem('filtersData', JSON.stringify(filtersData));
+    $scope.getMarksData();
   }
-  var pass = fail = attendanceVal = totalrecords = 0;
+  var updateditems = [];
   var subjectMarks = [];
+  var pass = fail = attendanceVal = totalrecords = 0;
   var subjectLabels = []; 
   var gradeLabels = [];
   var subjectDataPass = [];
-  var subjectDataFail = [];    
+  var subjectDataFail = [];  
+  var subjectDataMarks = [];    
+  var toppers = [];  
+  var topperSubjects = [];
+  var allsubjects = [];
   $scope.getMarksData = function() {
     $rootScope.filters = true;
-    console.log("user in dashboard:", user);
     var params = filtersData;
     params.schoolid = user.schoolid;
+    params.year = user.years[params.educationyear];
+    params.standard = user.standard;
+    params.division = (user.division) ? user.division : "all";
     if(!params.studentid) {
       params.studentid = "all";
     }
+    var standard = '';
+    if($stateParams.standard) {
+      params.standard = $stateParams.standard;
+      standard = '_'+$stateParams.standard;
+      $scope.standard = $stateParams.standard;
+    }
+    var division = '_all';
+    if($stateParams.division) {
+      params.division = $stateParams.division;
+      division = '_'+$stateParams.division;
+      $scope.division = $stateParams.division;
+    }    
+    console.log("params", params);
+    var dbkey = params.schoolid +'_'+params.year+'_'+user.typeofexams[params.typeofexam]+standard+division;
     if(AuthenticationService.online()) {
       AuthenticationService.getMarks(params).then(function(studentMarks) {
         console.log("Got marks:", studentMarks);
@@ -289,21 +359,33 @@ angular.module('starter.controllers', ['starter.services'])
           subjectLabels = []; 
           gradeLabels = [];
           subjectDataPass = [];
-          subjectDataFail = [];    
+          subjectDataFail = []; 
+          subjectDataMarks = [];       
+          toppers = [];
+          topperSubjects = [];
           var gradeData = j = [];
           angular.forEach(studentMarks, function(v,k) {
             processMarksVal(v, k, "online");
           })
           applyMarks();
+          var query = "INSERT into marks (key, value) VALUES (?, ?)";
+          var selectq = 'SELECT key from marks where key = "'+dbkey+'"';
+          $cordovaSQLite.execute(db, selectq).then(function(sres) {
+            if(sres.rows.length == 0) {
+              var values = [dbkey, JSON.stringify(studentMarks)];
+              $cordovaSQLite.execute(db, query, values).then(function(res) {
+                console.log("insertId: " + res.insertId);
+              })
+            }
+          })
         } else {
           $scope.dashboardStatus = "empty";
         }    
       });
     } else {
       var type = user.typeofexams[params.typeofexam];
-      var query = 'SELECT * from marks where schoolid = "'+params.schoolid+'" and year = "'+params.year+'" and typeofexam = "'+type+'"';
+      var query = 'SELECT * from marks where key = "'+dbkey+'"';
       $cordovaSQLite.execute(db, query).then(function(res) {
-        console.log("local rows: ", res.rows);
         totalrecords = res.rows.length;
         if(totalrecords > 0) {
           $scope.dashboardStatus = "not empty";
@@ -313,11 +395,16 @@ angular.module('starter.controllers', ['starter.services'])
           subjectLabels = []; 
           gradeLabels = [];
           subjectDataPass = [];
-          subjectDataFail = [];    
+          subjectDataFail = [];
+          subjectDataMarks = [];    
+          toppers = [];
+          topperSubjects = [];
           var gradeData = j = [];
-          for (var i = 0; i <= totalrecords - 1; i++) {
-            processMarksVal(res.rows.item(i), i, "offline");
-          };
+          var allmarks = JSON.parse(res.rows.item(0).value);
+          console.log("allmarks", allmarks);
+          angular.forEach(allmarks, function(v,k) {
+            processMarksVal(v, k, "online");
+          })
           applyMarks();
         } else {
           $scope.dashboardStatus = "empty";
@@ -327,32 +414,63 @@ angular.module('starter.controllers', ['starter.services'])
       });
     }
   }
+  var kkkk = 0;
   var processMarksVal = function(v, k, status) {
-    var subjects = v.subjects;
+    //var subjects = user.subjects;
     var marks = v.marks;
     if(status == "offline") {
-      subjects = JSON.parse(v.subjects);
+     // subjects = JSON.parse(v.subjects);
       marks = JSON.parse(v.marks);
-      console.log("subjects", subjects);
-      console.log("marks", marks);
     }
-    console.log("record", v);
-    console.log("record key", k);
       if(v.status == "Pass")
           pass++;
       if(v.status == "Fail")
           fail++;
-      for (var m = 0; m < marks.length ; m++) {
-        subjectDataPass[m] = (subjectDataPass[m]) ? subjectDataPass[m] : 0;
-        subjectDataFail[m] = (subjectDataFail[m]) ? subjectDataFail[m] : 0;   
-        console.log("subject", marks[m][subjects[m]]);
-        console.log("passmark", user.passmark);
-        if(marks[m][subjects[m]] > user.passmark) {
-          subjectDataPass[m]++;
-        } else {
-          subjectDataFail[m]++;
+      if(toppers[v.standard]) {
+        if(toppers[v.standard].total < v.total) {
+          toppers[v.standard] = {student: v.student, standard: v.standard, division: v.division, total: v.total};
         }
-      };
+      } else {
+        toppers[v.standard] = {student: v.student, standard: v.standard, division: v.division, total: v.total};
+      }
+      marks.forEach(function(mv, mk) {
+        angular.forEach(mv, function(mvv, mkk) {
+          if((mkk != "status")) {
+            if(allsubjects.indexOf(mkk) == -1) {
+              allsubjects.push(mkk);
+            }
+            subjectDataPass[mkk] = (subjectDataPass[mkk]) ? subjectDataPass[mkk] : 0;
+            subjectDataFail[mkk] = (subjectDataFail[mkk]) ? subjectDataFail[mkk] : 0;   
+            if(mvv >= user.passmark) {
+              subjectDataPass[mkk]++;
+            } else {
+              subjectDataFail[mkk]++;
+            }
+            if(subjectDataMarks[mkk]) {
+              subjectDataMarks[mkk] = parseInt(mvv) + subjectDataMarks[mkk];
+            } else {
+              subjectDataMarks[mkk] = parseInt(mvv);
+            }
+            if(topperSubjects[mkk]) {
+              if(parseInt(mvv) > topperSubjects[mkk].total) {
+                topperSubjects[mkk] = {total: mvv, student:v.student, subject: mkk, classd: v.standard+v.division.toUpperCase()};              
+              } else if (parseInt(mvv) == topperSubjects[mkk].total) {
+                topperSubjects[mkk].student = topperSubjects[mkk].student + "," + v.student;
+              }
+            } else {
+              topperSubjects[mkk] = {total: mvv, student:v.student, subject: mkk, classd: v.standard+v.division.toUpperCase()};              
+            }
+            console.log("mark", topperSubjects[mkk]);
+/*            if(mkk == "english") {
+              kkkk++;
+              console.log("mark", mvv);
+              console.log("pass", subjectDataPass[mkk]);
+              console.log("fail", subjectDataFail[mkk]);
+            }  */         
+          }
+        })
+      })
+
       gradeLabels = [];
       for (var i = 0; i < user.grades.length; i++) {
         j[i] = (j[i]) ? j[i] : 0;
@@ -369,21 +487,121 @@ angular.module('starter.controllers', ['starter.services'])
       }
   }
   var applyMarks = function() {
+    var toppersList = [];
+    _.each(toppers, function(v, k) {
+      if(v) {
+        toppersList.push(v);
+      }
+    });
+    $scope.toppers = toppersList;
     $scope.statusLabels = ["Pass", "Fail"];
     $scope.subjectSeries = ["Pass", "Fail"];
-    $scope.subjectLabels = user.subjects;
+    $scope.subjectData = []; 
+    $scope.subjectLabels = allsubjects;
+    var passvals = [];
+    var failvals = [];
+    var marksvals = [];
+    var topperS = [];
+    angular.forEach(allsubjects, function(us, uk) {
+      if(subjectDataPass[us]) {
+        passvals.push(subjectDataPass[us]);
+        failvals.push(subjectDataFail[us]);
+      } else {
+        passvals.push(0);
+        failvals.push(0);
+      }
+      if(subjectDataMarks[us]) {
+        marksvals.push(subjectDataMarks[us]*(100/(totalrecords*100)));
+      } else {
+        marksvals.push(0);
+      }
+      if(topperSubjects[us]) {
+        topperS.push(topperSubjects[us]);
+      } else {
+        topperS.push({total:0, student:"", subject: us, classd: ""});
+      }
+    })
+    console.log("labels", allsubjects);
     $scope.subjectData = [
-      subjectDataPass,subjectDataFail
+      passvals,failvals
     ];
-    console.log("subjectDataPass", subjectDataPass);
-    console.log("subjectDataFail", subjectDataFail);
+    $scope.subjectMarks = [
+      marksvals
+    ];
+    $scope.subjectToppers = topperS;
+    console.log("values", $scope.subjectData);
     $scope.statusData = [pass,fail];
     $scope.gradeData = [gradeData];
     $scope.gradeLabels = gradeLabels;
-    var attendance = attendanceVal * (100/(totalrecords *100));
-    $scope.attendanceLabels = ["Present", "Absent"];
-    $scope.attendanceData = [attendance, 100 - attendance];          
   }
+})
+.controller('AllClassesCtrl', function($scope, $rootScope, $cordovaSQLite, AuthenticationService) {
+  $rootScope.filters = false;
+  var processUsers = function(users) {
+    $scope.allClasses = true;
+    var classes = [];
+    var all = [];
+    var standard = [];
+    angular.forEach(users, function(uv, uk) {
+      var allusers = [];
+      var classd = uv.standard + uv.division;
+      if(classes.indexOf(classd) == -1) {
+        uv.classd = uv.standard + uv.division;
+        allusers.push(uv);
+        classes.push(classd);
+        var sdkey = uv.standard+uv.division;
+        var skey = uv.standard;
+        if(uv.standard.length > 1) {
+          sdkey = "_"+sdkey;
+          skey = "_"+skey;
+        }
+        console.log("standard", uv.standard);
+        console.log("division", uv.division);
+        if(standard.indexOf(uv.standard) == -1 ) {
+          all.push({standard:uv.standard, d: "all", division: "", classd: skey});
+          standard.push(uv.standard);
+        }
+        all.push({standard:uv.standard, d:uv.division, division: uv.division.toUpperCase(), classd: sdkey});
+      }
+    });
+    $scope.users = all;
+  }
+  $scope.getClassesData = function() {
+    var params = {};
+    params.schoolid = user.schoolid;
+    var dbkey = user.schoolid+"_students";
+    if(AuthenticationService.online()) {
+      AuthenticationService.getUsers(params).then(function(users) {
+        if(users.length > 0) {
+          console.log("Got all users:", users);
+          processUsers(users);
+          var query = "INSERT into users (key, value) VALUES (?, ?)";
+          var selectq = 'SELECT key from users where key = "'+dbkey+'"';
+          $cordovaSQLite.execute(db, selectq).then(function(sres) {
+            if(sres.rows.length == 0) {
+              var values = [dbkey, JSON.stringify(users)];
+              $cordovaSQLite.execute(db, query, values).then(function(res) {
+                console.log("insertId: " + res.insertId);
+              })
+            }
+          })
+        } else {
+          $scope.allClasses = false;
+        }    
+      });
+    } else {
+      var query = 'SELECT * from users where key = "'+dbkey+'"';
+      $cordovaSQLite.execute(db, query).then(function(res) {
+        totalrecords = res.rows.length;
+        if(totalrecords > 0) {
+          var allusers = JSON.parse(res.rows.item(0).value);
+          processUsers(allusers);
+        }
+      }, function(err) {
+        console.log("offline all users error", err);
+      });
+    }
+  }  
 })
 .controller('AllStudentsCtrl', function($scope, $rootScope, $cordovaSQLite, AuthenticationService) {
   var filtersData = JSON.parse(localStorage.getItem('filtersData'));
@@ -709,7 +927,7 @@ angular.module('starter.controllers', ['starter.services'])
   $scope.doingLogin = false;
   $scope.user = {
     email: '8951572125@school-a.com',
-    password: '+dacrF9HTKkqGNqObFcTgg=='
+    password: 'RiRualr+mm7mWve0wjNO7Q=='
   };
   $scope.login = function() {
     if(($scope.user.email == null) || ($scope.user.password == null)) {

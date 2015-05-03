@@ -21,6 +21,7 @@ router.get('/me', auth.isAuthenticated(), controller.me);
 router.post('/verify', controller.verify);
 router.put('/:id/password', auth.isAuthenticated(), controller.changePassword);
 router.get('/:id', auth.isAuthenticated(), controller.show);
+router.get('/:schoolid/:standard/:division', controller.users);
 router.post('/', controller.create);
 
 module.exports = router;

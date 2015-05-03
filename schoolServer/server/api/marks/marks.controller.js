@@ -26,11 +26,17 @@ exports.show = function(req, res) {
 exports.getMark = function(req, res) {
   var params = req.params;
   console.log("requested", req.params);
-  if(req.params.typeofexam == "all") {
+  if(req.params.typeofexam.toLowerCase() == "all") {
     delete params.typeofexam;
   }
-  if(req.params.studentid == "all") {
+  if(req.params.studentid.toLowerCase() == "all") {
     delete params.studentid;
+  }
+  if(req.params.standard == 'undefined') {
+    delete params.standard;
+  }  
+  if((req.params.division == 'undefined') || (req.params.division.toLowerCase() == "all")) {
+    delete params.division;
   }
   console.log("request", params);
   Marks.find(params, function (err, marks) {
@@ -103,6 +109,10 @@ exports.create = function(req, res) {
           req.body.grade = (status == "Fail") ? "Grade F" : gv.grade;
         }
       })
+      if(req.body.attendance) {
+        var attendanceVal = req.body.attendance.split("/");
+        req.body.attendanceP = (parseInt(attendanceVal[0]) * (100/parseInt(attendanceVal[1]))).toPrecision(4);
+      }
       console.log("before store:", req.body);
       Marks.findOne({studentid: student._id, typeofexam: req.body.typeofexam, educationyear: req.body.educationyear}, function(err, markcreated) {
         if (err) return next(err);
@@ -141,29 +151,7 @@ exports.create = function(req, res) {
 
 // Updates an existing marks in the DB.
 exports.update = function(req, res) {
-  if(req.body._id) { delete req.body._id; }
-    console.log("requested", req.body);
-    School.findOne({school: req.body.school}, function (err, school) {
-    if (err) return next(err);
-    if (!school) return res.send(401);
-    var total = 0;
-    var status = "Pass";
-    req.body.marks.forEach(function(v) {
-      console.log("v:", req.body.marks[v]);
-      console.log("v1:", parseInt(req.body.marks[v]));
-      if(req.body.marks[v] < school.passmark) {
-        status = "Fail";
-      }
-      total = parseInt(total) + parseInt(req.body.marks[v]);
-    });    
-    req.body.total = total;
-    req.body.percentage = total * (100/(req.body.subjects.length*100));
-    school.grades.forEach(function(v) {
-      if((req.body.percentage >= v.lesser) && ((req.body.percentage <= v.greater))) {
-        req.body.grade = (status == "Fail") ? "Grade F" : v.grade;
-      }
-    })
-    req.body.status = status;
+  if(req.body.import) {
     Marks.findById(req.params.id, function (err, marks) {
       if (err) { return handleError(res, err); }
       if(!marks) { return res.send(404); }
@@ -173,7 +161,41 @@ exports.update = function(req, res) {
         return res.json(200, marks);
       });
     });
-  });
+  } else {
+    if(req.body._id) { delete req.body._id; }
+      console.log("requested", req.body);
+      School.findOne({school: req.body.school}, function (err, school) {
+      if (err) return next(err);
+      if (!school) return res.send(401);
+      var total = 0;
+      var status = "Pass";
+      req.body.marks.forEach(function(v) {
+        console.log("v:", req.body.marks[v]);
+        console.log("v1:", parseInt(req.body.marks[v]));
+        if(req.body.marks[v] < school.passmark) {
+          status = "Fail";
+        }
+        total = parseInt(total) + parseInt(req.body.marks[v]);
+      });    
+      req.body.total = total;
+      req.body.percentage = total * (100/(req.body.subjects.length*100));
+      school.grades.forEach(function(v) {
+        if((req.body.percentage >= v.lesser) && ((req.body.percentage <= v.greater))) {
+          req.body.grade = (status == "Fail") ? "Grade F" : v.grade;
+        }
+      })
+      req.body.status = status;
+      Marks.findById(req.params.id, function (err, marks) {
+        if (err) { return handleError(res, err); }
+        if(!marks) { return res.send(404); }
+        var updated = _.merge(marks, req.body);
+        updated.save(function (err) {
+          if (err) { return handleError(res, err); }
+          return res.json(200, marks);
+        });
+      });
+    });
+  }
 };
 
 // Deletes a marks from the DB.

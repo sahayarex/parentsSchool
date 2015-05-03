@@ -19,6 +19,7 @@ var UserSchema = new Schema({
   studentid: String,
   standard: String,
   division: String,
+  sex: String,
   phone: String,
   address: String,
   students: { type: Array, unique: true},

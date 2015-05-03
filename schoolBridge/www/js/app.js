@@ -6,16 +6,19 @@ var educationyear = '';
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'ngCordova', 'chart.js', 'starter.controllers'])
+angular.module('starter', ['ionic', 'ngCordova', 'chart.js', 'underscore', 'starter.controllers'])
 
 .run(function($ionicPlatform, $cordovaSQLite) {
   $ionicPlatform.ready(function() {
     if(window.cordova) {
-      db = $cordovaSQLite.openDB({ name: "mytest.db" });
+      db = $cordovaSQLite.openDB({ name: "testing.db" });
     } else {
-      db = window.openDatabase("mytest.db", "1.0", "my test data", 200000);
+      db = window.openDatabase("testing.db", "1.0", "my test data", 200000);
     }
-    $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS marks (id integer primary key, _id text, student text, studentid text, school text, schoolid text, typeofexam text, marks blob, total integer, percentage integer, grade text, attendance text, status text, year integer, educationyear text, subjects blob, teacher text, teacherid text, standard text, division text, created integer, action text)");
+    //$cordovaSQLite.execute(db, "DROP TABLE marks");
+    //$cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS marks (id integer primary key, _id text, student text, studentid text, school text, schoolid text, typeofexam text, marks blob, total integer, percentage integer, grade text, attendance text, status text, year integer, educationyear text, subjects blob, teacher text, teacherid text, standard text, division text, created integer, action text)");
+    $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS marks (key text, value blob, created)");
+    $cordovaSQLite.execute(db, "CREATE TABLE IF NOT EXISTS users (key text, value blob, created)");
 
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
@@ -41,6 +44,9 @@ angular.module('starter', ['ionic', 'ngCordova', 'chart.js', 'starter.controller
           scope.filterResults();
         } else if(scope.link.title == "Students") {
           $rootScope.filters = true;
+        } else if(scope.link.title == "Classes") {
+          $rootScope.filters = false;
+          
         } else {
           $rootScope.filters = false;
           $rootScope.page = "allstudents";
@@ -119,11 +125,20 @@ angular.module('starter', ['ionic', 'ngCordova', 'chart.js', 'starter.controller
     }
   })
  .state('app.dashboardFilters', {
-    url: "/dashboard/:year/:typeofexam",
+    url: "/dashboard/:standard/:division",
     views: {
       'menuContent' :{
         templateUrl: "templates/dashboard.html",
         controller: 'DashboardCtrl'
+      }
+    }
+  })
+  .state('app.allclasses', {
+    url: "/allclasses",
+    views: {
+      'menuContent' :{
+        templateUrl: "templates/allclasses.html",
+        controller: 'AllClassesCtrl'
       }
     }
   })
@@ -137,7 +152,7 @@ angular.module('starter', ['ionic', 'ngCordova', 'chart.js', 'starter.controller
     }
   })
  .state('app.allstudentsFilters', {
-    url: "/allstudents/:year/:typeofexam",
+    url: "/allstudents/:standard/:division",
     views: {
       'menuContent' :{
         templateUrl: "templates/allstudents.html",

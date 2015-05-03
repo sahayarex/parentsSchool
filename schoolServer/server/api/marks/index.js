@@ -15,7 +15,7 @@ router.all('*', function(req, res, next) {
 });
 router.get('/', controller.index);
 router.get('/:id', controller.show);
-router.get('/:schoolid/:year/:typeofexam/:studentid', controller.getMark);
+router.get('/:schoolid/:educationyear/:typeofexam/:studentid/:standard/:division', controller.getMark);
 router.get('/:typeofexam', controller.getAllMarks);
 router.post('/', controller.create);
 router.put('/:id', controller.update);
