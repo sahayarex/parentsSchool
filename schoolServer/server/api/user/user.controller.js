@@ -14,17 +14,20 @@ var validationError = function(res, err) {
 
 var createParent = function(res, request, student) {
   //Create Parent
-  var parentEmail = student.parent.replace(" ", "-").toLowerCase()+"@"+student.school.replace(" ", "-").toLowerCase()+".com";
+  var parentEmail = request.parentphone+"@"+student.school.replace(" ", "-").toLowerCase()+".com";
+  console.log("parent email", parentEmail);
+  console.log("parent name", request.parent);
   User.findOne({
     email: parentEmail,
+    name: request.parent,
     role: "parent"
   }, function(err, parentData) { // don't ever give out the password or salt
     if (err) return next(err);
-    console.log("ParentData", parentData);
+    console.log("parentData", parentData);
     if(parentData) {
       parentData.name = request.parent;
       parentData.students.push({id:student._id,name:student.name,subjects:student.subjects});
-      parentData.phone = request.parentPhone;
+      parentData.phone = request.parentphone;
       parentData.pepper = Math.random().toString(36).substring(9);
       parentData.password = parentData.pepper;
       parentData.provider = request.provider;
@@ -39,7 +42,7 @@ var createParent = function(res, request, student) {
       parentData.role = "parent";
       parentData.students = [student._id];
       parentData.students = [{id:student._id,name:student.name, subjects:student.subjects}];
-      parentData.phone = request.parentPhone;
+      parentData.phone = request.parentphone;
       parentData.pepper = Math.random().toString(36).substring(9);
       parentData.password = parentData.pepper;
       parentData.provider = request.provider;
@@ -59,7 +62,6 @@ var createTeacher = function(res, request, student) {
   console.log("Email: "+teacherEmail);
   User.findOne({email:teacherEmail}, function(err, teacherData) {
     if (err) return next(err);
-    console.log("Teacher: ",teacherData);
     if(teacherData) {
       teacherData.name = request.teacher;
       teacherData.phone = request.teacherPhone;
@@ -124,13 +126,12 @@ exports.create = function (req, res, next) {
   if(req.body.import) {
     userData.subjects = req.body.subjects.replace(/ /g,"").split(",");
     userData.typeofexams = req.body.typeofexams.replace(/ /g,"").split(",");
-    delete req.body.import;
-    console.log("Requested: ", req.body);
+//    console.log("Requested: ", userData);
     User.findOne({
       email:req.body.email,
       role:"student",
     }, '-salt -hashedPassword', function(err, studentData) {
-      console.log("studentData", studentData);
+      if (err) return validationError(res, err);
       if(studentData) {
         var studentUpdated = _.merge(studentData, userData);
         studentUpdated.save(function (err) {

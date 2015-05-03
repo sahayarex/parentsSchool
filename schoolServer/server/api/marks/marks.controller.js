@@ -71,63 +71,63 @@ exports.getAllMarks = function(req, res) {
   import: true }*/
 // Creates a new marks in the DB.
 exports.create = function(req, res) {
-  console.log("request:", req.body);
   if(req.body.import) {
-    User.findOne({schoolid: req.body.schoolid, name: req.body.student, role: "student"}, function (err, student) {
+    User.findOne({schoolid: req.body.schoolid, name: req.body.student, studentid: req.body.studentid, role: "student"}, function (err, student) {
       if (err) return next(err);
       if (!student) return res.send(401);
-      console.log("Student", student)
       var total = 0;
       var status = "Pass";
-      req.body.marks = [];
+      var studentMark = req.body;
+      studentMark.marks = [];
       student.subjects.forEach(function(sub, si) {
-        req.body.marks[si] = {};
-        console.log("subject:", sub);
-        console.log("subjectVal", req.body.marks[sub]);
-        console.log("iteration", si);
-        if(req.body[sub] == "ab") {
-          req.body.marks[si]["status"] = "absent";
-          req.body.marks[si][sub] = 0;
+        studentMark.marks[si] = {};
+        if(studentMark[sub] == "ab") {
+          studentMark.marks[si]["status"] = "absent";
+          studentMark.marks[si][sub] = 0;
           status = "Fail";
         } else {
-          req.body.marks[si]["status"] = "present";
-          req.body.marks[si][sub] = parseInt(req.body[sub]);
+          studentMark.marks[si]["status"] = "present";
+          studentMark.marks[si][sub] = parseInt(studentMark[sub]);
         }
-        total = parseInt(total) + req.body.marks[si][sub];
-        if(req.body[sub] < req.body.passmark) {
+        total = parseInt(total) + studentMark.marks[si][sub];
+        if(studentMark[sub] < studentMark.passmark) {
           status = "Fail";
         }
       })
-      req.body.studentid = student._id;
-      req.body.typeofexam = req.body.typeofexam.toLowerCase();
-      req.body.subjects = student.subjects;
-      req.body.status = status;
-      req.body.total = total;
-      req.body.percentage = (total * (100/(student.subjects.length*100))).toPrecision(4);
-      req.body.grades.forEach(function(gv, gk) {
-        if((req.body.percentage >= gv.lesser) && ((req.body.percentage <= gv.greater))) {
-          req.body.grade = (status == "Fail") ? "Grade F" : gv.grade;
+      studentMark.studentid = student._id;
+      studentMark.typeofexam = studentMark.typeofexam.toLowerCase();
+      studentMark.subjects = student.subjects;
+      studentMark.status = status;
+      studentMark.total = total;
+      studentMark.percentage = (total * (100/(student.subjects.length*100))).toPrecision(4);
+      studentMark.grades.forEach(function(gv, gk) {
+        if((studentMark.percentage >= gv.lesser) && ((studentMark.percentage <= gv.greater))) {
+          studentMark.grade = (status == "Fail") ? "Grade F" : gv.grade;
         }
       })
-      if(req.body.attendance) {
-        var attendanceVal = req.body.attendance.split("/");
-        req.body.attendanceP = (parseInt(attendanceVal[0]) * (100/parseInt(attendanceVal[1]))).toPrecision(4);
+      if(studentMark.attendance) {
+        var attendanceVal = studentMark.attendance.split("/");
+        studentMark.attendanceP = (parseInt(attendanceVal[0]) * (100/parseInt(attendanceVal[1]))).toPrecision(4);
       }
-      console.log("before store:", req.body);
-      Marks.findOne({studentid: student._id, typeofexam: req.body.typeofexam, educationyear: req.body.educationyear}, function(err, markcreated) {
+      console.log("before store:", studentMark);
+      Marks.findOne({studentid: student._id, typeofexam: studentMark.typeofexam, educationyear: studentMark.educationyear}, function(err, markcreated) {
         if (err) return next(err);
         var t = new Date();
-        console.log("availability: ", markcreated);
         if(markcreated) {
-          var updated = _.merge(markcreated, req.body);
-          req.body.updated = t.getTime();
+          console.log("mark exists so updating the mark");
+        } else {
+          console.log("Create new mark");
+        }
+        if(markcreated) {
+          var updated = _.merge(markcreated, studentMark);
+          studentMark.updated = t.getTime();
           updated.save(function (err) {
           if (err) { return handleError(res, err); }
             return res.json(200, markcreated);
           });
         } else {
-          req.body.created = req.body.updated = t.getTime();
-          Marks.create(req.body, function(err, marks) {
+          studentMark.created = studentMark.updated = t.getTime();
+          Marks.create(studentMark, function(err, marks) {
             if(err) { return handleError(res, err); }
             return res.json(201, marks);
           });
