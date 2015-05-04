@@ -4,10 +4,8 @@
             <div class="bar bar-header item-input-inset">
                 <ion-search placeholder="Search a user" filter="query.search"></ion-search>
             </div>
-            <a  ng-if="allStudentsStatus == true" class="item item-avatar" ng-repeat="user in users | filter:query.search.value" href="#/app/studentdashboard/{{user.year}}/{{user.typeofexam}}/{{user.studentid}}">
-            <div class="text-icon badge badge-assertive">{{user.grade}}</div>
-            <h2>{{user.student}}</h2>
-            <p>Total: {{user.total}} | Percentage: {{user.percentage}}%</p>
+            <a class="item item-avatar" ng-repeat="user in users | filter:query.search.value" href="#/app/studentdashboard/{{filtersData.educationyear}}/{{filtersData.typeofexam}}/{{user._id}}">
+            <h2>{{user.name}}</h2>
           </a>
           <a class="item" href="#" ng-if="allStudentsStatus == false"><p>No students found</p></a>
         </div>

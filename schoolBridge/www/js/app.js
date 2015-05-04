@@ -46,7 +46,6 @@ angular.module('starter', ['ionic', 'ngCordova', 'chart.js', 'underscore', 'star
           $rootScope.filters = true;
         } else if(scope.link.title == "Classes") {
           $rootScope.filters = false;
-          
         } else {
           $rootScope.filters = false;
           $rootScope.page = "allstudents";
@@ -168,7 +167,34 @@ angular.module('starter', ['ionic', 'ngCordova', 'chart.js', 'underscore', 'star
         controller: 'StudentDashboardCtrl'
       }
     }
+  })
+  .state('app.studentsOverall', {
+    url: "/studentoverall",
+    views: {
+      'menuContent' :{
+        templateUrl: "templates/studentoverall.html",
+        controller: 'StudentOverallCtrl'
+      }
+    }
   })   
+  .state('app.studentOverall', {
+    url: "/studentoverall/:studentid",
+    views: {
+      'menuContent' :{
+        templateUrl: "templates/studentoverall.html",
+        controller: 'StudentOverallCtrl'
+      }
+    }
+  })     
+  .state('app.studentProfile', {
+    url: "/studentprofile/:studentid",
+    views: {
+      'menuContent' :{
+        templateUrl: "templates/studentprofile.html",
+        controller: 'StudentProfileCtrl'
+      }
+    }
+  })     
  .state('app.marks', {
     url: "/marks",
     views: {

@@ -182,14 +182,15 @@ exports.show = function (req, res, next) {
  * Get multiple users
  */
 exports.users = function (req, res, next) {
-  if(req.body.standard == "all") {
-    delete req.body.standard;
+  if(req.params.standard == "all") {
+    delete req.params.standard;
   }
-  if(req.body.division == "all") {
-    delete req.body.division;
+  if(req.params.division == "all") {
+    delete req.params.division;
   }
-  req.body.role = "student";
-  User.find(req.body).sort({stardard: -1}).exec(function(err, user) {
+  req.params.role = "student";
+  console.log("requested users", req.params);
+  User.find(req.params).sort({stardard: -1}).exec(function(err, user) {
     if (err) return next(err);
     if (!user) return res.send(401);
     res.json(user);

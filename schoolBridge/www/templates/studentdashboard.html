@@ -1,21 +1,57 @@
-<ion-view title="Dashboard">
-<!--   <ion-nav-buttons side="left">
-    <button menu-toggle="left"class="button button-icon icon ion-navicon"></button>
-  </ion-nav-buttons> -->
+<ion-view title="Dashboard" ng-init="getMarksData()">
   <ion-content class="has-header">
   <div class="row" ng-if="dashboardStatus == 'empty'">
     <div class="col">Dashboard is empty</div>
   </div>
-  <div class="item item-list">
-    <canvas id="line" class="col chart chart-line" data="gradeData"
-      labels="gradeLabels" legend="true" series="gradeSeries">
+  <div class="item item-list" ng-if="dashboardStatus != 'empty'">
+<!--     <canvas id="doughnut" class="col chart chart-doughnut" data="statusData"
+    labels="statusLabels" legend="true" series="stutusLabels"></canvas>
+    <canvas id="bar" class="col chart chart-bar" data="gradeData"
+      labels="gradeLabels">
     </canvas>     
-    <canvas id="bar" class="col chart chart-bar" data="subjectData"
-  labels="subjectLabels" legend="true" series="subjectSeries"></canvas>
+    <canvas id="line" class="col chart chart-line" data="subjectData"
+  labels="subjectLabels" legend="true" series="subjectSeries"></canvas> -->
+      <canvas id="line" class="col chart chart-line" data="subjectMarks"
+  labels="subjectLabels"></canvas>
     <canvas id="pie" class="col chart chart-pie" data="attendanceData"
   labels="attendanceLabels" legend="true" series="attendanceLabels"></canvas> 
-    <canvas id="doughnut" class="col chart chart-doughnut" data="statusData"
-    labels="statusLabels" legend="true" series="stutusLabels"></canvas>
   </div>
+  <div class="list" ng-if="dashboardStatus != 'empty'">
+  <a class="item item-icon-left" href="#">
+    <i class="icon ion-person-stalker"></i>
+    Total
+    <span class="badge badge-assertive">{{mark.total}}</span>
+  </a>
+<a class="item item-icon-left" ng-show="mark.grade" href="#">
+    <i class="icon ion-person-stalker"></i>
+    Grade
+    <span class="badge badge-assertive">{{mark.grade}}</span>
+  </a>
+  <a class="item item-icon-left" ng-show="mark.rank" href="#">
+    <i class="icon ion-person-stalker"></i>
+    Rank
+    <span class="badge badge-assertive">{{mark.rank}}</span>
+  </a>
+  <a class="item item-icon-left" ng-show="mark.status" href="#">
+    <i class="icon ion-person-stalker"></i>
+    Status
+    <span class="badge badge-assertive">{{mark.status}}</span>
+  </a>  
+  <a class="item item-icon-left" ng-show="mark.remark" href="#">
+    <i class="icon ion-person-stalker"></i>
+    Remark
+    <span class="badge badge-assertive">{{mark.remark}}</span>
+  </a>    
+</div>
+  <div class="list" ng-if="user.role == 'hm'">
+  <a class="item item-icon-left" href="#/app/studentoverall/{{mark.studentid}}">
+    <i class="icon ion-stats-bars"></i>
+    View Overall report
+  </a>
+  <a class="item item-icon-left" href="#/app/studentprofile/{{mark.studentid}}">
+    <i class="icon ion-stats-bars"></i>
+    View Profile
+  </a>  
+</div>
   </ion-content>
 </ion-view>
