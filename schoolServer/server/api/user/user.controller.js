@@ -188,6 +188,9 @@ exports.users = function (req, res, next) {
   if(req.params.division == "all") {
     delete req.params.division;
   }
+  if(req.params._id == "all") {
+    delete req.params._id;
+  }
   req.params.role = "student";
   console.log("requested users", req.params);
   User.find(req.params).sort({stardard: -1}).exec(function(err, user) {

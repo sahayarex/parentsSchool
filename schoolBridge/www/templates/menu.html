@@ -7,7 +7,7 @@
         </button>
       </ion-nav-buttons>
       <ion-nav-buttons side="right">
-        <button ng-if="filters == true" class="button button-icon button-clear ion-funnel" menu-toggle="right">
+        <button class="button button-icon button-clear ion-funnel" menu-toggle="right">
         </button>
       </ion-nav-buttons>      
     </ion-nav-bar>
@@ -21,14 +21,14 @@
     <ion-content>
         <div class="list">
 
-  <a nav-clear menu-close initialize class="item item-icon-left" ui-sref="{{link.href}}" ng-repeat="link in menuLinks.Links">
+  <a nav-clear menu-close class="item item-icon-left" ui-sref="{{link.href}}" ng-repeat="link in menuLinks.Links">
     <i class="icon {{link.class}}"></i>
     {{link.title}}
   </a>
   </div>
     </ion-content>
   </ion-side-menu>
-  <ion-side-menu ng-if="filters == true" side="right">
+  <ion-side-menu side="right">
     <ion-header-bar class="bar-positive">
       <h1 class="title">Filters</h1>
     </ion-header-bar>
@@ -41,7 +41,7 @@
             <div class="item item-divider"><strong>Exam</strong></div>
             <ion-radio name="exam" ng-model="filtersData.typeofexam" ng-repeat="(k,v) in filtersData.typeofexams" ng-value="{{k}}">{{v}}</ion-radio>
         </div>
-      <div class="row" ng-if="page == 'app.dashboard'">
+<!--       <div class="row" ng-if="page == 'app.dashboard'">
         <button menu-close class="col col-33 col-offset-33 button icon-left ion-chevron-left button-block button-positive" ng-click="filterResults(page)">Go</button>
       </div>
       <div class="row" ng-if="page == 'app.hmdashboard'">
@@ -50,6 +50,9 @@
       <div class="row" ng-if="page == 'app.studentdashboard'">
         <button menu-close class="col col-33 col-offset-33 button icon-left ion-chevron-left button-block button-positive" ng-click="studentFilterResults(page)">Go</button>
       </div>        
+      <div class="row" ng-if="page == 'app.studentoveralldashboard'">
+        <button menu-close class="col col-33 col-offset-33 button icon-left ion-chevron-left button-block button-positive" ng-click="overallFilterResults(page)">Go</button>
+      </div>       -->
       </form>
       </div>
     </ion-content>

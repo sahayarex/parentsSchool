@@ -1,8 +1,6 @@
 angular.module('starter.services', [])
 .factory('AuthenticationService', function($rootScope, $ionicPopup, $state, $http, $q, $httpBackend, $location) {
-  //var baseUrl = 'http://192.168.1.3\:9000';
   var baseUrl = 'http://localhost\:9000';
-  //var baseUrl = 'http://axis.moolah.co.in';
   var loginEndpoint       = baseUrl +'/api/users/verify';
   var logoutEndpoint       = baseUrl +'/api/users/';
   var token = localStorage.getItem('token') || '';
@@ -26,7 +24,6 @@ angular.module('starter.services', [])
           $http.defaults.headers.common.Authorization = "Bearer "+data.token;
           console.log("UserData from server:", data);
           user = data;
-          $rootScope.filters = false;
           localStorage.setItem('token', data.token);
           delete data.token;
           localStorage.setItem('uid', data._id);
@@ -35,14 +32,7 @@ angular.module('starter.services', [])
         }
       })
       .error(function (data, status, headers, config) {
-        //$rootScope.$broadcast('event:auth-login-failed', status);
         defer.reject(status);
-/*        var error = "Login failed.";
-        if (status == 401) {
-          error = "Invalid Username or Password.";
-        } else if (status == 404) {
-          error = "Backend is not configured properly"; 
-        }*/
         console.log("status", status);
         var alertPopup = $ionicPopup.alert({
           title: 'Login failed!',
@@ -106,7 +96,10 @@ angular.module('starter.services', [])
         userdata.standard = "all";
       if(!userdata.division)
         userdata.division = "all";
-      $http.get(baseUrl+'/api/users/'+userdata.schoolid+'/'+userdata.standard+'/'+userdata.division)
+      if(!userdata._id) {
+        userdata._id = "all";
+      }
+      $http.get(baseUrl+'/api/users/'+userdata.schoolid+'/'+userdata.standard+'/'+userdata.division+'/'+userdata._id)
       .success(function(data, status, headers, config){
         defer.resolve(data);
       }).error(function(data, status, headers, config){

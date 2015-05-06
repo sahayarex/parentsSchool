@@ -1,0 +1,13 @@
+{
+  "name": "schoolIonic",
+  "private": "true",
+  "devDependencies": {
+    "ionic": "driftyco/ionic-bower#1.0.0-rc.5"
+  },
+  "dependencies": {
+    "angular-chart.js": "~0.7.0",
+    "ngCordova": "~0.1.15-alpha",
+    "underscore": "~1.8.3",
+    "highcharts-ng": "~0.0.8"
+  }
+}

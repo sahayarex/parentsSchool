@@ -1,7 +1,6 @@
 // Ionic Starter App
 var user = {};
 var db = null;
-var educationyear = '';
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
@@ -31,25 +30,26 @@ angular.module('starter', ['ionic', 'ngCordova', 'chart.js', 'underscore', 'star
     }
   });
 })
-.directive('initialize', function($rootScope) {
+.directive('initialize', function($rootScope, $state) {
   return {
     restrict: 'AE',
     replace: true,
     template: '',
     link: function(scope, elem, attrs) {
-      elem.bind('click', function() {
-        console.log("INITIALIZE: ", scope.link);
-        console.log("choose exam");
-        if(scope.link.title == "Dashboard") {
-          scope.filterResults();
-        } else if(scope.link.title == "Students") {
-          $rootScope.filters = true;
-        } else if(scope.link.title == "Classes") {
-          $rootScope.filters = false;
-        } else {
-          $rootScope.filters = false;
-          $rootScope.page = "allstudents";
-        }
+      elem.bind('click', function(event) {
+        /*console.log("INITIALIZE: ", scope.link);
+        console.log("ELEM: ", attrs.href);
+          if(scope.link.title.indexOf("ashboard") > 0) {
+            console.log("filters:", "yes");
+            $rootScope.filters = true;
+          } else {
+            console.log("filters:", "no");
+            $rootScope.filters = false;
+          }*/
+          $state.go(attrs.href, {}, {reload: true});
+          scope.$apply(function(){
+            $rootScope.filters = true;
+          });
       });
     }
   };
@@ -168,21 +168,12 @@ angular.module('starter', ['ionic', 'ngCordova', 'chart.js', 'underscore', 'star
       }
     }
   })
-  .state('app.studentsOverall', {
-    url: "/studentoverall",
+  .state('app.studentOverallDashboard', {
+    url: "/studentoveralldashboard/:studentid",
     views: {
       'menuContent' :{
         templateUrl: "templates/studentoverall.html",
-        controller: 'StudentOverallCtrl'
-      }
-    }
-  })   
-  .state('app.studentOverall', {
-    url: "/studentoverall/:studentid",
-    views: {
-      'menuContent' :{
-        templateUrl: "templates/studentoverall.html",
-        controller: 'StudentOverallCtrl'
+        controller: 'StudentOverallDashboardCtrl'
       }
     }
   })     

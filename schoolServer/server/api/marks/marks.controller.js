@@ -34,6 +34,9 @@ exports.getMark = function(req, res) {
   }
   if(req.params.standard == 'undefined') {
     delete params.standard;
+  }
+  if(req.params.typeofexam == 'all') {
+    delete params.typeofexam;
   }  
   if((req.params.division == 'undefined') || (req.params.division.toLowerCase() == "all")) {
     delete params.division;
