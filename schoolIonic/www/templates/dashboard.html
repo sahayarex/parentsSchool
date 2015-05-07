@@ -6,7 +6,11 @@
   <div class="row" ng-if="dashboardStatus == 'empty'">
     <div class="col">Dashboard is empty</div>
   </div>
-  <div class="item item-list" ng-if="dashboardStatus != 'empty'">
+  <chart id="tpassfailstatus" config="tpassfailConfig" ng-if="dashboardStatus != 'empty'" style="pointer-events: none"></chart>
+<chart id="tsubjects" config="tsubjectsConfig" ng-if="dashboardStatus != 'empty'"></chart>
+<chart id="tgrades" config="tgradeConfig" ng-if="dashboardStatus != 'empty'" style="pointer-events: none"></chart>
+
+<!--   <div class="item item-list" ng-if="dashboardStatus != 'empty'">
     <canvas id="doughnut" class="col chart chart-doughnut" data="statusData"
     labels="statusLabels" legend="true" series="stutusLabels"></canvas>
     <canvas id="bar" class="col chart chart-bar" data="gradeData"
@@ -16,9 +20,7 @@
   labels="subjectLabels" legend="true" series="subjectSeries"></canvas>
       <canvas id="line" class="col chart chart-line" data="subjectMarks"
   labels="subjectLabels"></canvas>
-<!--     <canvas id="pie" class="col chart chart-pie" data="attendanceData"
-  labels="attendanceLabels" legend="true" series="attendanceLabels"></canvas>  -->
-  </div>
+  </div> -->
 
   <div class="list" ng-if="dashboardStatus != 'empty'">
   <a class="item item-icon-left" href="#">

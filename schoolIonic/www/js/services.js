@@ -1,7 +1,7 @@
 angular.module('starter.services', [])
 .factory('MyService', function($rootScope, $ionicPopup, $state, $http, $q, $httpBackend, $location) {
-  //var baseUrl = 'http://192.168.1.2\:9000';
-  var baseUrl = 'http://localhost\:9000';
+  var baseUrl = 'http://192.168.1.3\:9000';
+  //var baseUrl = 'http://localhost\:9000';
   var loginEndpoint       = baseUrl +'/api/users/verify';
   var logoutEndpoint       = baseUrl +'/api/users/';
   var token = localStorage.getItem('token') || '';

@@ -6,11 +6,15 @@
   <div class="row" ng-if="dashboardStatus == 'empty'">
     <div class="col">Dashboard is empty</div>
   </div>
-  <div ng-if="dashboardStatus != 'empty'">
-    <div id="passfailstatus" style="pointer-events: none"></div>
-    <div id="grades"></div>
+<chart id="passfailstatus" config="passfailConfig" ng-if="dashboardStatus != 'empty'" style="pointer-events: none"></chart>
+<chart id="subjects" config="subjectsConfig" ng-if="dashboardStatus != 'empty'"></chart>
+<chart id="grades" config="gradeConfig" ng-if="dashboardStatus != 'empty'" style="pointer-events: none"></chart>
+
+<!--   <div class="list" ng-show="dashboardData" style="margin: 0 auto;width:400px">
+    <div id="passfailstatus" style="pointer-events: none;margin: 0 auto"></div>
     <div id="subjectmarks"></div>
-  </div>
+    <div id="grades" style="pointer-events: none"></div>
+  </div> -->
 <!--   <div class="item item-list" ng-if="dashboardStatus != 'empty'">
     <canvas id="doughnut" class="col chart chart-doughnut" data="statusData"
     labels="statusLabels" legend="true" series="stutusLabels"></canvas>
@@ -23,14 +27,14 @@
   </div> -->
   <div class="list" ng-if="dashboardStatus != 'empty'">
   <a class="item item-icon-left" href="#">
-    <i class="icon ion-trophy"></i>
-    <span style="color:#aaa;font-weight:bold;font-size:14px">Topper - Class</span>
+    <i class="icon ion-trophy positive"></i>
+    <span style="color:#aaa;font-weight:bold;font-size:14px">Topper/Class</span>
     <span class="badge">Total</span>
   </a>
-  <a class="item item-icon-left" href="#" ng-repeat="(k, v) in toppers | orderBy: 'total':'reverse'" >
-    <i class="icon ion-person"></i>
-    {{v.student}} - {{v.standard}}:{{v.division}}
-    <span class="badge badge-assertive">{{v.total}}</span>
+  <a class="item item-icon-left" href="#" ng-repeat="(k, v) in toppers">
+    <i class="icon ion-person positive"></i>
+    {{v.standard}}:{{v.division}} - {{v.student}}
+    <span class="badge badge-positive">{{v.total}}</span>
   </a>
   </div>
   </ion-content>

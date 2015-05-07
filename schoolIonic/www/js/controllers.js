@@ -48,8 +48,8 @@ angular.module('starter.controllers', ['starter.services'])
   filterStatus($state.current.name);
 })
 .controller('HmDashboardCtrl', function($scope, $rootScope, $state, _, $cordovaSQLite, MyService, $stateParams) {
-  var updateditems = subjectMarks = subjectLabels = gradeLabels = subjectDataPass = subjectDataFail = toppers = [];
-  var pass = fail = attendanceVal = totalrecords = 0;   
+  var allsubjects = subjectDataPass = subjectDataFail = toppers = [];
+  var pass = fail = 0;   
   var gradeData = {};
   $rootScope.hmfilterResults = function(page) {
     filtersData = $rootScope.filtersData;
@@ -75,6 +75,7 @@ angular.module('starter.controllers', ['starter.services'])
           fail = 0;
           subjectDataPass = [];
           subjectDataFail = [];
+          allsubjects = [];
           var gradeData = {};
           angular.forEach(studentMarks, function(v,k) {
             processMarksVal(v, k, "online");
@@ -120,61 +121,39 @@ angular.module('starter.controllers', ['starter.services'])
     }
   }
   var processMarksVal = function(v, k, status) {
-    var subjects = user.subjects;
-    var marks = v.marks;
-      if(v.status == "Pass") pass++;
-      if(v.status == "Fail") fail++;
-      if(toppers[v.standard]) {
-        if(toppers[v.standard].total < v.total) {
-          toppers[v.standard] = {student: v.student, standard: v.standard, division: v.division, total: v.total};
-        }
-      } else {
-        toppers[v.standard] = {student: v.student, standard: v.standard, division: v.division, total: v.total};
-      }
-      marks.forEach(function(mv, mk) {
-        angular.forEach(mv, function(mvv, mkk) {
-          if(subjects.indexOf(mkk) > -1) {
-            subjectDataPass[mkk] = (subjectDataPass[mkk]) ? subjectDataPass[mkk] : 0;
-            subjectDataFail[mkk] = (subjectDataFail[mkk]) ? subjectDataFail[mkk] : 0;   
-            if(mvv >= user.passmark) {
-              subjectDataPass[mkk]++;
-            } else {
-              subjectDataFail[mkk]++;
-            }
+    if(v.status == "Pass") pass++;
+    if(v.status == "Fail") fail++;
+    v.marks.forEach(function(mv, mk) {
+      angular.forEach(mv, function(mvv, mkk) {
+        if((mkk != "status")) {
+          if(allsubjects.indexOf(mkk) == -1) {
+            allsubjects.push(mkk);
           }
-        })
+          subjectDataPass[mkk] = (subjectDataPass[mkk]) ? subjectDataPass[mkk] : 0;
+          subjectDataFail[mkk] = (subjectDataFail[mkk]) ? subjectDataFail[mkk] : 0;   
+          if(mvv >= user.passmark) {
+            subjectDataPass[mkk]++;
+          } else {
+            subjectDataFail[mkk]++;
+          }
+        }
       })
-      if(gradeData[v.grade]) {
-        console.log("old one", gradeData[v.grade].y);
-        gradeData[v.grade] = {name: v.grade, y: parseInt(gradeData[v.grade].y) + 1};
-      } else {
+    })
+    if(gradeData[v.grade]) {
+      gradeData[v.grade] = {name: v.grade, y: parseInt(gradeData[v.grade].y) + 1};
+    } else {
+      if(v.grade)
         gradeData[v.grade] = {name: v.grade, y: 1};
+    }
+    if(toppers[v.standard]) {
+      if(toppers[v.standard].total < v.total) {
+        toppers[v.standard] = {student: v.student, standard: v.standard, division: v.division.toUpperCase(), total: v.total};
       }
-      gradeLabels = [];
-/*      for (var i = 0; i < user.grades.length; i++) {
-        j[i] = (j[i]) ? j[i] : 0;
-        if(user.grades[i].grade == v.grade) {
-            j[i]++;
-        }
-        gradeLabels[i] = user.grades[i].grade;
-        if(!gradeData) {
-          gradeData = {};
-        }
-      };*/
-      if(attendanceVal > 0) {
-        attendanceVal = parseInt(v.attendance);
-      } else {
-        attendanceVal = attendanceVal + parseInt(v.attendance);
-      }
+    } else {
+      toppers[v.standard] = {student: v.student, standard: v.standard, division: v.division.toUpperCase(), total: v.total};
+    }
   }
   var applyMarks = function() {
-    $scope.statusData = [pass,fail];
-    var gradeVal = [];
-    angular.forEach(gradeData, function(gv, gk) {
-      gradeVal.push(gv);
-    })
-    $scope.gradeData = [gradeData];
-    $scope.gradeLabels = gradeLabels;
     var toppersList = [];
     _.each(toppers, function(v, k) {
       if(v) {
@@ -182,104 +161,33 @@ angular.module('starter.controllers', ['starter.services'])
       }
     });
     $scope.toppers = toppersList;
-    $scope.statusLabels = ["Pass", "Fail"];
-    $scope.subjectSeries = ["Pass", "Fail"];
-    $scope.subjectData = []; 
-    $scope.subjectLabels = user.subjects;
+    var gradeVal = [];
+    angular.forEach(gradeData, function(gv, gk) {
+      gradeVal.push(gv);
+    })
     var passvals = []
     var failvals = []
     angular.forEach(user.subjects, function(us, uk) {
       passvals.push(subjectDataPass[us]);
       failvals.push(subjectDataFail[us]);
     })
-    $scope.subjectData = [
-      passvals,failvals
-    ];
-        console.log("gradeVal", gradeVal);
-    var options = {
-        chart: {
-          renderTo: 'passfailstatus',
-          animation: true,
-          type: 'pie',
-          options3d:{
-                enabled: true,
-                alpha: 45,
-                beta: 0
-          },
-          height: 200,
-        },
-        title: {
-            text: '',
-        },
-        tooltip: {
-            enabled: false
-        },
-        plotOptions: {
-            pie: {
-                innerSize: 50,
-                depth: 35,
-                dataLabels: {
-                    enabled: true,
-                    format: '{point.name}: <b>{point.y}</b>'
-                }
-            }
-        },
-        series: [{
-            type: 'pie',
-            name: 'Total',
-            data: [
-              ["Pass", pass],
-              ["Fail", fail],
-            ]
-        }]
-      };
-    var chart = new Highcharts.Chart(options);
-    options.chart.renderTo = "grades";
-    options.plotOptions.pie.innerSize = 0;
-    options.series[0].data = gradeVal;
-    var chart1 = new Highcharts.Chart(options);
-  console.log("gradeData", user.subjects);
-  console.log("pass", passvals);
-  console.log("fail", failvals);
-    var options2 = {
-      chart: {
-            renderTo: "subjectmarks",
-            type: 'column',
-            options3d: {
-                enabled: true,
-                alpha: 10,
-                beta: 5,
-                depth: 70
-            },
-        },
-        title: {
-            text: ''
-        },
-        plotOptions: {
-            column: {
-                depth: 25
-            }
-        },
-        scrollbar: {
-          enabled: true
-        },
-        xAxis: {
-            categories: Highcharts.getOptions().lang.shortMonths
-        },
-        yAxis: {
-            title: {
-                text: null
-            }
-        },
-        series: [{
-            name: 'Sales',
-            data: [2, 3, null, 4, 0, 5, 1, 4, 6, 3]
-        },{
-            name: 'test',
-            data: [2, 3, null, 4, 0, 5, 1, 4, 6, 3]
-        }]
-      };
-    var chart2 = new Highcharts.Chart(options2);
+    $scope.passfailConfig = {
+      chart: {renderTo: 'passfailstatus',type: 'pie',height:200,options3d:{enabled: true,alpha: 45,beta: 0},},
+      plotOptions: {pie: {innerSize: 50,depth: 35,dataLabels:{enabled: true,format: '{point.name}: <b>{point.y}</b>'}}},
+      series: [{type: 'pie',name: 'Total',data: [["Pass", pass],["Fail", fail]]}]
+    };
+    $scope.gradeConfig = {
+      chart: {renderTo: 'grades',type: 'pie',height: 200,options3d:{enabled: true,alpha: 45,beta: 0}},
+      plotOptions: {pie: {innerSize: 0,depth: 35,dataLabels:{enabled: true,format: '{point.name}: <b>{point.y}</b>'}}},
+      series: [{type: 'pie',name: 'Total',data: gradeVal}]
+    };
+    $scope.subjectsConfig = {
+      chart: {renderTo: 'subjects',type: 'column', options3d: {enabled: true,alpha: 10,beta: 20,depth: 50}},
+      plotOptions: {column: {depth: 25}},
+      xAxis: {categories: allsubjects},
+      yAxis: {title: {text: null}},
+      series: [{name: 'Pass',data: passvals},{name: 'Fail',data: failvals}]
+    };
   }
 })
 .controller('DashboardCtrl', function($scope, $rootScope, $state, $cordovaSQLite, MyService, $stateParams) {
@@ -289,17 +197,9 @@ angular.module('starter.controllers', ['starter.services'])
     localStorage.setItem('filtersData', JSON.stringify(filtersData));
     $scope.getMarksData();
   }
-  var updateditems = [];
-  var subjectMarks = [];
-  var pass = fail = attendanceVal = totalrecords = 0;
-  var subjectLabels = []; 
-  var gradeLabels = [];
-  var subjectDataPass = [];
-  var subjectDataFail = [];  
-  var subjectDataMarks = [];    
-  var toppers = [];  
-  var topperSubjects = [];
-  var allsubjects = [];
+  var allsubjects = subjectDataPass = subjectDataFail = toppers = subjectDataMarks = topperSubjects = [];
+  var pass = fail = 0;   
+  var gradeData = {};
   $scope.getMarksData = function() {
     var params = filtersData;
     params.schoolid = user.schoolid;
@@ -331,15 +231,13 @@ angular.module('starter.controllers', ['starter.services'])
           $scope.dashboardStatus = "not empty";
           pass = 0;
           fail = 0;
-          subjectMarks = [];
-          subjectLabels = []; 
-          gradeLabels = [];
           subjectDataPass = [];
-          subjectDataFail = []; 
+          subjectDataFail = [];
+          allsubjects = [];
           subjectDataMarks = [];       
           toppers = [];
           topperSubjects = [];
-          var gradeData = j = [];
+          var gradeData = {};
           angular.forEach(studentMarks, function(v,k) {
             processMarksVal(v, k, "online");
           })
@@ -368,15 +266,13 @@ angular.module('starter.controllers', ['starter.services'])
           $scope.dashboardStatus = "not empty";
           pass = 0;
           fail = 0;
-          subjectMarks = [];
-          subjectLabels = []; 
-          gradeLabels = [];
           subjectDataPass = [];
           subjectDataFail = [];
-          subjectDataMarks = [];    
+          allsubjects = [];
+          subjectDataMarks = [];       
           toppers = [];
           topperSubjects = [];
-          var gradeData = j = [];
+          var gradeData = {};
           var allmarks = JSON.parse(res.rows.item(0).value);
           console.log("allmarks", allmarks);
           angular.forEach(allmarks, function(v,k) {
@@ -391,73 +287,81 @@ angular.module('starter.controllers', ['starter.services'])
       });
     }
   }
-  var kkkk = 0;
   var processMarksVal = function(v, k, status) {
-    //var subjects = user.subjects;
-    var marks = v.marks;
-    if(status == "offline") {
-     // subjects = JSON.parse(v.subjects);
-      marks = JSON.parse(v.marks);
-    }
-      if(v.status == "Pass")
-          pass++;
-      if(v.status == "Fail")
-          fail++;
-      if(toppers[v.standard]) {
-        if(toppers[v.standard].total < v.total) {
-          toppers[v.standard] = {student: v.student, standard: v.standard, division: v.division, total: v.total};
-        }
-      } else {
-        toppers[v.standard] = {student: v.student, standard: v.standard, division: v.division, total: v.total};
-      }
-      marks.forEach(function(mv, mk) {
-        angular.forEach(mv, function(mvv, mkk) {
-          if((mkk != "status")) {
-            if(allsubjects.indexOf(mkk) == -1) {
-              allsubjects.push(mkk);
-            }
-            subjectDataPass[mkk] = (subjectDataPass[mkk]) ? subjectDataPass[mkk] : 0;
-            subjectDataFail[mkk] = (subjectDataFail[mkk]) ? subjectDataFail[mkk] : 0;   
-            if(mvv >= user.passmark) {
-              subjectDataPass[mkk]++;
-            } else {
-              subjectDataFail[mkk]++;
-            }
-            if(subjectDataMarks[mkk]) {
-              subjectDataMarks[mkk] = parseInt(mvv) + subjectDataMarks[mkk];
-            } else {
-              subjectDataMarks[mkk] = parseInt(mvv);
-            }
-            if(topperSubjects[mkk]) {
-              if(parseInt(mvv) > topperSubjects[mkk].total) {
-                topperSubjects[mkk] = {total: mvv, student:v.student, subject: mkk, classd: v.standard+v.division.toUpperCase()};              
-              } else if (parseInt(mvv) == topperSubjects[mkk].total) {
-                topperSubjects[mkk].student = topperSubjects[mkk].student + "," + v.student;
-              }
-            } else {
-              topperSubjects[mkk] = {total: mvv, student:v.student, subject: mkk, classd: v.standard+v.division.toUpperCase()};              
-            }
-            console.log("mark", topperSubjects[mkk]);
+    if(v.status == "Pass") pass++;
+    if(v.status == "Fail") fail++;
+    v.marks.forEach(function(mv, mk) {
+      angular.forEach(mv, function(mvv, mkk) {
+        if((mkk != "status")) {
+          if(allsubjects.indexOf(mkk) == -1) {
+            allsubjects.push(mkk);
           }
-        })
-      })
-
-      gradeLabels = [];
-      for (var i = 0; i < user.grades.length; i++) {
-        j[i] = (j[i]) ? j[i] : 0;
-        if(user.grades[i].grade == v.grade) {
-            j[i]++;
+          subjectDataPass[mkk] = (subjectDataPass[mkk]) ? subjectDataPass[mkk] : 0;
+          subjectDataFail[mkk] = (subjectDataFail[mkk]) ? subjectDataFail[mkk] : 0;   
+          if(mvv >= user.passmark) {
+            subjectDataPass[mkk]++;
+          } else {
+            subjectDataFail[mkk]++;
+          }
+          if(subjectDataMarks[mkk]) {
+            subjectDataMarks[mkk] = parseInt(mvv) + subjectDataMarks[mkk];
+          } else {
+            subjectDataMarks[mkk] = parseInt(mvv);
+          }
+          if(topperSubjects[mkk]) {
+            if(parseInt(mvv) > topperSubjects[mkk].total) {
+              topperSubjects[mkk] = {total: mvv, student:v.student, subject: mkk, classd: v.standard+v.division.toUpperCase()};              
+            } else if (parseInt(mvv) == topperSubjects[mkk].total) {
+              topperSubjects[mkk].student = topperSubjects[mkk].student + "," + v.student;
+            }
+          } else {
+            topperSubjects[mkk] = {total: mvv, student:v.student, subject: mkk, classd: v.standard+v.division.toUpperCase()};              
+          }
         }
-        gradeLabels[i] = user.grades[i].grade;
-      };
-      gradeData = j;
-      if(attendanceVal > 0) {
-        attendanceVal = parseInt(v.attendance);
-      } else {
-        attendanceVal = attendanceVal + parseInt(v.attendance);
+      })
+    })
+    if(gradeData[v.grade]) {
+      gradeData[v.grade] = {name: v.grade, y: parseInt(gradeData[v.grade].y) + 1};
+    } else {
+      if(v.grade)
+        gradeData[v.grade] = {name: v.grade, y: 1};
+    }
+    if(toppers[v.standard]) {
+      if(toppers[v.standard].total < v.total) {
+        toppers[v.standard] = {student: v.student, standard: v.standard, division: v.division.toUpperCase(), total: v.total};
       }
+    } else {
+      toppers[v.standard] = {student: v.student, standard: v.standard, division: v.division.toUpperCase(), total: v.total};
+    }
   }
   var applyMarks = function() {
+    var gradeVal = [];
+    angular.forEach(gradeData, function(gv, gk) {
+      gradeVal.push(gv);
+    })
+    var passvals = []
+    var failvals = []
+    angular.forEach(user.subjects, function(us, uk) {
+      passvals.push(subjectDataPass[us]);
+      failvals.push(subjectDataFail[us]);
+    })
+    $scope.tpassfailConfig = {
+      chart: {renderTo: 'tpassfailstatus',type: 'pie',height:200,options3d:{enabled: true,alpha: 45,beta: 0},},
+      plotOptions: {pie: {innerSize: 50,depth: 35,dataLabels:{enabled: true,format: '{point.name}: <b>{point.y}</b>'}}},
+      series: [{type: 'pie',name: 'Total',data: [["Pass", pass],["Fail", fail]]}]
+    };
+    $scope.tgradeConfig = {
+      chart: {renderTo: 'tgrades',type: 'pie',height: 200,options3d:{enabled: true,alpha: 45,beta: 0}},
+      plotOptions: {pie: {innerSize: 0,depth: 35,dataLabels:{enabled: true,format: '{point.name}: <b>{point.y}</b>'}}},
+      series: [{type: 'pie',name: 'Total',data: gradeVal}]
+    };
+    $scope.tsubjectsConfig = {
+      chart: {renderTo: 'tsubjects',type: 'column', options3d: {enabled: true,alpha: 10,beta: 20,depth: 50}},
+      plotOptions: {column: {depth: 25}},
+      xAxis: {categories: allsubjects},
+      yAxis: {title: {text: null}},
+      series: [{name: 'Pass',data: passvals},{name: 'Fail',data: failvals}]
+    };    
     var toppersList = [];
     _.each(toppers, function(v, k) {
       if(v) {
@@ -465,15 +369,7 @@ angular.module('starter.controllers', ['starter.services'])
       }
     });
     $scope.toppers = toppersList;
-    $scope.statusLabels = ["Pass", "Fail"];
-    $scope.subjectSeries = ["Pass", "Fail"];
-    $scope.subjectData = []; 
-    $scope.subjectLabels = allsubjects;
-    var passvals = [];
-    var failvals = [];
-    var marksvals = [];
-    var topperS = [];
-    angular.forEach(allsubjects, function(us, uk) {
+/*    angular.forEach(allsubjects, function(us, uk) {
       if(subjectDataPass[us]) {
         passvals.push(subjectDataPass[us]);
         failvals.push(subjectDataFail[us]);
@@ -491,19 +387,8 @@ angular.module('starter.controllers', ['starter.services'])
       } else {
         topperS.push({total:0, student:"", subject: us, classd: ""});
       }
-    })
-    console.log("labels", allsubjects);
-    $scope.subjectData = [
-      passvals,failvals
-    ];
-    $scope.subjectMarks = [
-      marksvals
-    ];
-    $scope.subjectToppers = topperS;
-    console.log("values", $scope.subjectData);
-    $scope.statusData = [pass,fail];
-    $scope.gradeData = [gradeData];
-    $scope.gradeLabels = gradeLabels;
+    })*/
+    //$scope.subjectToppers = topperS;
   }
 })
 .controller('AllClassesCtrl', function($scope, $rootScope, $cordovaSQLite, MyService) {
@@ -905,7 +790,7 @@ angular.module('starter.controllers', ['starter.services'])
   $scope.doingLogin = false;
   $scope.user = {
     email: '8951572125@school-a.com',
-    password: 'RiRualr+mm7mWve0wjNO7Q=='
+    password: '8Bu1+XUwxvFfqjZCB+8blg=='
   };
   $scope.login = function() {
     if(($scope.user.email == null) || ($scope.user.password == null)) {

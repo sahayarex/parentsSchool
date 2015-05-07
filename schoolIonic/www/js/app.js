@@ -72,7 +72,41 @@ angular.module('starter', ['ionic', 'ngCordova', 'underscore', 'starter.controll
                   '</div>'
     };
 })
-
+.directive('chart', function() {
+    return {
+        restrict: 'E',
+        template: '<div></div>',
+        replace: true,
+        scope: {
+            config: '='
+        },
+        link: function (scope, element, attrs) {
+            var chart;
+            var process = function () {
+                var defaultOptions = {
+                    chart: { renderTo: element[0],  animation: true},
+                    title: {text: ''},
+                };
+                var config = angular.extend(defaultOptions, scope.config);
+                chart = new Highcharts.Chart(config);
+            };
+            process();
+            scope.$watch("config.series", function (loading) {
+                process();
+            });
+            scope.$watch("config.loading", function (loading) {
+                if (!chart) {
+                    return;
+                }
+                if (loading) {
+                    chart.showLoading();
+                } else {
+                    chart.hideLoading();
+                }
+            });
+        },
+    };
+})
 .config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
   .state('app', {
