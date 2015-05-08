@@ -1,0 +1,26 @@
+<ion-view title="{{title}}" ng-init="getStudentsData()">
+  <ion-content class="has-header">
+<div class="list">
+  <a class="item item-icon-left positive" href="#">
+    <i class="icon ion-easel"></i>
+    {{standard}}{{division}}
+  </a>
+  <a class="item item-icon-left positive" href="#">
+    <i class="icon ion-person"></i>
+    Teacher : {{classData.teacher}}
+  </a>
+  <a class="item item-icon-left positive" href="#">
+    <i class="icon ion-person-stalker"></i>
+    Total : {{classData.total}}
+  </a>
+  <a class="item item-icon-left positive" href="#" ng-show="classData.male">
+    <i class="icon ion-man"></i>
+    {{classData.male}}
+  </a>
+  <a class="item item-icon-left positive" href="#" ng-show="classData.female">
+    <i class="icon ion-woman"></i>
+    {{classData.female}}
+  </a>  
+</div>
+  </ion-content>
+</ion-view>
