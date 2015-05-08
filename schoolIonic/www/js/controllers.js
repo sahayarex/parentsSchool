@@ -3,6 +3,7 @@ angular.module('starter.controllers', ['starter.services'])
 .controller('AppCtrl', function($scope, $stateParams, $cordovaSQLite, $rootScope, $state, MyService) {
   $scope.uid = localStorage.getItem('uid') || '';
   user = JSON.parse(localStorage.getItem('user')) || user;
+  $scope.school = user.school;
   if($scope.uid) {
     $scope.authorized = true;
     if(user.role == "hm") {
@@ -44,6 +45,10 @@ angular.module('starter.controllers', ['starter.services'])
   } 
   $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){ 
     filterStatus(toState.name);
+    if(toState.name == 'app.allclasses') {
+/*      location.reload();
+$scope.allclasses = true;*/
+    }
   })
   filterStatus($state.current.name);
 })
@@ -65,18 +70,18 @@ angular.module('starter.controllers', ['starter.services'])
     }
     console.log("params", params);
     var dbkey = params.schoolid +'_'+params.year+'_'+user.typeofexams[params.typeofexam]+'_hm';
+    pass = 0;
+    fail = 0;
+    subjectDataPass = [];
+    subjectDataFail = [];
+    allsubjects = [];
+    var gradeData = {};
     if(MyService.online()) {
       MyService.getMarks(params).then(function(studentMarks) {
         console.log("Got marks:", studentMarks);
         totalrecords = studentMarks.length;
         if(totalrecords > 0) {
           $scope.dashboardStatus = "not empty";
-          pass = 0;
-          fail = 0;
-          subjectDataPass = [];
-          subjectDataFail = [];
-          allsubjects = [];
-          var gradeData = {};
           angular.forEach(studentMarks, function(v,k) {
             processMarksVal(v, k, "online");
           })
@@ -103,9 +108,6 @@ angular.module('starter.controllers', ['starter.services'])
         totalrecords = res.rows.length;
         if(totalrecords > 0) {
           $scope.dashboardStatus = "not empty";
-          subjectDataPass = [];
-          subjectDataFail = [];    
-          var gradeData = j = [];
           var allmarks = JSON.parse(res.rows.item(0).value);
           console.log("allmarks", allmarks);
           angular.forEach(allmarks, function(v,k) {
@@ -147,10 +149,10 @@ angular.module('starter.controllers', ['starter.services'])
     }
     if(toppers[v.standard]) {
       if(toppers[v.standard].total < v.total) {
-        toppers[v.standard] = {student: v.student, standard: v.standard, division: v.division.toUpperCase(), total: v.total};
+        toppers[v.standard] = {student: v.student, standard: v.standard, division: v.division.toUpperCase(), total: v.total, studentid: v.studentid};
       }
     } else {
-      toppers[v.standard] = {student: v.student, standard: v.standard, division: v.division.toUpperCase(), total: v.total};
+      toppers[v.standard] = {student: v.student, standard: v.standard, division: v.division.toUpperCase(), total: v.total, studentid: v.studentid};
     }
   }
   var applyMarks = function() {
@@ -209,35 +211,41 @@ angular.module('starter.controllers', ['starter.services'])
     if(!params.studentid) {
       params.studentid = "all";
     }
-    var standard = '';
-    if($stateParams.standard) {
-      params.standard = $stateParams.standard;
-      standard = '_'+$stateParams.standard;
-      $scope.standard = $stateParams.standard;
+    var tdashparams = localStorage.getItem("DashParam") || '';
+    console.log("tdashparams", tdashparams);
+    if(tdashparams) {
+      var tdashp = tdashparams.split("-");
+      var standard = '';
+      if(tdashp[0]) {
+        params.standard = tdashp[0];
+        standard = '_'+tdashp[0];
+        $scope.standard = tdashp[0];
+      }
+      var division = '_all';
+      if(tdashp[1]) {
+        params.division = tdashp[1];
+        division = '_'+tdashp[1];
+        $scope.division = tdashp[1];
+      }    
     }
-    var division = '_all';
-    if($stateParams.division) {
-      params.division = $stateParams.division;
-      division = '_'+$stateParams.division;
-      $scope.division = $stateParams.division;
-    }    
+    $scope.title = params.standard +'/'+params.division+' Dashboard';
     console.log("params", params);
     var dbkey = params.schoolid +'_'+params.year+'_'+user.typeofexams[params.typeofexam]+standard+division;
+    pass = 0;
+    fail = 0;
+    subjectDataPass = [];
+    subjectDataFail = [];
+    allsubjects = [];
+    subjectDataMarks = [];       
+    toppers = [];
+    topperSubjects = [];
+    var gradeData = {};
     if(MyService.online()) {
       MyService.getMarks(params).then(function(studentMarks) {
         console.log("Got marks:", studentMarks);
         totalrecords = studentMarks.length;
         if(totalrecords > 0) {
           $scope.dashboardStatus = "not empty";
-          pass = 0;
-          fail = 0;
-          subjectDataPass = [];
-          subjectDataFail = [];
-          allsubjects = [];
-          subjectDataMarks = [];       
-          toppers = [];
-          topperSubjects = [];
-          var gradeData = {};
           angular.forEach(studentMarks, function(v,k) {
             processMarksVal(v, k, "online");
           })
@@ -264,15 +272,6 @@ angular.module('starter.controllers', ['starter.services'])
         totalrecords = res.rows.length;
         if(totalrecords > 0) {
           $scope.dashboardStatus = "not empty";
-          pass = 0;
-          fail = 0;
-          subjectDataPass = [];
-          subjectDataFail = [];
-          allsubjects = [];
-          subjectDataMarks = [];       
-          toppers = [];
-          topperSubjects = [];
-          var gradeData = {};
           var allmarks = JSON.parse(res.rows.item(0).value);
           console.log("allmarks", allmarks);
           angular.forEach(allmarks, function(v,k) {
@@ -335,15 +334,22 @@ angular.module('starter.controllers', ['starter.services'])
     }
   }
   var applyMarks = function() {
+    $scope.tpassfailConfig = {};
     var gradeVal = [];
     angular.forEach(gradeData, function(gv, gk) {
       gradeVal.push(gv);
     })
-    var passvals = []
-    var failvals = []
-    angular.forEach(user.subjects, function(us, uk) {
+    var passvals = [];
+    var failvals = [];
+    var topperS = [];
+    angular.forEach(allsubjects, function(us, uk) {
       passvals.push(subjectDataPass[us]);
       failvals.push(subjectDataFail[us]);
+      if(topperSubjects[us]) {
+        topperS.push(topperSubjects[us]);
+      } else {
+        topperS.push({total:0, student:"", subject: us, classd: ""});
+      }
     })
     $scope.tpassfailConfig = {
       chart: {renderTo: 'tpassfailstatus',type: 'pie',height:200,options3d:{enabled: true,alpha: 45,beta: 0},},
@@ -369,30 +375,14 @@ angular.module('starter.controllers', ['starter.services'])
       }
     });
     $scope.toppers = toppersList;
-/*    angular.forEach(allsubjects, function(us, uk) {
-      if(subjectDataPass[us]) {
-        passvals.push(subjectDataPass[us]);
-        failvals.push(subjectDataFail[us]);
-      } else {
-        passvals.push(0);
-        failvals.push(0);
-      }
-      if(subjectDataMarks[us]) {
-        marksvals.push(subjectDataMarks[us]*(100/(totalrecords*100)));
-      } else {
-        marksvals.push(0);
-      }
-      if(topperSubjects[us]) {
-        topperS.push(topperSubjects[us]);
-      } else {
-        topperS.push({total:0, student:"", subject: us, classd: ""});
-      }
-    })*/
-    //$scope.subjectToppers = topperS;
+    $scope.subjectToppers = topperS;
   }
+  $scope.getMarksData();
+
 })
-.controller('AllClassesCtrl', function($scope, $rootScope, $cordovaSQLite, MyService) {
+.controller('AllClassesCtrl', function($scope, $rootScope, $cordovaSQLite, MyService, $ionicHistory) {
   var processUsers = function(users) {
+    $ionicHistory.clearHistory();
     $scope.allClasses = true;
     var classes = [];
     var all = [];
@@ -426,7 +416,6 @@ angular.module('starter.controllers', ['starter.services'])
     if(MyService.online()) {
       MyService.getUsers(params).then(function(users) {
         if(users.length > 0) {
-          console.log("Got all users:", users);
           processUsers(users);
           var query = "INSERT into users (key, value) VALUES (?, ?)";
           var selectq = 'SELECT key from users where key = "'+dbkey+'"';
@@ -522,19 +511,21 @@ angular.module('starter.controllers', ['starter.services'])
     var params = filtersData;
     params.schoolid = user.schoolid;
     params.year = user.years[params.educationyear];
-    if($stateParams.studentid) {
-      params.studentid = $stateParams.studentid;
+    var sdashparams = localStorage.getItem("DashParam") || '';
+    console.log("sdashparams", sdashparams);
+    if(sdashparams) {
+      params.studentid = sdashparams;
     }    
     console.log("params", params);
     var dbkey = params.schoolid +'_'+params.year+'_'+user.typeofexams[params.typeofexam]+params.studentid;
+    subjectMarks = [];
+    subjectLabels = []; 
     if(MyService.online()) {
       MyService.getMarks(params).then(function(studentMarks) {
         console.log("Got marks:", studentMarks);
         totalrecords = studentMarks.length;
         if(totalrecords > 0) {
           $scope.dashboardStatus = "not empty";
-          subjectMarks = [];
-          subjectLabels = []; 
           angular.forEach(studentMarks, function(v,k) {
             processMarksVal(v, k, "online");
           })
@@ -560,8 +551,6 @@ angular.module('starter.controllers', ['starter.services'])
         totalrecords = res.rows.length;
         if(totalrecords > 0) {
           $scope.dashboardStatus = "not empty";
-          subjectMarks = [];
-          subjectLabels = []; 
           var allmarks = JSON.parse(res.rows.item(0).value);
           console.log("allmarks", allmarks);
           angular.forEach(allmarks, function(v,k) {
@@ -576,11 +565,7 @@ angular.module('starter.controllers', ['starter.services'])
     }
   }
   var processMarksVal = function(v, k, status) {
-    var marks = v.marks;
-    if(status == "offline") {
-      marks = JSON.parse(v.marks);
-    }
-    marks.forEach(function(mv, mk) {
+    v.marks.forEach(function(mv, mk) {
       angular.forEach(mv, function(mvv, mkk) {
         if((mkk != "status")) {
           subjectLabels.push(mkk);
@@ -588,24 +573,28 @@ angular.module('starter.controllers', ['starter.services'])
         }
       })
     })
-    $scope.subjectLabels = subjectLabels;
-    $scope.subjectMarks = [subjectMarks];
+    $scope.ssubjectsConfig = {
+      chart: {renderTo: 'ssubjects',type: 'column', options3d: {enabled: true,alpha: 10,beta: 20,depth: 50}},
+      plotOptions: {column: {depth: 25}},
+      xAxis: {categories: subjectLabels},
+      yAxis: {title: {text: null}},
+      series: [{name: 'Marks',data: subjectMarks}]
+    };
     if(v.attendance) {
-      $scope.attendanceLabels = ["Present", "Absent"];
       var att = v.attendance.split("/");
-      $scope.attendanceData = [att[0], parseInt(att[1]) - parseInt(att[0])];
+      $scope.sattendanceConfig = {
+      chart: {renderTo: 'sattendance',type: 'pie',height: 200,options3d:{enabled: true,alpha: 45,beta: 0}},
+      plotOptions: {pie: {innerSize: 0,depth: 35,dataLabels:{enabled: true,format: '{point.name}: <b>{point.y}</b>'}}},
+      series: [{type: 'pie',name: 'Total',data: [['Present', parseInt(att[0])],['Absent', parseInt(att[1]) - parseInt(att[0])]]}]
+      };
     }
     $scope.mark = v;
   }
 })
 .controller('StudentOverallDashboardCtrl', function($scope, $rootScope, $stateParams, $cordovaSQLite, MyService) {
-      var examLabels = [];
-    var examMarks = [];
-    var examGrades = [];
-    var allsubjects = [];
+    var examLabels = examMarks = examGrades = allsubjects = attendance = [];
     var subjectDataMarks = {};
-    var eachData = [];
-    var attendance = [];
+    var student = '';
     $rootScope.noexams = true;
   $rootScope.overallFilterResults = function(page) {
     console.log("Filtersdata", $rootScope.filtersData);
@@ -628,11 +617,16 @@ angular.module('starter.controllers', ['starter.services'])
       params.division = $stateParams.division;
       dbkey += '_'+$stateParams.division;
     }    
-    if($stateParams.studentid) {
+    var dashparam = localStorage.getItem("DashParam") || '';
+    console.log("dashparam", dashparam);
+    if(dashparam) {
+      params.studentid = dashparam;
+    }    
+/*    if($stateParams.studentid) {
       params.studentid = $stateParams.studentid;
       params.typeofexam = "all";
       dbkey += '_'+$stateParams.studentid;
-    }
+    }*/
     if(!params.studentid) {
       params.studentid = "all";
     }
@@ -648,6 +642,8 @@ angular.module('starter.controllers', ['starter.services'])
             examGrades = [];
             eachData = [];
             subjectDataMarks = {};
+            student = '';
+            attendance = [];
           angular.forEach(studentMarks, function(v,k) {
             processMarksVal(v, k, "online");
           })
@@ -700,7 +696,7 @@ angular.module('starter.controllers', ['starter.services'])
   }
   var processMarksVal = function(v, k, status) {
     examLabels.push(v.typeofexam);
-    examMarks.push(v.percentage);
+    examMarks.push({name: v.typeofexam, y: v.percentage});
     attendance.push(v.attendanceP);
     v.marks.forEach(function(mv, mk) {
       angular.forEach(mv, function(mvv, mkk) {
@@ -710,21 +706,45 @@ angular.module('starter.controllers', ['starter.services'])
           }
           if(!subjectDataMarks[mkk])
             subjectDataMarks[mkk] = [];
-          if(!subjectDataMarks[mkk][0])
-            subjectDataMarks[mkk][0] = [];
-          subjectDataMarks[mkk][0].push(parseInt(mvv));
+          subjectDataMarks[mkk].push({name: mkk, y:parseInt(mvv)});
         }
       })
     })
+    student = v.student;
   }
   var applyMarks = function() {
-    console.log("allsubjects", allsubjects);
+    $scope.title = student;
+    $scope.somarksConfig = {
+      chart: {renderTo: 'somarks',type: 'column', options3d: {enabled: true,alpha: 10,beta: 20,depth: 50}},
+      plotOptions: {column: {depth: 25},allowPointSelect: false},
+      xAxis: {categories: examLabels},
+      yAxis: {title: {text: null}},
+      series: [{name: 'Marks',data: examMarks}]
+    };
+    var allsubjectData = [];
+    allsubjects.forEach(function(sv, sk) {
+      allsubjectData.push({name: sv, data: subjectDataMarks[sv]});
+    })
+    console.log("examLabels", examLabels);
+    console.log("subjectDataMarks", subjectDataMarks);
     console.log("attendance", attendance);
-    $scope.examLabels = examLabels;
-    $scope.examMarks = [examMarks];
-    $scope.allsubjects = allsubjects;
+    $scope.sosubjectsConfig = {
+      chart: {renderTo: 'sosubjects',type: 'areaspline', options3d: {enabled: true,alpha: 10,beta: 20,depth: 50}},
+      plotOptions: {column: {depth: 25}},
+      xAxis: {categories: examLabels},
+      yAxis: {title: {text: null}},
+      series: allsubjectData
+    };
+    $scope.soattendanceConfig = {
+      chart: {renderTo: 'soattendance',type: 'column', options3d: {enabled: true,alpha: 10,beta: 20,depth: 50}},
+      plotOptions: {column: {depth: 25},allowPointSelect: false},
+      xAxis: {categories: examLabels},
+      yAxis: {title: {text: null}},
+      series: [{name: 'Attendance',data: attendance}]
+    };    
+/*    $scope.allsubjects = allsubjects;
     $scope.subjectMarks = subjectDataMarks;
-    $scope.attendanceVal = [attendance];
+    $scope.attendanceVal = [attendance];*/
   }
 })
 .controller('StudentProfileCtrl', function($scope, $rootScope, $cordovaSQLite, MyService, $stateParams) {
@@ -783,6 +803,87 @@ angular.module('starter.controllers', ['starter.services'])
         console.log("offline all users error", err);
       });
     }
+  }
+})
+.controller('ClassProfileCtrl', function($scope, $rootScope, $cordovaSQLite, MyService, $stateParams) {
+  var filtersData = JSON.parse(localStorage.getItem('filtersData'));
+  $scope.currentuser = user;
+  $scope.filtersData = filtersData;
+  var classData = {};
+  $scope.getStudentsData = function() {
+    var dbkey = user.schoolid;
+    var params = {};
+    params.schoolid = user.schoolid;
+    if($stateParams.standard) {
+      params.standard = $stateParams.standard;
+      dbkey += "_"+$stateParams.standard;
+      $scope.standard = $stateParams.standard;
+    }
+    if($stateParams.division) {
+      params.division = $stateParams.division;
+      dbkey += "_"+$stateParams.division;
+      $scope.division = $stateParams.division;
+    }
+    if($stateParams.studentid) {
+      params._id = $stateParams.studentid;
+      dbkey += "_"+$stateParams.studentid;
+    }
+    $scope.title = $stateParams.standard + '/'+$stateParams.division +' Profile';
+    if(MyService.online()) {
+      MyService.getUsers(params).then(function(allusers) {
+        console.log("Got all users:", allusers);
+        if(allusers.length > 0) {
+          $scope.allClasses = true;
+          classData = {};
+          angular.forEach(allusers, function(v,k) {
+            processMarksVal(v, k, "online");
+          })
+          classData.total = allusers.length;
+          console.log("classData", classData);
+          $scope.classData = classData;
+          var query = "INSERT into users (key, value) VALUES (?, ?)";
+          var selectq = 'SELECT key from users where key = "'+dbkey+'"';
+          $cordovaSQLite.execute(db, selectq).then(function(sres) {
+            if(sres.rows.length == 0) {
+              var values = [dbkey, JSON.stringify(users)];
+              $cordovaSQLite.execute(db, query, values).then(function(res) {
+                console.log("insertId: " + res.insertId);
+              })
+            }
+          })
+        } else {
+          $scope.allClasses = false;
+        }    
+      });
+    } else {
+      var query = 'SELECT * from users where key = "'+dbkey+'"';
+      $cordovaSQLite.execute(db, query).then(function(res) {
+        totalrecords = res.rows.length;
+        if(totalrecords > 0) {
+          var allusers = JSON.parse(res.rows.item(0).value);
+          $scope.allStudents = true;
+          angular.forEach(allusers, function(v,k) {
+            processMarksVal(v, k, "online");
+          })
+          classData.total = totalrecords;
+          console.log("classData", classData);
+          $scope.classData = classData;
+        } else {
+          $scope.allStudents = false;
+        }
+      }, function(err) {
+        console.log("offline all users error", err);
+      });
+    }
+  }
+  var processMarksVal = function(v, k, status) {
+    classData.teacher = v.teacher;
+    if(!classData.male) classData.male = 0;
+    classData.male = (v.sex.toLowerCase() == "male") ? classData.male + 1 : classData.male;
+    if(!classData.female) classData.female = 0;
+    classData.female = (v.sex.toLowerCase() == "female") ? classData.female + 1 : classData.female;
+    if(!classData.allstudent) classData.allstudents = [];
+    classData.allstudents.push({name: v.name, studentid: v._id});
   }
 })
 .controller('LoginCtrl', function($scope, $rootScope, $http, $state, $ionicPopup, MyService) {

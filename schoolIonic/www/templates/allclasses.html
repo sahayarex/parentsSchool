@@ -1,4 +1,4 @@
-<ion-view title="Students" ng-init="getClassesData()">
+<ion-view title="Classes" ng-init="getClassesData()">
 <!--   <ion-nav-buttons side="left">
     <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
   </ion-nav-buttons> -->
@@ -7,12 +7,14 @@
             <div class="bar bar-header item-input-inset">
                 <ion-search placeholder="Search a user" filter="query.search"></ion-search>
             </div>
-            <a class="item" ng-repeat="user in users | filter:query.search.value | orderBy:'classd'" href="#/app/dashboard/{{user.standard}}/{{user.d}}">
+            <a listtodash class="item item-icon-left positive" alt="teacher" id="{{user.standard}}-{{user.division}}" ng-repeat="user in users | filter:query.search.value | orderBy:'classd'" href="#/app/dashboard">
+            <i class="icon ion-easel"></i>
             <h2>{{user.standard}}{{user.division}}</h2>
           </a>
           </div>
           <div class="list" ng-if="allClasses == false">
           <a class="item" href="#" ><p>No students found</p></a>
         </div>
+        <div id="cleanup"></div>
   </ion-content>
 </ion-view>

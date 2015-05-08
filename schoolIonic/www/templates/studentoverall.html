@@ -1,4 +1,5 @@
-<ion-view title="Dashboard" ng-init="getMarksData()">
+<ion-view cache-view="false" ng-init="getMarksData()">
+<ion-nav-title>{{title}} Overall</ion-nav-title>
 <!--   <ion-nav-buttons side="left">
     <button menu-toggle="left"class="button button-icon icon ion-navicon"></button>
   </ion-nav-buttons> -->
@@ -6,7 +7,10 @@
   <div class="row" ng-if="dashboardStatus == 'empty'">
     <div class="col">Dashboard is empty</div>
   </div>
-  <div class="item item-list" ng-if="dashboardStatus != 'empty'">
+  <chart id="somarks" config="somarksConfig" ng-if="dashboardStatus != 'empty'"></chart>
+  <chart id="sosubjects" config="sosubjectsConfig" ng-if="dashboardStatus != 'empty'"></chart>
+  <chart id="soattendance" config="soattendanceConfig" ng-if="dashboardStatus != 'empty'"></chart>
+<!--   <div class="item item-list" ng-if="dashboardStatus != 'empty'">
     <canvas id="bar" class="col chart chart-bar" data="examMarks"
   labels="examLabels" legend="true" series="['Percentage(%)']"></canvas>
 
@@ -14,11 +18,7 @@
   labels="examLabels" legend="true" series="[v]" ng-repeat="(k, v) in allsubjects"></canvas>
       <canvas id="line" class="col chart chart-line" data="attendanceVal"
   labels="examLabels" legend="true" series="['Attendance']"></canvas>
-<!--     <canvas id="doughnut" class="col chart chart-doughnut" data="statusData"
-    labels="statusLabels" legend="true" series="stutusLabels"></canvas>
-    <canvas id="pie" class="col chart chart-pie" data="attendanceData"
-  labels="attendanceLabels" legend="true" series="attendanceLabels"></canvas> --> 
-  </div>
+  </div> -->
 <!--   <div class="list" ng-if="dashboardStatus != 'empty'">
   <a class="item item-icon-left" href="#">
     <i class="icon ion-trophy"></i>

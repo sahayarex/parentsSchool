@@ -4,7 +4,8 @@
             <div class="bar bar-header item-input-inset">
                 <ion-search placeholder="Search a user" filter="query.search"></ion-search>
             </div>
-            <a initialize class="item item-avatar" ng-repeat="user in users | filter:query.search.value" href="#/app/studentdashboard/{{filtersData.educationyear}}/{{filtersData.typeofexam}}/{{user._id}}">
+            <a listtodash id="{{user._id}}" class="item item-icon-left positive" ng-repeat="user in users | filter:query.search.value" href="#/app/studentdashboard">
+            <i class="icon ion-person"></i>
             <h2>{{user.name}}</h2>
           </a>
           <a class="item" href="#" ng-if="allStudentsStatus == false"><p>No students found</p></a>

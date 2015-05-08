@@ -84,7 +84,7 @@ angular.module('starter', ['ionic', 'ngCordova', 'underscore', 'starter.controll
             var chart;
             var process = function () {
                 var defaultOptions = {
-                    chart: { renderTo: element[0],  animation: true},
+                    chart: {renderTo: element[0], animation:true},
                     title: {text: ''},
                 };
                 var config = angular.extend(defaultOptions, scope.config);
@@ -97,7 +97,7 @@ angular.module('starter', ['ionic', 'ngCordova', 'underscore', 'starter.controll
             scope.$watch("config.loading", function (loading) {
                 if (!chart) {
                     return;
-                }
+                } 
                 if (loading) {
                     chart.showLoading();
                 } else {
@@ -106,6 +106,13 @@ angular.module('starter', ['ionic', 'ngCordova', 'underscore', 'starter.controll
             });
         },
     };
+})
+.directive('listtodash', function() {
+  return function(scope, element, attrs) {
+    element.bind('click', function() {
+      localStorage.setItem("DashParam", element.attr("id").toLowerCase());
+    });
+  }
 })
 .config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
@@ -170,7 +177,7 @@ angular.module('starter', ['ionic', 'ngCordova', 'underscore', 'starter.controll
     }
   })           
  .state('app.studentDashboard', {
-    url: "/studentdashboard/:year/:typeofexam/:studentid",
+    url: "/studentdashboard",
     views: {
       'menuContent' :{
         templateUrl: "templates/studentdashboard.html",
@@ -179,14 +186,23 @@ angular.module('starter', ['ionic', 'ngCordova', 'underscore', 'starter.controll
     }
   })
   .state('app.studentOverallDashboard', {
-    url: "/studentoveralldashboard/:studentid",
+    url: "/studentoveralldashboard",
     views: {
       'menuContent' :{
         templateUrl: "templates/studentoverall.html",
         controller: 'StudentOverallDashboardCtrl'
       }
     }
-  })     
+  })
+  .state('app.classProfile', {
+    url: "/classprofile/:standard/:division",
+    views: {
+      'menuContent' :{
+        templateUrl: "templates/classprofile.html",
+        controller: 'ClassProfileCtrl'
+      }
+    }
+  })            
   .state('app.studentProfile', {
     url: "/studentprofile/:studentid",
     views: {

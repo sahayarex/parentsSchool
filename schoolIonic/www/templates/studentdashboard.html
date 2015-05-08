@@ -1,57 +1,53 @@
-<ion-view title="Dashboard" ng-init="getMarksData()">
+<ion-view cache-view="false" ng-init="getMarksData()">
+<ion-nav-title>{{mark.student}} Dashboard</ion-nav-title>
   <ion-content class="has-header">
   <div class="row" ng-if="dashboardStatus == 'empty'">
     <div class="col">No marks added yet</div>
   </div>
-  <div class="item item-list" ng-if="dashboardStatus != 'empty'">
-<!--     <canvas id="doughnut" class="col chart chart-doughnut" data="statusData"
-    labels="statusLabels" legend="true" series="stutusLabels"></canvas>
-    <canvas id="bar" class="col chart chart-bar" data="gradeData"
-      labels="gradeLabels">
-    </canvas>     
-    <canvas id="line" class="col chart chart-line" data="subjectData"
-  labels="subjectLabels" legend="true" series="subjectSeries"></canvas> -->
-      <canvas id="line" class="col chart chart-line" data="subjectMarks"
+  <chart id="ssubjects" config="ssubjectsConfig" ng-if="dashboardStatus != 'empty'"></chart>
+  <chart id="sattendance" config="sattendanceConfig" ng-if="dashboardStatus != 'empty'" style="pointer-events:none"></chart>
+  <!-- <div class="item item-list" ng-if="dashboardStatus != 'empty'">
+        <canvas id="line" class="col chart chart-line" data="subjectMarks"
   labels="subjectLabels"></canvas>
     <canvas id="pie" class="col chart chart-pie" data="attendanceData"
   labels="attendanceLabels" legend="true" series="attendanceLabels"></canvas> 
-  </div>
+  </div> -->
   <div class="list" ng-if="dashboardStatus != 'empty'">
   <a class="item item-icon-left" href="#">
-    <i class="icon ion-person-stalker"></i>
+    <i class="icon ion-plus-circled positive"></i>
     Total
-    <span class="badge badge-assertive">{{mark.total}}</span>
+    <span class="badge badge-positive">{{mark.total}}</span>
   </a>
 <a class="item item-icon-left" ng-show="mark.grade" href="#">
-    <i class="icon ion-person-stalker"></i>
+    <i class="icon ion-ribbon-a positive"></i>
     Grade
-    <span class="badge badge-assertive">{{mark.grade}}</span>
+    <span class="badge badge-positive">{{mark.grade}}</span>
   </a>
   <a class="item item-icon-left" ng-show="mark.rank" href="#">
-    <i class="icon ion-person-stalker"></i>
+    <i class="icon ion-trophy positive"></i>
     Rank
-    <span class="badge badge-assertive">{{mark.rank}}</span>
+    <span class="badge badge-positive">{{mark.rank}}</span>
   </a>
   <a class="item item-icon-left" ng-show="mark.status" href="#">
-    <i class="icon ion-person-stalker"></i>
+    <i class="icon ion-university positive"></i>
     Status
-    <span class="badge badge-assertive">{{mark.status}}</span>
+    <span class="badge badge-positive">{{mark.status}}</span>
   </a>  
   <a class="item item-icon-left" ng-show="mark.remark" href="#">
-    <i class="icon ion-person-stalker"></i>
+    <i class="icon ion-edit positive"></i>
     Remark
-    <span class="badge badge-assertive">{{mark.remark}}</span>
+    <span class="badge badge-positive">{{mark.remark}}</span>
   </a>    
-</div>
-  <div class="list" ng-if="user.role == 'hm'">
-  <a ng-if="dashboardStatus != 'empty'" class="item item-icon-left" href="#/app/studentoveralldashboard/{{mark.studentid}}">
-    <i class="icon ion-stats-bars"></i>
+  <a listtodash id="{{mark.studentid}}" ng-if="dashboardStatus != 'empty'" class="item item-icon-left" href="#/app/studentoveralldashboard">
+    <i class="icon ion-stats-bars positive"></i>
     View Overall report
   </a>
   <a class="item item-icon-left" href="#/app/studentprofile/{{mark.studentid}}">
-    <i class="icon ion-stats-bars"></i>
+    <i class="icon ion-person positive"></i>
     View Profile
   </a>  
+</div>
+  <div class="list" >
 </div>
   </ion-content>
 </ion-view>

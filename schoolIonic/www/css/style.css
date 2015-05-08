@@ -1,22 +1,19 @@
+.list .item, .title {
+    text-transform: capitalize;
+}
 /* Empty. Add your own CSS if you like */
-// Your application styles go here
-.list .done {
-	color: #ccc;
-	text-decoration: line-through;
+/*.list .done {
+    color: #ccc;
+    text-decoration: line-through;
 }
 body.home .icon {
-	font-size: 20px;
-	padding: 5px 12px 5px 0px;
+    font-size: 20px;
+    padding: 5px 12px 5px 0px;
 }
-/*body .pane {
-        background: url(../images/bg.png) no-repeat center center fixed; 
-        -webkit-background-size: cover;
-        -moz-background-size: cover;
-        background-size: cover;
-        z-index: -1000;
-    }*/
+
 body .item, body .list-inset {
-	background: none;
+    background: none;
+    text-transform: capitalize;
 }
 input.custom-icon {
     padding-left: 12px;
@@ -37,3 +34,4 @@ padding: 12px 12px;
 body .bar .buttons .show {
     display: block;
 }
+*/
