@@ -1,0 +1,81 @@
+Student,StudentID,Standard,Division,EducationYear,TypeOfExam,Malayalam,Tamil,English,Hindi,Math,Science,History,Attendance,Remarks
+Adarsh A,200101,1,a,2015-2016,periodical2,78,,84,77,78,90,90,27/30,Good
+Anthony D,200102,1,a,2015-2016,periodical2,,44,55,46,44,60,62,24/30,Average
+Anitha C,200103,1,a,2015-2016,periodical2,,56,58,33,44,38,51,22/30,Poor
+Ashwini S,200104,1,a,2015-2016,periodical2,91,,90,88,89,93,98,30/30,Very Good
+Binil B,200105,1,a,2015-2016,periodical2,,22,41,17,41,47,51,25/30,Poor
+Binitha X,200106,1,a,2015-2016,periodical2,65,,ab,78,81,66,59,29/30,Need Improvement
+Baiju J,200107,1,a,2015-2016,periodical2,,67,56,67,72,75,60,30/30,Good
+Cindrella J,200108,1,a,2015-2016,periodical2,71,,61,45,68,66,59,26/30,Need Improvement
+Daniel D,200109,1,a,2015-2016,periodical2,,44,29,45,16,41,51,24/30,Poor
+Sruthi R,200110,1,a,2015-2016,periodical2,80,,66,71,56,69,61,30/30,Good
+Anto A,200111,1,b,2015-2016,periodical2,,41,46,32,35,46,41,24/30,Poor
+Anjali A,200112,1,b,2015-2016,periodical2,90,,92,77,88,90,87,30/30,Good
+Anusha B,200113,1,b,2015-2016,periodical2,,89,93,88,91,92,88,30/30,Impressive
+Arvind A,200114,1,b,2015-2016,periodical2,61,,ab,64,82,89,77,23/30,Dont take leave
+Biju D,200115,1,b,2015-2016,periodical2,,44,51,34,41,51,57,27/30,Poor
+Bindhu B,200116,1,b,2015-2016,periodical2,77,,71,78,69,81,77,29/30,Good
+Reshma R,200117,1,b,2015-2016,periodical2,,72,63,66,71,57,69,28/30,Good
+Rajan R,200118,1,b,2015-2016,periodical2,,70,69,61,70,77,74,29/30,Good
+Shabu S,200119,1,b,2015-2016,periodical2,,41,42,45,19,23,45,30/30,Poor
+Sajan J,200120,1,b,2015-2016,periodical2,,70,75,72,69,77,75,30/30,Good
+Anil A,200201,2,a,2015-2016,periodical2,56,,71,47,56,59,57,28/30,Need Improvement
+Amalan A,200202,2,a,2015-2016,periodical2,65,,66,71,77,61,73,30/30,Need Improvement
+Angel B,200203,2,a,2015-2016,periodical2,,78,81,80,66,72,63,29/30,Good
+Ankhitha S,200204,2,a,2015-2016,periodical2,89,,84,90,96,91,98,30/30,Very Good
+Bibin B,200205,2,a,2015-2016,periodical2,34,,43,55,41,31,53,21/30,Poor
+Babitha D,200206,2,a,2015-2016,periodical2,77,,72,60,67,69,78,28/30,Good
+Ferdinant F,200207,2,a,2015-2016,periodical2,,44,45,61,34,65,56,25/30,Poor
+Jeena J,200208,2,a,2015-2016,periodical2,81,,82,90,81,83,90,30/30,Good
+Divya S,200209,2,a,2015-2016,periodical2,,78,74,70,81,76,83,30/30,Good
+Samantha S,200210,2,a,2015-2016,periodical2,ab,,67,78,67,51,67,26/30,Dont take leave
+Arjun A,200211,2,b,2015-2016,periodical2,,72,70,69,73,71,78,27/30,Good
+Anupama D,200212,2,b,2015-2016,periodical2,90,,97,86,92,88,91,29/30,Very Good
+Aarthi S,200213,2,b,2015-2016,periodical2,,61,63,41,56,44,57,26/30,Need Improvement
+Athul S,200214,2,b,2015-2016,periodical2,,72,73,67,60,77,80,30/30,Good
+Sunil B,200215,2,b,2015-2016,periodical2,,60,67,68,71,80,69,27/30,Good
+Bhavani H,200216,2,b,2015-2016,periodical2,,90,81,77,78,90,81,29/30,Good
+Remya R,200217,2,b,2015-2016,periodical2,,51,56,56,29,27,51,23/30,Poor
+Renjith S,200218,2,b,2015-2016,periodical2,,ab,70,61,69,59,71,26/30,Need Improvement
+Sameer W,200219,2,b,2015-2016,periodical2,,70,62,67,71,69,62,30/30,Good
+Sanil S,200220,2,b,2015-2016,periodical2,,61,57,55,51,61,47,28/30,Need Improvement
+Amulya B,200301,3,a,2015-2016,periodical2,83,,78,90,91,87,92,30/30,Very Good
+Amal A,200302,3,a,2015-2016,periodical2,61,,54,41,27,50,44,26/30,Poor
+Ananya S,200303,3,a,2015-2016,periodical2,,72,70,75,61,74,79,28/30,Good
+Ajantha B,200304,3,a,2015-2016,periodical2,,78,72,79,81,75,82,27/30,Need Improvement
+Bernad F,200305,3,a,2015-2016,periodical2,,45,46,31,56,50,47,30/30,Poor
+Smitha S,200306,3,a,2015-2016,periodical2,72,,80,75,70,69,81,29/30,Good
+Shaji J,200307,3,a,2015-2016,periodical2,57,,51,63,62,69,54,27/30,Need Improvement
+Prophin raj,200308,3,a,2015-2016,periodical2,57,,61,58,51,54,47,24/30,Need Improvement
+Prenaka P,200309,3,a,2015-2016,periodical2,,93,90,87,89,96,94,30/30,Very Good
+Britto A,200310,3,a,2015-2016,periodical2,56,,40,33,40,29,44,28/30,Poor
+Mary M,200311,3,b,2015-2016,periodical2,,71,60,47,33,55,61,26/30,Poor
+Subin S,200312,3,b,2015-2016,periodical2,,41,32,40,34,29,50,30/30,Poor
+Seethal N,200313,3,b,2015-2016,periodical2,,70,65,55,50,59,57,27/30,Need Improvement
+Neethu N,200314,3,b,2015-2016,periodical2,89,,72,77,80,78,81,30/30,Good
+Salman A,200315,3,b,2015-2016,periodical2,,50,54,57,60,59,61,27/30,Need Improvement
+Thiru A,200316,3,b,2015-2016,periodical2,,80,65,62,77,80,72,30/30,Good
+Thaman D,200317,3,b,2015-2016,periodical2,80,,72,70,65,63,65,29/30,Good
+Thushara S,200318,3,b,2015-2016,periodical2,,60,56,55,32,31,36,26/30,Poor
+Sindhu M,200319,3,b,2015-2016,periodical2,,60,62,59,55,59,63,29/30,Need Improvement
+Yasir N,200320,3,b,2015-2016,periodical2,,50,30,44,23,38,59,23/30,Poor
+Ajmal A,200401,4,a,2015-2016,periodical2,,90,92,81,83,79,88,29/30,Good
+Deepa S,200402,4,a,2015-2016,periodical2,,90,93,97,100,92,96,30/30,Impressive
+Mithun S,200403,4,a,2015-2016,periodical2,80,,90,90,87,91,82,30/30,Very Good
+Shankar V,200404,4,a,2015-2016,periodical2,,40,44,42,31,51,27,28/30,Poor
+Teena M,200405,4,b,2015-2016,periodical2,,67,41,32,54,34,61,25/30,Poor
+Aadhi A,200406,4,b,2015-2016,periodical2,,90,98,92,100,91,94,30/30,Impressive
+Anjali S,200407,4,b,2015-2016,periodical2,78,,69,70,68,67,78,30/30,Good
+Sabitha L,200408,4,b,2015-2016,periodical2,70,,62,56,71,56,61,25/30,Need Improvement
+Serena M,200409,4,b,2015-2016,periodical2,,40,62,30,36,56,57,28/30,Poor
+Tenil A,200410,4,b,2015-2016,periodical2,70,,68,58,73,61,59,30/30,Need Improvement
+Deepa T,200501,5,a,2015-2016,periodical2,,70,79,72,71,80,70,30/30,Good
+Dhanya S,200502,5,a,2015-2016,periodical2,,80,89,79,100,90,92,30/30,Very Good
+Selvan V,200503,5,a,2015-2016,periodical2,60,,40,34,41,56,33,24/30,Poor
+Kumar K,200504,5,a,2015-2016,periodical2,56,,63,71,62,56,67,30/30,Need Improvement
+Mahendran A,200505,5,a,2015-2016,periodical2,,60,54,34,47,33,56,28/30,Poor
+Bhavana B,200506,5,b,2015-2016,periodical2,93,,90,98,100,100,90,30/30,Impressive
+Bavithra S,200507,5,b,2015-2016,periodical2,,60,51,30,60,23,39,27/30,Poor
+Hema H,200508,5,b,2015-2016,periodical2,,60,62,68,50,59,62,28/30,Good
+Viji S,200509,5,b,2015-2016,periodical2,,80,77,71,49,56,60,30/30,Need Improvement
+Thaman B,200510,5,b,2015-2016,periodical2,,72,80,70,76,71,67,28/30,Good

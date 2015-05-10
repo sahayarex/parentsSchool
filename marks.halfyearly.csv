@@ -1,0 +1,81 @@
+Student,StudentID,Standard,Division,EducationYear,TypeOfExam,Malayalam,Tamil,English,Hindi,Math,Science,History,Attendance,Remarks
+Adarsh A,200101,1,a,2015-2016,halfyearly,80,,78,70,76,81,80,30/30,Good
+Anthony D,200102,1,a,2015-2016,halfyearly,,45,47,34,29,45,51,26/30,Poor
+Anitha C,200103,1,a,2015-2016,halfyearly,,60,55,56,51,49,57,26/30,Need Improvement
+Ashwini S,200104,1,a,2015-2016,halfyearly,94,,92,90,100,89,93,29/30,Very Good
+Binil B,200105,1,a,2015-2016,halfyearly,,45,51,41,47,33,30,27/30,Poor
+Binitha X,200106,1,a,2015-2016,halfyearly,70,,72,75,69,72,67,30/30,Good
+Baiju J,200107,1,a,2015-2016,halfyearly,,60,55,58,59,63,57,29/30,Need Improvement
+Cindrella J,200108,1,a,2015-2016,halfyearly,67,,60,ab,56,71,74,27/30,Dont take leave
+Daniel D,200109,1,a,2015-2016,halfyearly,,50,34,31,44,51,45,25/30,Poor
+Sruthi R,200110,1,a,2015-2016,halfyearly,67,,72,74,67,78,65,29/30,Good
+Anto A,200111,1,b,2015-2016,halfyearly,,54,56,41,33,49,51,28/30,Poor
+Anjali A,200112,1,b,2015-2016,halfyearly,78,,81,70,78,81,71,29/30,Good
+Anusha B,200113,1,b,2015-2016,halfyearly,,90,94,96,100,87,90,30/30,Impressive
+Arvind A,200114,1,b,2015-2016,halfyearly,70,,74,75,78,67,70,30/30,Good
+Biju D,200115,1,b,2015-2016,halfyearly,,50,55,60,57,48,61,28/30,Need Improvement
+Bindhu B,200116,1,b,2015-2016,halfyearly,80,,76,70,72,78,73,30/30,Good
+Reshma R,200117,1,b,2015-2016,halfyearly,,70,75,71,80,77,73,29/30,Good
+Rajan R,200118,1,b,2015-2016,halfyearly,,56,55,46,34,56,57,26/30,Poor
+Shabu S,200119,1,b,2015-2016,halfyearly,,47,40,31,43,51,56,28/30,Poor
+Sajan J,200120,1,b,2015-2016,halfyearly,,56,61,60,67,56,59,27/30,Need Improvement
+Anil A,200201,2,a,2015-2016,halfyearly,57,,50,36,46,58,72,30/30,Poor
+Amalan A,200202,2,a,2015-2016,halfyearly,73,,78,68,80,72,76,29/30,Good
+Angel B,200203,2,a,2015-2016,halfyearly,,80,76,75,71,67,73,30/30,Good
+Ankhitha S,200204,2,a,2015-2016,halfyearly,93,,81,83,100,94,95,29/30,Very Good
+Bibin B,200205,2,a,2015-2016,halfyearly,45,,36,44,47,23,34,24/30,Poor
+Babitha D,200206,2,a,2015-2016,halfyearly,70,,78,72,71,77,63,30/30,Good
+Ferdinant F,200207,2,a,2015-2016,halfyearly,,56,34,54,67,41,33,27/30,Poor
+Jeena J,200208,2,a,2015-2016,halfyearly,90,,92,87,84,80,91,29/30,Good
+Divya S,200209,2,a,2015-2016,halfyearly,,80,81,84,86,90,94,30/30,Good
+Samantha S,200210,2,a,2015-2016,halfyearly,78,,79,81,84,77,89,28/30,Good
+Arjun A,200211,2,b,2015-2016,halfyearly,,76,59,63,66,71,63,29/30,Need Improvement
+Anupama D,200212,2,b,2015-2016,halfyearly,93,,91,87,96,93,97,30/30,Very Good
+Aarthi S,200213,2,b,2015-2016,halfyearly,,67,73,67,78,71,69,30/30,Good
+Athul S,200214,2,b,2015-2016,halfyearly,,60,56,67,61,72,73,28/30,Need Improvement
+Sunil B,200215,2,b,2015-2016,halfyearly,,56,54,41,37,44,31,26/30,Poor
+Bhavani H,200216,2,b,2015-2016,halfyearly,,93,90,88,83,91,85,30/30,Good
+Remya R,200217,2,b,2015-2016,halfyearly,,60,61,64,67,56,59,27/30,Need Improvement
+Renjith S,200218,2,b,2015-2016,halfyearly,,61,66,67,72,77,81,30/30,Good
+Sameer W,200219,2,b,2015-2016,halfyearly,,67,56,51,37,44,71,27/30,Poor
+Sanil S,200220,2,b,2015-2016,halfyearly,,67,62,69,73,77,72,30/30,Good
+Amulya B,200301,3,a,2015-2016,halfyearly,90,,92,87,85,91,94,29/30,Very Good
+Amal A,200302,3,a,2015-2016,halfyearly,67,,55,34,43,56,23,27/30,Poor
+Ananya S,200303,3,a,2015-2016,halfyearly,,78,76,80,67,72,67,29/30,Good
+Ajantha B,200304,3,a,2015-2016,halfyearly,,80,70,73,77,69,73,30/30,Good
+Bernad F,200305,3,a,2015-2016,halfyearly,,40,34,33,45,47,32,27/30,Poor
+Smitha S,200306,3,a,2015-2016,halfyearly,60,,63,56,59,72,59,30/30,Need Improvement
+Shaji J,200307,3,a,2015-2016,halfyearly,54,,41,34,45,23,56,30/30,Poor
+Prophin raj,200308,3,a,2015-2016,halfyearly,60,,65,66,71,45,56,27/30,Need Improvement
+Prenaka P,200309,3,a,2015-2016,halfyearly,,90,88,89,91,90,97,29/30,Very Good
+Britto A,200310,3,a,2015-2016,halfyearly,45,,34,41,45,47,33,27/30,Poor
+Mary M,200311,3,b,2015-2016,halfyearly,,60,56,51,54,60,63,28/30,Average
+Subin S,200312,3,b,2015-2016,halfyearly,,44,30,47,27,20,23,25/30,Poor
+Seethal N,200313,3,b,2015-2016,halfyearly,,72,76,67,61,64,66,30/30,Good
+Neethu N,200314,3,b,2015-2016,halfyearly,90,,92,70,82,83,80,29/30,Good
+Salman A,200315,3,b,2015-2016,halfyearly,,45,34,56,61,54,67,28/30,Poor
+Thiru A,200316,3,b,2015-2016,halfyearly,,67,72,71,78,72,70,29/30,Good
+Thaman D,200317,3,b,2015-2016,halfyearly,78,,78,89,67,68,73,30/30,Good
+Thushara S,200318,3,b,2015-2016,halfyearly,,56,45,44,30,45,51,27/30,Poor
+Sindhu M,200319,3,b,2015-2016,halfyearly,,67,67,78,56,49,56,30/30,Need Improvement
+Yasir N,200320,3,b,2015-2016,halfyearly,,50,54,55,51,32,61,27/30,Poor
+Ajmal A,200401,4,a,2015-2016,halfyearly,,89,80,77,69,81,80,30/30,Good
+Deepa S,200402,4,a,2015-2016,halfyearly,,93,90,88,91,94,89,29/30,Impressive
+Mithun S,200403,4,a,2015-2016,halfyearly,89,,93,93,94,92,87,30/30,Very Good
+Shankar V,200404,4,a,2015-2016,halfyearly,,44,47,51,52,41,43,30/30,Need Improvement
+Teena M,200405,4,b,2015-2016,halfyearly,,61,56,57,61,62,67,29/30,Average
+Aadhi A,200406,4,b,2015-2016,halfyearly,,91,88,87,90,79,84,29/30,Good
+Anjali S,200407,4,b,2015-2016,halfyearly,80,,82,67,70,71,67,29/30,Good
+Sabitha L,200408,4,b,2015-2016,halfyearly,60,,45,31,44,57,64,26/30,Poor
+Serena M,200409,4,b,2015-2016,halfyearly,,56,57,61,63,58,63,30/30,Average
+Tenil A,200410,4,b,2015-2016,halfyearly,73,,70,71,67,78,81,29/30,Good
+Deepa T,200501,5,a,2015-2016,halfyearly,,80,82,83,79,84,86,29/30,Good
+Dhanya S,200502,5,a,2015-2016,halfyearly,,90,77,73,81,77,78,30/30,Good
+Selvan V,200503,5,a,2015-2016,halfyearly,56,,47,33,45,76,44,25/30,Poor
+Kumar K,200504,5,a,2015-2016,halfyearly,60,,66,74,77,65,71,29/30,Good
+Mahendran A,200505,5,a,2015-2016,halfyearly,,56,44,25,54,56,61,30/30,Poor
+Bhavana B,200506,5,b,2015-2016,halfyearly,90,,94,89,98,96,95,29/30,Impressive
+Bavithra S,200507,5,b,2015-2016,halfyearly,,77,73,65,73,76,74,30/30,Good
+Hema H,200508,5,b,2015-2016,halfyearly,,72,71,80,73,69,77,29/30,Good
+Viji S,200509,5,b,2015-2016,halfyearly,,63,66,65,34,54,71,28/30,Poor
+Thaman B,200510,5,b,2015-2016,halfyearly,,80,73,67,69,77,73,30/30,Good
