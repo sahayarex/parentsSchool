@@ -1,6 +1,7 @@
 angular.module('starter.services', [])
-.factory('MyService', function($rootScope, $ionicPopup, $state, $http, $q, $httpBackend, $location) {
-  //var baseUrl = 'http://192.168.1.2\:9000';
+.factory('MyService', function($rootScope, $ionicPopup, $ionicUser, $state, $http, $q, $httpBackend, $location) {
+  //var baseUrl = 'http://192.168.1.5\:9000';
+  var baseUrl = 'http://myschool-bridgeserver.rhcloud.com';
   var baseUrl = 'http://localhost\:9000';
   var loginEndpoint       = baseUrl +'/api/users/verify';
   var logoutEndpoint       = baseUrl +'/api/users/';
@@ -29,6 +30,11 @@ angular.module('starter.services', [])
           delete data.token;
           localStorage.setItem('uid', data._id);
           localStorage.setItem('user', JSON.stringify(data));
+          $ionicUser.identify({user_id: data._id, name: data.name, message: data.role +' of '+data.school}).then(function(identity) {
+            console.log("user identified in ionic", identity);
+          }, function(err) {
+           console.log("user identification failed", err);
+          });
           defer.resolve(data);
         }
       })

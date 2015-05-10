@@ -78,8 +78,8 @@ $scope.allclasses = true;*/
     var gradeData = {};
     if(MyService.online()) {
       MyService.getMarks(params).then(function(studentMarks) {
-        console.log("Got marks:", studentMarks);
         totalrecords = studentMarks.length;
+        console.log("Got marks:", totalrecords);
         if(totalrecords > 0) {
           $scope.dashboardStatus = "not empty";
           angular.forEach(studentMarks, function(v,k) {
@@ -195,6 +195,7 @@ $scope.allclasses = true;*/
 .controller('DashboardCtrl', function($scope, $rootScope, $state, $cordovaSQLite, MyService, $stateParams) {
   var filtersData = JSON.parse(localStorage.getItem('filtersData'));
   $rootScope.filterResults = function(page) {
+    console.log("filter is called");
     filtersData = $rootScope.filtersData;
     localStorage.setItem('filtersData', JSON.stringify(filtersData));
     $scope.getMarksData();
@@ -208,9 +209,7 @@ $scope.allclasses = true;*/
     params.year = user.years[params.educationyear];
     params.standard = user.standard;
     params.division = (user.division) ? user.division : "all";
-    if(!params.studentid) {
-      params.studentid = "all";
-    }
+    params.studentid = "all";
     var tdashparams = localStorage.getItem("DashParam") || '';
     console.log("tdashparams", tdashparams);
     if(tdashparams) {
@@ -242,8 +241,8 @@ $scope.allclasses = true;*/
     var gradeData = {};
     if(MyService.online()) {
       MyService.getMarks(params).then(function(studentMarks) {
-        console.log("Got marks:", studentMarks);
         totalrecords = studentMarks.length;
+        console.log("Got marks:", totalrecords);
         if(totalrecords > 0) {
           $scope.dashboardStatus = "not empty";
           angular.forEach(studentMarks, function(v,k) {
@@ -463,7 +462,7 @@ $scope.allclasses = true;*/
     if(MyService.online()) {
       MyService.getUsers(params).then(function(users) {
         if(users.length > 0) {
-          console.log("Got all users:", users);
+          console.log("Got all users:", users.length);
           $scope.allStudents = true;
           $scope.users = users;
           var query = "INSERT into users (key, value) VALUES (?, ?)";
@@ -515,6 +514,8 @@ $scope.allclasses = true;*/
     console.log("sdashparams", sdashparams);
     if(sdashparams) {
       params.studentid = sdashparams;
+      params.standard = "all";
+      params.division = "all";
     }    
     console.log("params", params);
     var dbkey = params.schoolid +'_'+params.year+'_'+user.typeofexams[params.typeofexam]+params.studentid;
@@ -522,8 +523,8 @@ $scope.allclasses = true;*/
     subjectLabels = []; 
     if(MyService.online()) {
       MyService.getMarks(params).then(function(studentMarks) {
-        console.log("Got marks:", studentMarks);
         totalrecords = studentMarks.length;
+        console.log("Got marks:", totalrecords);
         if(totalrecords > 0) {
           $scope.dashboardStatus = "not empty";
           angular.forEach(studentMarks, function(v,k) {
@@ -633,8 +634,8 @@ $scope.allclasses = true;*/
     console.log("params", params);
     if(MyService.online()) {
       MyService.getMarks(params).then(function(studentMarks) {
-        console.log("Got marks:", studentMarks);
         totalrecords = studentMarks.length;
+        console.log("Got marks:", totalrecords);
         if(totalrecords > 0) {
           $scope.dashboardStatus = "not empty";
             examLabels = [];
@@ -770,7 +771,7 @@ $scope.allclasses = true;*/
     if(MyService.online()) {
       console.log("GGGGGGGGGGGG", params);
       MyService.getUsers(params).then(function(users) {
-          console.log("Got all users:", users);
+          console.log("Got all users:", users.length);
         if(users.length > 0) {
           $scope.allStudents = true;
           $scope.user = users[0];
@@ -831,7 +832,7 @@ $scope.allclasses = true;*/
     $scope.title = $stateParams.standard + '/'+$stateParams.division +' Profile';
     if(MyService.online()) {
       MyService.getUsers(params).then(function(allusers) {
-        console.log("Got all users:", allusers);
+        console.log("Got all users:", allusers.length);
         if(allusers.length > 0) {
           $scope.allClasses = true;
           classData = {};
@@ -891,7 +892,7 @@ $scope.allclasses = true;*/
   $scope.doingLogin = false;
   $scope.user = {
     email: '8951572125@school-a.com',
-    password: '8Bu1+XUwxvFfqjZCB+8blg=='
+    password: 'uMoq+IBffgVzSBQcwWdcLw=='
   };
   $scope.login = function() {
     if(($scope.user.email == null) || ($scope.user.password == null)) {

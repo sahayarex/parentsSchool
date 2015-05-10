@@ -32,10 +32,10 @@ exports.getMark = function(req, res) {
   if(req.params.studentid.toLowerCase() == "all") {
     delete params.studentid;
   }
-  if(req.params.standard == 'undefined') {
+  if((req.params.standard == 'undefined') || (req.params.standard == 'all')) {
     delete params.standard;
   }
-  if(req.params.typeofexam == 'all') {
+  if((req.params.typeofexam == 'undefined') || (req.params.typeofexam == 'all')) {
     delete params.typeofexam;
   }  
   if((req.params.division == 'undefined') || (req.params.division.toLowerCase() == "all")) {

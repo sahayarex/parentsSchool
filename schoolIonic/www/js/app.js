@@ -6,7 +6,7 @@ var filtersData = {};
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
 // 'starter.controllers' is found in controllers.js
-angular.module('starter', ['ionic', 'ngCordova', 'underscore', 'starter.controllers'])
+angular.module('starter', ['ionic', 'ngCordova', 'underscore', 'starter.controllers','ionic.service.core'])
 
 .run(function($ionicPlatform, $cordovaSQLite) {
   $ionicPlatform.ready(function() {
@@ -114,6 +114,18 @@ angular.module('starter', ['ionic', 'ngCordova', 'underscore', 'starter.controll
     });
   }
 })
+
+// Identify App
+.config(function($ionicAppProvider) {
+  // Identify app
+  $ionicAppProvider.identify({
+    // The App ID for the server
+    app_id: '47dd5376',
+    // The API key all services will use for this app
+    api_key: 'b52055ebd783fefeb776305af0bcb7c1f7014e77bedd44aa'
+  });
+})
+
 .config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
   .state('app', {

@@ -1,6 +1,6 @@
 {
   "name": "schoolIonic",
-  "app_id": "",
+  "app_id": "47dd5376",
   "gulpStartupTasks": [
     "sass",
     "watch"

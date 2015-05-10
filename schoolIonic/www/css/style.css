@@ -1,6 +1,7 @@
 .list .item, .title {
     text-transform: capitalize;
 }
+
 /* Empty. Add your own CSS if you like */
 /*.list .done {
     color: #ccc;
