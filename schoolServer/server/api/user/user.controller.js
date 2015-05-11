@@ -199,7 +199,8 @@ exports.users = function (req, res, next) {
     res.json(user);
   })
 };
-var senduserdata = function(res, user, data) {
+
+var senduserdata = function(res, user, data, marksparam) {
   School.findOne({
         school: user.school
       }, function(err, school) {
@@ -210,19 +211,32 @@ var senduserdata = function(res, user, data) {
         data.schoolid = school._id;
         data.school = user.school;
         data.period = school.period;
-        Marks.find({schoolid: school._id}).sort({_id: -1}).limit(1).populate('*').exec(function(err, lastmark) {
-          data.educationyear = lastmark[0].educationyear;
-          data.latesttypeofexam = lastmark[0].typeofexam;
+        Marks.find(marksparam).sort({_id: 1}).populate('*').exec(function(err, allmarks) {
+          var totalmarks = allmarks.length;
+          data.typeofexams = [];
           data.years = [];
-          if(lastmark[0].educationyear.indexOf("-") > -1) {
-            var year = lastmark[0].educationyear.split("-");
-            data.years.push(year[0] - 1 +"-"+year[0]);
-          } else {
-            data.years.push(data.educationyear - 1);
+          console.log("totalmarks", totalmarks);
+          if(totalmarks > 0) {
+            _.each(allmarks, function(m, mkey) {
+              if(data.typeofexams.indexOf(m.typeofexam) == -1) {
+                data.typeofexams.push(m.typeofexam);
+              }
+              console.log("Mark iteration:", mkey);
+              if(mkey == totalmarks - 1) {
+                data.educationyear = m.educationyear;
+                data.latesttypeofexam = m.typeofexam;
+                if(m.educationyear.indexOf("-") > -1) {
+                  var year = m.educationyear.split("-");
+                  data.years.push(year[0] - 1 +"-"+year[0]);
+                } else {
+                  data.years.push(data.educationyear - 1);
+                }
+                data.years.push(data.educationyear);
+                console.log("Data", data)
+                res.json(data);
+              }
+            })
           }
-          data.years.push(data.educationyear);
-          console.log("Data", data)
-          res.json(data);
         });
       });
 }
@@ -243,19 +257,21 @@ User.findOne({
       data.name = user.name;
       data.role = user.role;
       data.token = jwt.sign({_id: user._id }, config.secrets.session, { expiresInMinutes: 60*5 });
+      var marksparam = {schoolid: user.schoolid};
       if((user.role == 'teacher') || (user.role == 'parent')) {
-        data.division = user.division;
-        data.standard = user.standard;
+        marksparam.division = data.division = user.division;
+        marksparam.standard = data.standard = user.standard;
         data.phone = user.phone;
-        data.typeofexams = user.typeofexams;
         data.students = user.students;
+/*        data.typeofexams = user.typeofexams;
         var subjects = {};
         for (var i = 0; i <= user.students.length - 1; i++) {
           subjects = _.merge(subjects, user.students[i].subjects);
         }
-        data.subjects = subjects;
-        senduserdata(res, user, data);
-      } else if (user.role == "hm") {
+        data.subjects = subjects;*/
+      }
+      senduserdata(res, user, data, marksparam);
+      /* else if (user.role == "hm") {
         User.find({schoolid: user.schoolid, role: "student"}, function(er, allusers) {
           var subjects = [];
           var typeofexams = [];
@@ -275,7 +291,7 @@ User.findOne({
           data.typeofexams = typeofexams;  
           senduserdata(res, user, data);
         })
-      }
+      }*/
     } else {
       res.json({status: 'password not matching'});
     }

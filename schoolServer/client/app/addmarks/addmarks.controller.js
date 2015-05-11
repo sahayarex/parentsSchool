@@ -62,9 +62,9 @@ angular.module('schoolServerApp')
             mark.import = true;
             $http.post('/api/marks', mark).success(function(created) {
               if (created.status == "Pass") {
-                if(!allexams[created.educationyear+'_'+ created.typeofexam])
-                  allexams[created.educationyear+'_'+ created.typeofexam] = [];                
-                allexams[created.educationyear+'_'+ created.typeofexam].push({_id: created._id, total: created.total});
+                if(!allexams[created.educationyear+'_'+ created.typeofexam+'_'+created.standard+'_'+created.division])
+                  allexams[created.educationyear+'_'+ created.typeofexam+'_'+created.standard+'_'+created.division] = [];                
+                allexams[created.educationyear+'_'+ created.typeofexam+'_'+created.standard+'_'+created.division].push({_id: created._id, total: created.total});
               }
               sentcount++;
               console.log("i", sentcount);

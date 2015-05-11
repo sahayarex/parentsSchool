@@ -12,7 +12,7 @@ var MarksSchema = new Schema({
   marks: Array,
   total: {type: Number, default: 0},
   percentage: {type: Number, default: 0},
-  rank: Number,
+  rank: {type: Number, default: 0},
   grade: String,
   attendance: String,
   attendanceP: Number,
