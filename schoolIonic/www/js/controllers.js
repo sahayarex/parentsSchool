@@ -70,19 +70,19 @@ $scope.allclasses = true;*/
     params.studentid = "all";
     console.log("params", params);
     var dbkey = params.schoolid +'_'+params.year+'_'+user.typeofexams[params.typeofexam]+'_hm';
-    pass = 0;
-    fail = 0;
-    subjectDataPass = [];
-    subjectDataFail = [];
-    allsubjects = [];
-    var gradeData = {};
-    toppers = {};
     if(MyService.online()) {
       MyService.getMarks(params).then(function(studentMarks) {
         totalrecords = studentMarks.length;
         console.log("Got marks:", totalrecords);
         if(totalrecords > 0) {
           $scope.dashboardStatus = "not empty";
+          pass = 0;
+          fail = 0;
+          subjectDataPass = [];
+          subjectDataFail = [];
+          allsubjects = [];
+          gradeData = {};
+          toppers = {};
           angular.forEach(studentMarks, function(v,k) {
             processMarksVal(v, k, "online");
           })
@@ -109,6 +109,13 @@ $scope.allclasses = true;*/
         totalrecords = res.rows.length;
         if(totalrecords > 0) {
           $scope.dashboardStatus = "not empty";
+          pass = 0;
+          fail = 0;
+          subjectDataPass = [];
+          subjectDataFail = [];
+          allsubjects = [];
+          gradeData = {};
+          toppers = {};          
           var allmarks = JSON.parse(res.rows.item(0).value);
           console.log("allmarks", allmarks);
           angular.forEach(allmarks, function(v,k) {
@@ -224,21 +231,21 @@ $scope.allclasses = true;*/
     $scope.title = params.standard +'/'+params.division+' Dashboard';
     console.log("params", params);
     var dbkey = params.schoolid +'_'+params.year+'_'+user.typeofexams[params.typeofexam]+'_'+params.standard+'_'+params.division;
-    pass = 0;
-    fail = 0;
-    subjectDataPass = [];
-    subjectDataFail = [];
-    allsubjects = [];
-    subjectDataMarks = [];       
-    toppers = [];
-    topperSubjects = [];
-    gradeData = {};
     if(MyService.online()) {
       MyService.getMarks(params).then(function(studentMarks) {
         totalrecords = studentMarks.length;
         console.log("Got marks:", totalrecords);
         if(totalrecords > 0) {
           $scope.dashboardStatus = "not empty";
+          pass = 0;
+          fail = 0;
+          subjectDataPass = [];
+          subjectDataFail = [];
+          allsubjects = [];
+          subjectDataMarks = [];       
+          toppers = [];
+          topperSubjects = [];
+          gradeData = {};
           angular.forEach(studentMarks, function(v,k) {
             processMarksVal(v, k, "online");
           })
@@ -265,6 +272,15 @@ $scope.allclasses = true;*/
         totalrecords = res.rows.length;
         if(totalrecords > 0) {
           $scope.dashboardStatus = "not empty";
+          pass = 0;
+          fail = 0;
+          subjectDataPass = [];
+          subjectDataFail = [];
+          allsubjects = [];
+          subjectDataMarks = [];       
+          toppers = [];
+          topperSubjects = [];
+          gradeData = {};
           var allmarks = JSON.parse(res.rows.item(0).value);
           console.log("allmarks", allmarks);
           angular.forEach(allmarks, function(v,k) {
@@ -888,14 +904,14 @@ $scope.allclasses = true;*/
 .controller('LoginCtrl', function($scope, $rootScope, $http, $state, $ionicPopup, MyService) {
   $scope.message = "";
   $scope.doingLogin = false;
-/*  $scope.user = {
+  $scope.user = {
     email: '8951572125@school-a.com',
     password: 'uMoq+IBffgVzSBQcwWdcLw=='
-  };*/
-  $scope.user = {
+  };
+  /*$scope.user = {
     email: 'sudha@school-a.com',
     password: 'vr8zx5hfr'
-  };  
+  };*/  
   $scope.login = function() {
     if(($scope.user.email == null) || ($scope.user.password == null)) {
       alert('Please fill the fields');

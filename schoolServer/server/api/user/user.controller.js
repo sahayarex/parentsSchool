@@ -31,6 +31,7 @@ var createParent = function(res, request, student) {
       parentData.pepper = Math.random().toString(36).substring(9);
       parentData.password = parentData.pepper;
       parentData.provider = request.provider;
+      parentData.school = request.school;
       parentData.save(function (err) {
         if (err) { return validationError(res, err); }
         return createTeacher(res, request, student);  
@@ -39,6 +40,7 @@ var createParent = function(res, request, student) {
       var parentData = {};
       parentData.name = request.parent;
       parentData.email = parentEmail;
+      parentData.school = 
       parentData.role = "parent";
       parentData.students = [student._id];
       parentData.students = [{id:student._id,name:student.name, subjects:student.subjects}];
@@ -46,6 +48,7 @@ var createParent = function(res, request, student) {
       parentData.pepper = Math.random().toString(36).substring(9);
       parentData.password = parentData.pepper;
       parentData.provider = request.provider;
+      parentData.school = request.school;
       var newParent = new User(parentData);
       newParent.save(function(err, parent) {
         if (err) return validationError(res, err);
