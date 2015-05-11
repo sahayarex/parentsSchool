@@ -8,7 +8,7 @@ var filtersData = {};
 // 'starter.controllers' is found in controllers.js
 angular.module('starter', ['ionic', 'ngCordova', 'underscore', 'starter.controllers','ionic.service.core'])
 
-.run(function($ionicPlatform, $cordovaSQLite) {
+.run(function($ionicPlatform, $state, $cordovaSQLite) {
   $ionicPlatform.ready(function() {
     if(window.cordova) {
       db = $cordovaSQLite.openDB({ name: "testing.db" });
@@ -30,6 +30,14 @@ angular.module('starter', ['ionic', 'ngCordova', 'underscore', 'starter.controll
       StatusBar.styleDefault();
     }
   });
+  $ionicPlatform.registerBackButtonAction(function (event) {
+    if($state.current.name=="home"){
+      navigator.app.exitApp();
+    }
+    else {
+      navigator.app.backHistory();
+    }
+  }, 100);
 })
 .directive('ionSearch', function() {
     return {

@@ -211,6 +211,7 @@ var senduserdata = function(res, user, data, marksparam) {
         data.schoolid = school._id;
         data.school = user.school;
         data.period = school.period;
+        console.log("marksparam", marksparam);
         Marks.find(marksparam).sort({_id: 1}).populate('*').exec(function(err, allmarks) {
           var totalmarks = allmarks.length;
           data.typeofexams = [];
@@ -236,6 +237,8 @@ var senduserdata = function(res, user, data, marksparam) {
                 res.json(data);
               }
             })
+          } else {
+            res.json(data);
           }
         });
       });
@@ -257,7 +260,7 @@ User.findOne({
       data.name = user.name;
       data.role = user.role;
       data.token = jwt.sign({_id: user._id }, config.secrets.session, { expiresInMinutes: 60*5 });
-      var marksparam = {schoolid: user.schoolid};
+      var marksparam = {school: user.school};
       if((user.role == 'teacher') || (user.role == 'parent')) {
         marksparam.division = data.division = user.division;
         marksparam.standard = data.standard = user.standard;

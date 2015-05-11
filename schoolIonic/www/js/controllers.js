@@ -7,13 +7,13 @@ angular.module('starter.controllers', ['starter.services'])
   if($scope.uid) {
     $scope.authorized = true;
     if(user.role == "hm") {
-      $scope.menuLinks = {"Links":[{"title":"Dashboard", "href":"app.hmdashboard", "class":"ion-stats-bars"}, {"title":"Classes", "href":"app.allclasses", "class": "ion-easel"}, {"title":"Students", "href":"app.allstudents", "class": "ion-person"},{"title":"log-out", "href":"logout", "class":"ion-log-out"}]};                            
+      $scope.menuLinks = {"Links":[{"title":"Dashboard", "href":"app.hmdashboard", "class":"ion-stats-bars"}, {"title":"Classes", "href":"app.allclasses", "class": "ion-easel"}, {"title":"Students", "href":"app.allstudents", "class": "ion-person-stalker"},{"title":"log-out", "href":"logout", "class":"ion-log-out"}]};                            
       $state.go('app.hmdashboard', {}, {reload: true});
     } else if (user.role == "parent") {
-      $scope.menuLinks = {"Links":[{"title":"Dashboard", "href":"app.dashboard", "class":"ion-stats-bars"}, {"title":"Students", "href":"app.allstudents", "class": "ion-person"},{"title":"log-out", "href":"logout", "class":"ion-log-out"}]};                            
-      $state.go('app.dashboard', {}, {reload: true});
+      $scope.menuLinks = {"Links":[{"title":"Dashboard", "href":"app.studentDashboard", "class":"ion-stats-bars"}, {"title":"Students", "href":"app.allstudents", "class": "ion-person-stalker"},{"title":"Profile", "href":"app.studentProfile", "class": "ion-person"},{"title":"log-out", "href":"logout", "class":"ion-log-out"}]};                            
+      $state.go('app.studentDashboard', {}, {reload: true});
     } else {
-      $scope.menuLinks = {"Links":[{"title":"Dashboard", "href":"app.dashboard", "class":"ion-stats-bars"}, {"title":"Students", "href":"app.allstudents", "class": "ion-person"},{"title":"log-out", "href":"logout", "class":"ion-log-out"}]};                            
+      $scope.menuLinks = {"Links":[{"title":"Dashboard", "href":"app.dashboard", "class":"ion-stats-bars"}, {"title":"Students", "href":"app.allstudents", "class": "ion-person-stalker"},{"title":"Profile", "href":"app.classProfile", "class": "ion-person"},{"title":"log-out", "href":"logout", "class":"ion-log-out"}]};                            
       $state.go('app.dashboard', {}, {reload: true});
     }
   } else {
@@ -25,9 +25,11 @@ angular.module('starter.controllers', ['starter.services'])
   } else {
     filtersData.years = user.years;
     filtersData.educationyear = user.years.indexOf(user.educationyear);
-    user.typeofexams.unshift("All");
-    filtersData.typeofexams = user.typeofexams;
-    filtersData.typeofexam = user.typeofexams.indexOf(user.latesttypeofexam);
+    if(user.typeofexams.length > 0) {
+      user.typeofexams.unshift("All");
+      filtersData.typeofexams = user.typeofexams;
+      filtersData.typeofexam = user.typeofexams.indexOf(user.latesttypeofexam);
+    }
   }
   localStorage.setItem('filtersData', JSON.stringify(filtersData));
   $rootScope.filtersData = filtersData;
@@ -175,7 +177,7 @@ $scope.allclasses = true;*/
     })
     $scope.passfailConfig = {
       chart: {renderTo: 'passfailstatus',type: 'pie',height:200,options3d:{enabled: true,alpha: 45,beta: 0},},
-      plotOptions: {pie: {innerSize: 50,depth: 35,dataLabels:{enabled: true,format: '{point.name}: <b>{point.y}</b>'}}},
+      plotOptions: {pie: {innerSize: 50,depth: 35,dataLabels:{enabled: true,format: '{point.name}: <b>{point.y}</b>'}},tickInterval:1},
       series: [{type: 'pie',name: 'Total',data: [["Pass", pass],["Fail", fail]]}]
     };
     $scope.gradeConfig = {
@@ -207,29 +209,21 @@ $scope.allclasses = true;*/
     var params = filtersData;
     params.schoolid = user.schoolid;
     params.year = user.years[params.educationyear];
+    params.studentid = "all";
     params.standard = user.standard;
     params.division = (user.division) ? user.division : "all";
-    params.studentid = "all";
     var tdashparams = localStorage.getItem("DashParam") || '';
     console.log("tdashparams", tdashparams);
     if(tdashparams) {
       var tdashp = tdashparams.split("-");
-      var standard = '';
-      if(tdashp[0]) {
-        params.standard = tdashp[0];
-        standard = '_'+tdashp[0];
-        $scope.standard = tdashp[0];
-      }
-      var division = '_all';
-      if(tdashp[1]) {
-        params.division = tdashp[1];
-        division = '_'+tdashp[1];
-        $scope.division = tdashp[1];
-      }    
+      params.standard = tdashp[0];
+      params.division = tdashp[1];
     }
+    $scope.standard = params.standard;
+    $scope.division = params.division;
     $scope.title = params.standard +'/'+params.division+' Dashboard';
     console.log("params", params);
-    var dbkey = params.schoolid +'_'+params.year+'_'+user.typeofexams[params.typeofexam]+standard+division;
+    var dbkey = params.schoolid +'_'+params.year+'_'+user.typeofexams[params.typeofexam]+'_'+params.standard+'_'+params.division;
     pass = 0;
     fail = 0;
     subjectDataPass = [];
@@ -238,7 +232,7 @@ $scope.allclasses = true;*/
     subjectDataMarks = [];       
     toppers = [];
     topperSubjects = [];
-    var gradeData = {};
+    gradeData = {};
     if(MyService.online()) {
       MyService.getMarks(params).then(function(studentMarks) {
         totalrecords = studentMarks.length;
@@ -451,14 +445,11 @@ $scope.allclasses = true;*/
     var dbkey = user.schoolid;
     var params = {};
     params.schoolid = user.schoolid;
-    if($stateParams.standard) {
-      params.standard = $stateParams.standard;
-      dbkey += "_"+$stateParams.standard;
-    }
-    if($stateParams.division) {
-      params.division = $stateParams.division;
-      dbkey += "_"+$stateParams.division;
-    }
+    params.standard = (user.standard) ? user.standard : 'all';
+    params.division = (user.division) ? user.division : 'all';
+    if($stateParams.standard) params.standard = $stateParams.standard;
+    if($stateParams.division) params.division = $stateParams.division;
+    dbkey += "_"+params.standard+'_'+params.division;
     if(MyService.online()) {
       MyService.getUsers(params).then(function(users) {
         if(users.length > 0) {
@@ -829,21 +820,14 @@ $scope.allclasses = true;*/
     var dbkey = user.schoolid;
     var params = {};
     params.schoolid = user.schoolid;
-    if($stateParams.standard) {
-      params.standard = $stateParams.standard;
-      dbkey += "_"+$stateParams.standard;
-      $scope.standard = $stateParams.standard;
-    }
-    if($stateParams.division) {
-      params.division = $stateParams.division;
-      dbkey += "_"+$stateParams.division;
-      $scope.division = $stateParams.division;
-    }
-    if($stateParams.studentid) {
-      params._id = $stateParams.studentid;
-      dbkey += "_"+$stateParams.studentid;
-    }
-    $scope.title = $stateParams.standard + '/'+$stateParams.division +' Profile';
+    params.standard = (user.standard) ? user.standard : 'all';
+    params.division = (user.division) ? user.division : 'all';
+    if($stateParams.standard) params.standard = $stateParams.standard;
+    if($stateParams.division) params.division = $stateParams.division;
+    $scope.standard = params.standard;
+    $scope.division = params.division;
+    $scope.title = params.standard + '/'+params.division +' Profile';
+    dbkey += '_'+params.standard+'_'+params.division+'_profile';
     if(MyService.online()) {
       MyService.getUsers(params).then(function(allusers) {
         console.log("Got all users:", allusers.length);
@@ -904,10 +888,14 @@ $scope.allclasses = true;*/
 .controller('LoginCtrl', function($scope, $rootScope, $http, $state, $ionicPopup, MyService) {
   $scope.message = "";
   $scope.doingLogin = false;
-  $scope.user = {
+/*  $scope.user = {
     email: '8951572125@school-a.com',
     password: 'uMoq+IBffgVzSBQcwWdcLw=='
-  };
+  };*/
+  $scope.user = {
+    email: 'sudha@school-a.com',
+    password: 'vr8zx5hfr'
+  };  
   $scope.login = function() {
     if(($scope.user.email == null) || ($scope.user.password == null)) {
       alert('Please fill the fields');
@@ -922,7 +910,7 @@ $scope.allclasses = true;*/
         if(data.role == "hm") {
           $state.transitionTo("app.hmdashboard", null, {'reload': true});
         } else if (data.role == "parent") {
-          $state.transitionTo("app.dashboard", null, {'reload': true});
+          $state.transitionTo("app.studentDashboard", null, {'reload': true});
         } else {
           $state.transitionTo("app.dashboard", null, {'reload': true});
         }
