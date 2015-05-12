@@ -188,7 +188,7 @@ angular.module('starter', ['ionic', 'ngCordova', 'underscore', 'starter.controll
     }
   })
  .state('app.allstudentsFilters', {
-    url: "/allstudents/:standard/:division",
+    url: "/allstudents/:standard/:division/:sex/:status",
     views: {
       'menuContent' :{
         templateUrl: "templates/allstudents.html",

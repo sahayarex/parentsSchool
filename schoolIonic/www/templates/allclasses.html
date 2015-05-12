@@ -7,7 +7,7 @@
             <div class="bar bar-header item-input-inset">
                 <ion-search placeholder="Search a user" filter="query.search"></ion-search>
             </div>
-            <a listtodash class="item item-icon-left positive" alt="teacher" id="{{user.standard}}-{{user.division}}" ng-repeat="user in users | filter:query.search.value | orderBy:'classd'" href="#/app/dashboard">
+            <a listtodash class="item item-icon-left positive" alt="teacher" id="{{user.standard}}|{{user.d}}" ng-repeat="user in users | filter:query.search.value | orderBy:'classd'" href="#/app/dashboard">
             <i class="icon ion-easel"></i>
             <h2>{{user.standard}}{{user.division}}</h2>
           </a>

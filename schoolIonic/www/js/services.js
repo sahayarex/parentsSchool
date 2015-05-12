@@ -104,9 +104,9 @@ angular.module('starter.services', [])
       if(!userdata.division)
         userdata.division = "all";
       if(!userdata._id) {
-        userdata._id = "all";
+        userdata._id = 'all';
       }
-      $http.get(baseUrl+'/api/users/'+userdata.schoolid+'/'+userdata.standard+'/'+userdata.division+'/'+userdata._id)
+      $http.get(baseUrl+'/api/users/'+userdata.schoolid+'/'+userdata.standard+'/'+userdata.division+'/'+userdata.sex+'/'+userdata.status+'/'+userdata._id)
       .success(function(data, status, headers, config){
         defer.resolve(data);
       }).error(function(data, status, headers, config){

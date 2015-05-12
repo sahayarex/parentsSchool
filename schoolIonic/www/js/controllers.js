@@ -10,8 +10,13 @@ angular.module('starter.controllers', ['starter.services'])
       $scope.menuLinks = {"Links":[{"title":"Dashboard", "href":"app.hmdashboard", "class":"ion-stats-bars"}, {"title":"Classes", "href":"app.allclasses", "class": "ion-easel"}, {"title":"Students", "href":"app.allstudents", "class": "ion-person-stalker"},{"title":"log-out", "href":"logout", "class":"ion-log-out"}]};                            
       $state.go('app.hmdashboard', {}, {reload: true});
     } else if (user.role == "parent") {
-      $scope.menuLinks = {"Links":[{"title":"Dashboard", "href":"app.studentDashboard", "class":"ion-stats-bars"}, {"title":"Students", "href":"app.allstudents", "class": "ion-person-stalker"},{"title":"Profile", "href":"app.studentProfile", "class": "ion-person"},{"title":"log-out", "href":"logout", "class":"ion-log-out"}]};                            
-      $state.go('app.studentDashboard', {}, {reload: true});
+      if(user.students.length > 1) {
+        $scope.menuLinks = {"Links":[{"title":"Children", "href":"app.allstudents", "class": "ion-person-stalker"},{"title":"log-out", "href":"logout", "class":"ion-log-out"}]};
+        $state.go('app.allstudents', {}, {reload: true});
+      } else {
+        $scope.menuLinks = {"Links":[{"title":"Dashboard", "href":"app.studentDashboard", "class":"ion-stats-bars"},{"title":"Profile", "href":"app.studentProfile", "class": "ion-person"},{"title":"log-out", "href":"logout", "class":"ion-log-out"}]};
+        $state.go('app.studentDashboard', {}, {reload: true});
+      }
     } else {
       $scope.menuLinks = {"Links":[{"title":"Dashboard", "href":"app.dashboard", "class":"ion-stats-bars"}, {"title":"Students", "href":"app.allstudents", "class": "ion-person-stalker"},{"title":"Profile", "href":"app.classProfile", "class": "ion-person"},{"title":"log-out", "href":"logout", "class":"ion-log-out"}]};                            
       $state.go('app.dashboard', {}, {reload: true});
@@ -30,8 +35,8 @@ angular.module('starter.controllers', ['starter.services'])
       filtersData.typeofexams = user.typeofexams;
       filtersData.typeofexam = user.typeofexams.indexOf(user.latesttypeofexam);
     }
+    localStorage.setItem('filtersData', JSON.stringify(filtersData));
   }
-  localStorage.setItem('filtersData', JSON.stringify(filtersData));
   $rootScope.filtersData = filtersData;
   console.log("CURRENT STATE", $state.current);
   var filterStatus = function(page) {
@@ -39,18 +44,15 @@ angular.module('starter.controllers', ['starter.services'])
     $rootScope.page = page;
     console.log("dashboard index:", page.indexOf('ashboard'));
     console.log("Page:", page);
-    if(page.indexOf('ashboard') > 0) {
+    console.log("filt data", filtersData);
+    if((page.indexOf('ashboard') > 0) && (filtersData.years.length > 0)) {
         $rootScope.filters = true;
     } else {
         $rootScope.filters = false;
-    }
+    }      
   } 
   $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){ 
     filterStatus(toState.name);
-    if(toState.name == 'app.allclasses') {
-/*      location.reload();
-$scope.allclasses = true;*/
-    }
   })
   filterStatus($state.current.name);
 })
@@ -214,6 +216,7 @@ $scope.allclasses = true;*/
   var gradeData = {};
   $scope.getMarksData = function() {
     var params = filtersData;
+    console.log("user", user);
     params.schoolid = user.schoolid;
     params.year = user.years[params.educationyear];
     params.studentid = "all";
@@ -222,9 +225,11 @@ $scope.allclasses = true;*/
     var tdashparams = localStorage.getItem("DashParam") || '';
     console.log("tdashparams", tdashparams);
     if(tdashparams) {
-      var tdashp = tdashparams.split("-");
-      params.standard = tdashp[0];
-      params.division = tdashp[1];
+      var tdashp = tdashparams.split("|");
+      if(tdashp[1]){
+        params.standard = tdashp[0];
+        params.division = tdashp[1];
+      }
     }
     $scope.standard = params.standard;
     $scope.division = params.division;
@@ -386,12 +391,9 @@ $scope.allclasses = true;*/
     $scope.toppers = toppersList;
     $scope.subjectToppers = topperS;
   }
-  $scope.getMarksData();
-
 })
-.controller('AllClassesCtrl', function($scope, $rootScope, $cordovaSQLite, MyService, $ionicHistory) {
+.controller('AllClassesCtrl', function($scope, $rootScope, $cordovaSQLite, MyService) {
   var processUsers = function(users) {
-    $ionicHistory.clearHistory();
     $scope.allClasses = true;
     var classes = [];
     var all = [];
@@ -421,9 +423,12 @@ $scope.allclasses = true;*/
   $scope.getClassesData = function() {
     var params = {};
     params.schoolid = user.schoolid;
+    params.sex = params.status = 'all';
     var dbkey = user.schoolid+"_students";
+    console.log("Class Params", params);
     if(MyService.online()) {
       MyService.getUsers(params).then(function(users) {
+        console.log("Got users", users.length);
         if(users.length > 0) {
           processUsers(users);
           var query = "INSERT into users (key, value) VALUES (?, ?)";
@@ -461,11 +466,31 @@ $scope.allclasses = true;*/
     var dbkey = user.schoolid;
     var params = {};
     params.schoolid = user.schoolid;
-    params.standard = (user.standard) ? user.standard : 'all';
-    params.division = (user.division) ? user.division : 'all';
-    if($stateParams.standard) params.standard = $stateParams.standard;
-    if($stateParams.division) params.division = $stateParams.division;
-    dbkey += "_"+params.standard+'_'+params.division;
+    params.sex = params.status = "all";
+    if(user.role == 'parent') {
+      title = user.name + ' Children';
+      params._id = '';
+      angular.forEach(user.students, function(sv, skey) {
+        if(skey != user.students.length -1) {
+          params._id += sv.id+'|';
+        } else {
+          params._id += sv.id;
+        }
+      })
+      dbkey += '_'+user.name;
+    } else {
+      params.standard = (user.standard) ? user.standard : 'all';
+      params.division = (user.division) ? user.division : 'all';
+      if($stateParams.standard) params.standard = $stateParams.standard;
+      if($stateParams.division) params.division = $stateParams.division;
+      title = params.standard+'/'+params.division;
+      if($stateParams.sex && $stateParams.sex != "all") {params.sex = $stateParams.sex; title += ' '+$stateParams.sex}
+      if($stateParams.status && $stateParams.status != "all") {params.status = $stateParams.status; title += ' '+$stateParams.status}
+      dbkey += "_"+params.standard+'_'+params.division+'_'+params.sex+'_'+params.status;
+      title = title + ' Students';
+    }
+    console.log("Users Param", params);
+    $scope.title = title;
     if(MyService.online()) {
       MyService.getUsers(params).then(function(users) {
         if(users.length > 0) {
@@ -506,7 +531,8 @@ $scope.allclasses = true;*/
 .controller('StudentDashboardCtrl', function($scope, $rootScope, $cordovaSQLite, $state, $stateParams, $ionicSideMenuDelegate, MyService) {
   var filtersData = JSON.parse(localStorage.getItem('filtersData'));
   console.log("filtersData", filtersData);
-  filtersData.typeofexams.splice(0, 1);
+  if(filtersData.typeofexams)
+    filtersData.typeofexams.splice(0, 1);
   $rootScope.filtersData = filtersData;
   $scope.user = user;
   $rootScope.studentFilterResults = function(page) {
@@ -524,10 +550,19 @@ $scope.allclasses = true;*/
     var sdashparams = localStorage.getItem("DashParam") || '';
     console.log("sdashparams", sdashparams);
     if(sdashparams) {
-      params.studentid = sdashparams;
+      var sdash = sdashparams.split("-");
+      params.studentid = sdash[0];
       params.standard = "all";
       params.division = "all";
-    }    
+      $scope.title =  sdash[1];
+    }
+    if(user.role == 'parent') {
+      if(user.students.length == 1) {
+        params.studentid = user.students[0].id;
+        $scope.title = user.students[0].name;
+      }
+    }
+    $scope.studentid = params.studentid;
     console.log("params", params);
     var dbkey = params.schoolid +'_'+params.year+'_'+user.typeofexams[params.typeofexam]+params.studentid;
     subjectMarks = [];
@@ -774,8 +809,8 @@ $scope.allclasses = true;*/
   $scope.currentuser = user;
   $scope.filtersData = filtersData;
   $scope.getStudentsData = function() {
-    var dbkey = user.schoolid;
     var params = {};
+    params.sex = params.status = 'all';
     params.schoolid = user.schoolid;
     if($stateParams.standard) {
       params.standard = $stateParams.standard;
@@ -789,8 +824,12 @@ $scope.allclasses = true;*/
       params._id = $stateParams.studentid;
       dbkey += "_"+$stateParams.studentid;
     }
+    if(user.students.length == 1) {
+      params._id = user.students[0].id;
+    }
+    var dbkey = params.schoolid+'_'+params._id;
+    console.log("GGGGGGGGGGGG", params);
     if(MyService.online()) {
-      console.log("GGGGGGGGGGGG", params);
       MyService.getUsers(params).then(function(users) {
           console.log("Got all users:", users.length);
         if(users.length > 0) {
@@ -838,6 +877,7 @@ $scope.allclasses = true;*/
     params.schoolid = user.schoolid;
     params.standard = (user.standard) ? user.standard : 'all';
     params.division = (user.division) ? user.division : 'all';
+    params.sex = params.status = 'all';
     if($stateParams.standard) params.standard = $stateParams.standard;
     if($stateParams.division) params.division = $stateParams.division;
     $scope.standard = params.standard;
@@ -860,7 +900,7 @@ $scope.allclasses = true;*/
           var selectq = 'SELECT key from users where key = "'+dbkey+'"';
           $cordovaSQLite.execute(db, selectq).then(function(sres) {
             if(sres.rows.length == 0) {
-              var values = [dbkey, JSON.stringify(users)];
+              var values = [dbkey, JSON.stringify(allusers)];
               $cordovaSQLite.execute(db, query, values).then(function(res) {
                 console.log("insertId: " + res.insertId);
               })
@@ -904,14 +944,26 @@ $scope.allclasses = true;*/
 .controller('LoginCtrl', function($scope, $rootScope, $http, $state, $ionicPopup, MyService) {
   $scope.message = "";
   $scope.doingLogin = false;
+  //hm
   $scope.user = {
     email: '8951572125@school-a.com',
-    password: 'uMoq+IBffgVzSBQcwWdcLw=='
+    password: 'TdBTtJQacQk3gQ5hdSt+Ug=='
   };
-  /*$scope.user = {
-    email: 'sudha@school-a.com',
-    password: 'vr8zx5hfr'
-  };*/  
+  //parent with single student
+  $scope.user = {
+    email: '8879900341@school-a.com',
+    password: 'z0db49529'
+  };
+  //parent with multiple student
+  $scope.user = {
+    email: '9944046100@school-a.com',
+    password: '3w92lz0k9'
+  };
+  //teacher
+   $scope.user = {
+    email: '7890003311@school-a.com',
+    password: 'lgbzc9pb9'
+  };  
   $scope.login = function() {
     if(($scope.user.email == null) || ($scope.user.password == null)) {
       alert('Please fill the fields');
@@ -924,11 +976,15 @@ $scope.allclasses = true;*/
         $scope.password = null;
         $scope.authorized = true;
         if(data.role == "hm") {
-          $state.transitionTo("app.hmdashboard", null, {'reload': true});
+          $state.go("app.hmdashboard", {}, {'reload': true});
         } else if (data.role == "parent") {
-          $state.transitionTo("app.studentDashboard", null, {'reload': true});
+          if(data.students.length == 1) {
+            $state.go("app.studentDashboard", {}, {'reload': true});
+          } else {
+            $state.go("app.allstudents", {}, {'reload': true});            
+          }
         } else {
-          $state.transitionTo("app.dashboard", null, {'reload': true});
+          $state.go("app.dashboard", {}, {'reload': true});
         }
       });      
     }
@@ -938,5 +994,9 @@ $scope.allclasses = true;*/
     delete $http.defaults.headers.common.Authorization;
     console.log("Logging out:");
     localStorage.removeItem('uid');
+    localStorage.removeItem("DashParam");
+    localStorage.removeItem("filtersData");
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
     $state.go("home", {}, {reload: true});
 });

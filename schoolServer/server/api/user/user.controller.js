@@ -32,6 +32,7 @@ var createParent = function(res, request, student) {
       parentData.password = parentData.pepper;
       parentData.provider = request.provider;
       parentData.school = request.school;
+      parentData.schoolid = request.schoolid;
       parentData.save(function (err) {
         if (err) { return validationError(res, err); }
         return createTeacher(res, request, student);  
@@ -49,6 +50,7 @@ var createParent = function(res, request, student) {
       parentData.password = parentData.pepper;
       parentData.provider = request.provider;
       parentData.school = request.school;
+      parentData.schoolid = request.schoolid;
       var newParent = new User(parentData);
       newParent.save(function(err, parent) {
         if (err) return validationError(res, err);
@@ -61,19 +63,20 @@ var createParent = function(res, request, student) {
 
 var createTeacher = function(res, request, student) {
   //Create Teacher
-  var teacherEmail = student.teacher.replace(" ", "-").toLowerCase()+"@"+student.school.replace(" ", "-").toLowerCase()+".com";
+  var teacherEmail = request.teacherphone+"@"+student.school.replace(" ", "-").toLowerCase()+".com";
   console.log("Email: "+teacherEmail);
   User.findOne({email:teacherEmail}, function(err, teacherData) {
     if (err) return next(err);
     if(teacherData) {
       teacherData.name = request.teacher;
-      teacherData.phone = request.teacherPhone;
+      teacherData.phone = request.teacherphone;
       teacherData.pepper = Math.random().toString(36).substring(9);
       teacherData.password = teacherData.pepper;
       teacherData.provider = request.provider;
       teacherData.students.push({id:student._id,name:student.name,subjects:student.subjects});
       teacherData.typeofexams = request.typeofexams;
       teacherData.school = request.school;
+      teacherData.schoolid = request.schoolid;
       teacherData.standard = request.standard;
       teacherData.division = request.division;      
       teacherData.save(function (err) {
@@ -87,12 +90,13 @@ var createTeacher = function(res, request, student) {
       teacherData.email = teacherEmail;
       teacherData.role = "teacher";
       teacherData.students = [{id:student._id,name:student.name, subjects: student.subjects}];
-      teacherData.phone = request.teacherPhone;
+      teacherData.phone = request.teacherphone;
       teacherData.pepper = Math.random().toString(36).substring(9);
       teacherData.password = teacherData.pepper;
       teacherData.provider = request.provider;
       teacherData.typeofexams = request.typeofexams;
       teacherData.school = request.school;
+      teacherData.schoolid = request.schoolid;
       teacherData.standard = request.standard;
       teacherData.division = request.division;
       var newTeacher = new User(teacherData);
@@ -185,14 +189,13 @@ exports.show = function (req, res, next) {
  * Get multiple users
  */
 exports.users = function (req, res, next) {
-  if(req.params.standard == "all") {
-    delete req.params.standard;
-  }
-  if(req.params.division == "all") {
-    delete req.params.division;
-  }
-  if(req.params._id == "all") {
-    delete req.params._id;
+  _.each(req.params, function(p, pk) {
+    if(p == 'all') {
+      delete req.params[pk];
+    }
+  })
+  if(req.params._id) {
+    req.params._id = {$in: req.params._id.split("|")};
   }
   req.params.role = "student";
   console.log("requested users", req.params);
@@ -263,18 +266,24 @@ User.findOne({
       data.name = user.name;
       data.role = user.role;
       data.token = jwt.sign({_id: user._id }, config.secrets.session, { expiresInMinutes: 60*5 });
+      data.students = user.students;
+      data.phone = user.phone;
       var marksparam = {school: user.school};
-      if((user.role == 'teacher') || (user.role == 'parent')) {
+      if(user.role == 'teacher') {
         marksparam.division = data.division = user.division;
         marksparam.standard = data.standard = user.standard;
-        data.phone = user.phone;
-        data.students = user.students;
 /*        data.typeofexams = user.typeofexams;
         var subjects = {};
         for (var i = 0; i <= user.students.length - 1; i++) {
           subjects = _.merge(subjects, user.students[i].subjects);
         }
         data.subjects = subjects;*/
+      } else if (user.role == 'parent') {
+        var allkids = [];
+        _.each(user.students, function(s, skey) {
+            allkids.push(s.id);
+        })
+        marksparam.studentid = {$in: allkids};
       }
       senduserdata(res, user, data, marksparam);
       /* else if (user.role == "hm") {

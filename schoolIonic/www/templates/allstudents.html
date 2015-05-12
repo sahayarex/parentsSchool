@@ -1,10 +1,11 @@
-<ion-view title="Students" ng-init="getStudentsData()">
+<ion-view ng-init="getStudentsData()">
+  <ion-nav-title>{{title}}</ion-nav-title>
   <ion-content class="has-header">
          <div class="list">
             <div class="bar bar-header item-input-inset">
                 <ion-search placeholder="Search a user" filter="query.search"></ion-search>
             </div>
-            <a listtodash id="{{user._id}}" class="item item-icon-left positive" ng-repeat="user in users | filter:query.search.value" href="#/app/studentdashboard">
+            <a listtodash id="{{user._id}}-{{user.name}}" class="item item-icon-left positive" ng-repeat="user in users | filter:query.search.value" href="#/app/studentdashboard">
             <i class="icon ion-person"></i>
             <h2>{{user.name}}</h2>
           </a>

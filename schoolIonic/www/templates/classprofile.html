@@ -1,24 +1,24 @@
 <ion-view title="{{title}}" ng-init="getStudentsData()">
   <ion-content class="has-header">
 <div class="list">
-  <a class="item item-icon-left positive" href="#">
-    <i class="icon ion-easel"></i>
+  <a class="item item-icon-left" id="{{user.standard}}|{{user.division}}" listtodash href="#/app/dashboard">
+    <i class="icon ion-easel positive"></i>
     {{standard}}{{division}}
   </a>
-  <a class="item item-icon-left positive" href="#">
-    <i class="icon ion-person"></i>
-    Teacher : {{classData.teacher}}
+  <a class="item item-icon-left" href="#">
+    <i class="icon ion-ios-body positive"></i>
+    {{classData.teacher}}
   </a>
-  <a class="item item-icon-left positive" href="#">
-    <i class="icon ion-person-stalker"></i>
-    Total : {{classData.total}}
+  <a class="item item-icon-left" href="#/app/allstudents/{{standard}}/{{division}}/all/all">
+    <i class="icon ion-ios-people positive"></i>
+    {{classData.total}}
   </a>
-  <a class="item item-icon-left positive" href="#" ng-show="classData.male">
-    <i class="icon ion-man"></i>
+  <a class="item item-icon-left" href="#/app/allstudents/{{standard}}/{{division}}/male/all" ng-show="classData.male">
+    <i class="icon ion-man positive"></i>
     {{classData.male}}
   </a>
-  <a class="item item-icon-left positive" href="#" ng-show="classData.female">
-    <i class="icon ion-woman"></i>
+  <a class="item item-icon-left" href="#/app/allstudents/{{standard}}/{{division}}/female/all" ng-show="classData.female">
+    <i class="icon ion-woman positive"></i>
     {{classData.female}}
   </a>  
 </div>
